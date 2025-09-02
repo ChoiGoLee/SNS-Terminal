@@ -1,0 +1,54 @@
+name: Test Notion Sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  test-notion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test Notion Connection
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: |
+          echo "Testing Notion connection..."
+
+          # Notion API 호출 테스트
+          curl -X POST https://api.notion.com/v1/pages \
+            -H "Authorization: Bearer $NOTION_TOKEN" \
+            -H "Content-Type: application/json" \
+            -H "Notion-Version: 2022-06-28" \
+            -d '{
+              "parent": { "database_id": "'$NOTION_DATABASE_ID'" },
+              "properties": {
+                "Repository": {
+                  "title": [{ "text": { "content": "'$GITHUB_REPOSITORY'" } }]
+                },
+                "Workflow": {
+                  "rich_text": [{ "text": { "content": "'$GITHUB_WORKFLOW'" } }]
+                },
+                "Status": {
+                  "select": { "name": "Success" }
+                },
+                "Run ID": {
+                  "number": '$GITHUB_RUN_ID'
+                },
+                "Commit SHA": {
+                  "rich_text": [{ "text": { "content": "'${GITHUB_SHA:0:8}'" } }]
+                },
+                "Branch": {
+                  "rich_text": [{ "text": { "content": "'$GITHUB_REF_NAME'" } }]
+                },
+                "Timestamp": {
+                  "date": { "start": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'" }
+                }
+              }
+            }'
+
+          echo "✅ Notion sync completed!"
