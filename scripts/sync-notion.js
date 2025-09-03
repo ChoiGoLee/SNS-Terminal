@@ -119,12 +119,12 @@ async function createOrUpdateNotionPage(eventData) {
         },
       },
       // Status 속성 - 에러가 계속 발생하면 주석 처리
-      Status: {
-        select: {
-          name:
-            eventData.state.charAt(0).toUpperCase() + eventData.state.slice(1),
-        },
-      },
+      // Status: {
+      //   select: {
+      //     name:
+      //       eventData.state.charAt(0).toUpperCase() + eventData.state.slice(1),
+      //   },
+      // },
       Number: {
         number: parseInt(eventData.number) || 0,
       },
