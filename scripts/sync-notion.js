@@ -102,6 +102,7 @@ async function createOrUpdateNotionPage(eventData) {
       eventData.number
     )
 
+    // 기본 속성만 설정 (문제가 되는 속성들 제외)
     const pageProperties = {
       Name: {
         title: [
@@ -117,6 +118,7 @@ async function createOrUpdateNotionPage(eventData) {
           name: eventData.type,
         },
       },
+      // Status 속성 - 에러가 계속 발생하면 주석 처리
       Status: {
         select: {
           name:
@@ -142,25 +144,25 @@ async function createOrUpdateNotionPage(eventData) {
       },
     }
 
-    // URL 속성 추가 (값이 있을 때만)
+    // URL을 rich_text로 처리 (링크 포함)
     if (eventData.url) {
       pageProperties['URL'] = {
-        url: eventData.url,
-      }
-    }
-
-    // Body 속성 추가 (값이 있을 때만)
-    if (eventData.body && eventData.body.length > 0) {
-      pageProperties['Body'] = {
         rich_text: [
           {
             text: {
-              content: eventData.body.substring(0, 2000), // Notion 제한으로 2000자까지
+              content: eventData.url,
+              link: {
+                url: eventData.url,
+              },
             },
           },
         ],
       }
     }
+
+    // Body 속성은 완전히 제거 (존재하지 않음)
+
+    console.log('전송할 속성들:', Object.keys(pageProperties))
 
     if (existingPage) {
       // 기존 페이지 업데이트
@@ -185,7 +187,26 @@ async function createOrUpdateNotionPage(eventData) {
     }
   } catch (error) {
     console.error('Notion 페이지 생성/업데이트 실패:', error)
+    console.error('상세 에러:', error.message)
     throw error
+  }
+}
+
+// 데이터베이스 스키마 확인 함수
+async function debugDatabaseSchema() {
+  try {
+    const response = await notion.databases.retrieve({
+      database_id: DATABASE_ID,
+    })
+
+    console.log('=== 실제 데이터베이스 속성들 ===')
+    for (const [key, value] of Object.entries(response.properties)) {
+      console.log(`"${key}" -> ${value.type}`)
+    }
+    return response.properties
+  } catch (error) {
+    console.error('스키마 확인 실패:', error)
+    return null
   }
 }
 
@@ -199,6 +220,9 @@ async function main() {
     console.log('Event Name:', process.env.GITHUB_EVENT_NAME)
     console.log('Database ID:', DATABASE_ID ? 'SET' : 'NOT SET')
     console.log('API Key:', process.env.NOTION_API_KEY ? 'SET' : 'NOT SET')
+
+    // 데이터베이스 스키마 확인
+    await debugDatabaseSchema()
 
     // GitHub 이벤트 데이터 가져오기
     const eventData = getGitHubEventData()
@@ -224,23 +248,4 @@ async function main() {
   }
 }
 
-// 기존 페이지의 속성 구조 확인
-async function debugExistingPage() {
-  try {
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      page_size: 1,
-    })
-
-    if (response.results.length > 0) {
-      const page = response.results[0]
-      console.log('=== 기존 페이지 속성들 ===')
-
-      for (const [key, value] of Object.entries(page.properties)) {
-        console.log(`속성 이름: "${key}" | 타입: ${value.type}`)
-      }
-    }
-  } catch (error) {
-    console.error('기존 페이지 확인 실패:', error)
-  }
-}
+main()
