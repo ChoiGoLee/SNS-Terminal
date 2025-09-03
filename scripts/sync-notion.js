@@ -1,4 +1,99 @@
-// Notion 페이지 생성/업데이트 함수 수정
+import { Client } from '@notionhq/client'
+import process from 'process'
+
+const notion = new Client({
+  auth: process.env.NOTION_API_KEY,
+})
+
+const DATABASE_ID = process.env.NOTION_DATABASE_ID
+
+// GitHub 이벤트 데이터 파싱
+function getGitHubEventData() {
+  const eventName = process.env.GITHUB_EVENT_NAME
+  const eventPath = process.env.GITHUB_EVENT_PATH
+
+  console.log('Event Name:', eventName)
+
+  // GitHub Actions 컨텍스트에서 이벤트 데이터 가져오기
+  let eventData = {}
+
+  if (process.env.GITHUB_EVENT_NAME === 'issues') {
+    eventData = {
+      type: 'Issue',
+      number: process.env.GITHUB_EVENT_ISSUE_NUMBER || 'N/A',
+      title: process.env.GITHUB_EVENT_ISSUE_TITLE || 'No Title',
+      body: process.env.GITHUB_EVENT_ISSUE_BODY || '',
+      state: process.env.GITHUB_EVENT_ISSUE_STATE || 'open',
+      author: process.env.GITHUB_EVENT_ISSUE_USER_LOGIN || 'Unknown',
+      url: process.env.GITHUB_EVENT_ISSUE_HTML_URL || '',
+      labels: process.env.GITHUB_EVENT_ISSUE_LABELS || '',
+      created_at:
+        process.env.GITHUB_EVENT_ISSUE_CREATED_AT || new Date().toISOString(),
+    }
+  } else if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+    eventData = {
+      type: 'Pull Request',
+      number: process.env.GITHUB_EVENT_PR_NUMBER || 'N/A',
+      title: process.env.GITHUB_EVENT_PR_TITLE || 'No Title',
+      body: process.env.GITHUB_EVENT_PR_BODY || '',
+      state: process.env.GITHUB_EVENT_PR_MERGED
+        ? 'merged'
+        : process.env.GITHUB_EVENT_PR_STATE || 'open',
+      author: process.env.GITHUB_EVENT_PR_USER_LOGIN || 'Unknown',
+      url: process.env.GITHUB_EVENT_PR_HTML_URL || '',
+      labels: process.env.GITHUB_EVENT_PR_LABELS || '',
+      created_at:
+        process.env.GITHUB_EVENT_PR_CREATED_AT || new Date().toISOString(),
+    }
+  } else {
+    // 수동 실행이나 기타 경우
+    eventData = {
+      type: 'Test',
+      number: 0,
+      title: 'Manual Test Sync',
+      body: 'This is a test sync from GitHub Actions',
+      state: 'open',
+      author: 'GitHub Actions',
+      url: `https://github.com/${process.env.GITHUB_REPOSITORY}`,
+      labels: '',
+      created_at: new Date().toISOString(),
+    }
+  }
+
+  return eventData
+}
+
+// 중복 확인 함수
+async function findExistingPage(type, number) {
+  try {
+    const response = await notion.databases.query({
+      database_id: DATABASE_ID,
+      filter: {
+        and: [
+          {
+            property: 'Type',
+            select: {
+              equals: type,
+            },
+          },
+          {
+            property: 'Number',
+            number: {
+              equals: parseInt(number),
+            },
+          },
+        ],
+      },
+    })
+
+    return response.results.length > 0 ? response.results[0] : null
+  } catch (error) {
+    console.log('중복 확인 중 에러 (무시):', error.message)
+    return null
+  }
+}
+
+// Notion 페이지 생성/업데이트
 async function createOrUpdateNotionPage(eventData) {
   try {
     // 중복 확인
@@ -22,8 +117,7 @@ async function createOrUpdateNotionPage(eventData) {
           name: eventData.type,
         },
       },
-      // Status -> status (소문자)로 변경
-      status: {
+      Status: {
         select: {
           name:
             eventData.state.charAt(0).toUpperCase() + eventData.state.slice(1),
@@ -48,23 +142,25 @@ async function createOrUpdateNotionPage(eventData) {
       },
     }
 
-    // URL을 rich_text 타입으로 변경
+    // URL 속성 추가 (값이 있을 때만)
     if (eventData.url) {
       pageProperties['URL'] = {
+        url: eventData.url,
+      }
+    }
+
+    // Body 속성 추가 (값이 있을 때만)
+    if (eventData.body && eventData.body.length > 0) {
+      pageProperties['Body'] = {
         rich_text: [
           {
             text: {
-              content: eventData.url,
-              link: {
-                url: eventData.url,
-              },
+              content: eventData.body.substring(0, 2000), // Notion 제한으로 2000자까지
             },
           },
         ],
       }
     }
-
-    // Body 속성 제거 (존재하지 않으므로)
 
     if (existingPage) {
       // 기존 페이지 업데이트
@@ -93,32 +189,58 @@ async function createOrUpdateNotionPage(eventData) {
   }
 }
 
-// 중복 확인 함수도 수정 (status 소문자로)
-async function findExistingPage(type, number) {
+// 메인 함수
+async function main() {
+  try {
+    console.log('=== GitHub to Notion 동기화 시작 ===')
+
+    // 환경변수 확인
+    console.log('Repository:', process.env.GITHUB_REPOSITORY)
+    console.log('Event Name:', process.env.GITHUB_EVENT_NAME)
+    console.log('Database ID:', DATABASE_ID ? 'SET' : 'NOT SET')
+    console.log('API Key:', process.env.NOTION_API_KEY ? 'SET' : 'NOT SET')
+
+    // GitHub 이벤트 데이터 가져오기
+    const eventData = getGitHubEventData()
+    console.log('처리할 데이터:', {
+      type: eventData.type,
+      number: eventData.number,
+      title: eventData.title,
+      author: eventData.author,
+      state: eventData.state,
+    })
+
+    // Notion에 동기화
+    const result = await createOrUpdateNotionPage(eventData)
+
+    console.log('=== 동기화 완료 ===')
+    console.log('Notion 페이지 ID:', result.id)
+  } catch (error) {
+    console.error('동기화 실패:', error.message)
+    if (error.code) {
+      console.error('에러 코드:', error.code)
+    }
+    process.exit(1)
+  }
+}
+
+// 기존 페이지의 속성 구조 확인
+async function debugExistingPage() {
   try {
     const response = await notion.databases.query({
       database_id: DATABASE_ID,
-      filter: {
-        and: [
-          {
-            property: 'Type',
-            select: {
-              equals: type,
-            },
-          },
-          {
-            property: 'Number',
-            number: {
-              equals: parseInt(number),
-            },
-          },
-        ],
-      },
+      page_size: 1,
     })
 
-    return response.results.length > 0 ? response.results[0] : null
+    if (response.results.length > 0) {
+      const page = response.results[0]
+      console.log('=== 기존 페이지 속성들 ===')
+
+      for (const [key, value] of Object.entries(page.properties)) {
+        console.log(`속성 이름: "${key}" | 타입: ${value.type}`)
+      }
+    }
   } catch (error) {
-    console.log('중복 확인 중 에러 (무시):', error.message)
-    return null
+    console.error('기존 페이지 확인 실패:', error)
   }
 }
