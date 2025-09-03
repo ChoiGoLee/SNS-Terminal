@@ -10,7 +10,6 @@ const DATABASE_ID = process.env.NOTION_DATABASE_ID
 // GitHub 이벤트 데이터 파싱
 function getGitHubEventData() {
   const eventName = process.env.GITHUB_EVENT_NAME
-  const eventPath = process.env.GITHUB_EVENT_PATH
 
   console.log('Event Name:', eventName)
 
@@ -94,7 +93,7 @@ async function findExistingPage(type, number) {
 }
 
 // Notion 페이지 생성/업데이트
-async function createOrUpdateNotionPage(eventData) {
+async function createOrUpdateNotionPage(eventData, dbProperties) {
   try {
     // 중복 확인
     const existingPage = await findExistingPage(
@@ -102,7 +101,7 @@ async function createOrUpdateNotionPage(eventData) {
       eventData.number
     )
 
-    // 기본 속성만 설정 (문제가 되는 속성들 제외)
+    // 기본 속성들
     const pageProperties = {
       Name: {
         title: [
@@ -118,13 +117,6 @@ async function createOrUpdateNotionPage(eventData) {
           name: eventData.type,
         },
       },
-      // Status 속성 - 에러가 계속 발생하면 주석 처리
-      // Status: {
-      //   select: {
-      //     name:
-      //       eventData.state.charAt(0).toUpperCase() + eventData.state.slice(1),
-      //   },
-      // },
       Number: {
         number: parseInt(eventData.number) || 0,
       },
@@ -144,23 +136,69 @@ async function createOrUpdateNotionPage(eventData) {
       },
     }
 
-    // URL을 rich_text로 처리 (링크 포함)
-    if (eventData.url) {
-      pageProperties['URL'] = {
-        rich_text: [
-          {
-            text: {
-              content: eventData.url,
-              link: {
-                url: eventData.url,
-              },
-            },
+    // 데이터베이스에 실제로 존재하는 속성들만 추가
+    if (dbProperties.Status) {
+      if (dbProperties.Status.type === 'status') {
+        // Status 타입인 경우
+        pageProperties.Status = {
+          status: {
+            name:
+              eventData.state.charAt(0).toUpperCase() +
+              eventData.state.slice(1),
           },
-        ],
+        }
+      } else if (dbProperties.Status.type === 'select') {
+        // Select 타입인 경우
+        pageProperties.Status = {
+          select: {
+            name:
+              eventData.state.charAt(0).toUpperCase() +
+              eventData.state.slice(1),
+          },
+        }
       }
     }
 
-    // Body 속성은 완전히 제거 (존재하지 않음)
+    // URL 속성 처리
+    if (dbProperties.URL && eventData.url) {
+      if (dbProperties.URL.type === 'url') {
+        // URL 타입인 경우
+        pageProperties.URL = {
+          url: eventData.url,
+        }
+      } else if (dbProperties.URL.type === 'rich_text') {
+        // Rich Text 타입인 경우
+        pageProperties.URL = {
+          rich_text: [
+            {
+              text: {
+                content: eventData.url,
+                link: {
+                  url: eventData.url,
+                },
+              },
+            },
+          ],
+        }
+      }
+    }
+
+    // Body 속성이 존재하는 경우에만 추가
+    if (dbProperties.Body && eventData.body) {
+      if (dbProperties.Body.type === 'rich_text') {
+        // 텍스트 길이 제한 (Notion의 rich_text 제한)
+        const bodyText = eventData.body.substring(0, 2000)
+        pageProperties.Body = {
+          rich_text: [
+            {
+              text: {
+                content: bodyText,
+              },
+            },
+          ],
+        }
+      }
+    }
 
     console.log('전송할 속성들:', Object.keys(pageProperties))
 
@@ -222,7 +260,10 @@ async function main() {
     console.log('API Key:', process.env.NOTION_API_KEY ? 'SET' : 'NOT SET')
 
     // 데이터베이스 스키마 확인
-    await debugDatabaseSchema()
+    const dbProperties = await debugDatabaseSchema()
+    if (!dbProperties) {
+      throw new Error('데이터베이스 스키마를 가져올 수 없습니다.')
+    }
 
     // GitHub 이벤트 데이터 가져오기
     const eventData = getGitHubEventData()
@@ -234,8 +275,8 @@ async function main() {
       state: eventData.state,
     })
 
-    // Notion에 동기화
-    const result = await createOrUpdateNotionPage(eventData)
+    // Notion에 동기화 (스키마 정보 전달)
+    const result = await createOrUpdateNotionPage(eventData, dbProperties)
 
     console.log('=== 동기화 완료 ===')
     console.log('Notion 페이지 ID:', result.id)
