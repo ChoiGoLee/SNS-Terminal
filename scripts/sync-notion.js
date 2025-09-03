@@ -117,6 +117,13 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
           name: eventData.type,
         },
       },
+      Status = {
+        status: {
+          name:
+            eventData.state.charAt(0).toUpperCase() +
+            eventData.state.slice(1),
+        },
+      }
       Number: {
         number: parseInt(eventData.number) || 0,
       },
@@ -134,69 +141,17 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
           start: eventData.created_at.split('T')[0],
         },
       },
-    }
-
-    // 데이터베이스에 실제로 존재하는 속성들만 추가
-    if (dbProperties.Status) {
-      if (dbProperties.Status.type === 'status') {
-        // Status 타입인 경우
-        pageProperties.Status = {
-          status: {
-            name:
-              eventData.state.charAt(0).toUpperCase() +
-              eventData.state.slice(1),
-          },
-        }
-      } else if (dbProperties.Status.type === 'select') {
-        // Select 타입인 경우
-        pageProperties.Status = {
-          select: {
-            name:
-              eventData.state.charAt(0).toUpperCase() +
-              eventData.state.slice(1),
-          },
-        }
-      }
-    }
-
-    // URL 속성 처리
-    if (dbProperties.URL && eventData.url) {
-      if (dbProperties.URL.type === 'url') {
-        // URL 타입인 경우
-        pageProperties.URL = {
-          url: eventData.url,
-        }
-      } else if (dbProperties.URL.type === 'rich_text') {
-        // Rich Text 타입인 경우
-        pageProperties.URL = {
-          rich_text: [
-            {
-              text: {
-                content: eventData.url,
-                link: {
-                  url: eventData.url,
-                },
+      URL = {
+        rich_text: [
+          {
+            text: {
+              content: eventData.url,
+              link: {
+                url: eventData.url,
               },
             },
-          ],
-        }
-      }
-    }
-
-    // Body 속성이 존재하는 경우에만 추가
-    if (dbProperties.Body && eventData.body) {
-      if (dbProperties.Body.type === 'rich_text') {
-        // 텍스트 길이 제한 (Notion의 rich_text 제한)
-        const bodyText = eventData.body.substring(0, 2000)
-        pageProperties.Body = {
-          rich_text: [
-            {
-              text: {
-                content: bodyText,
-              },
-            },
-          ],
-        }
+          },
+        ],
       }
     }
 
