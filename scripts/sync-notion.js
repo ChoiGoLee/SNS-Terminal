@@ -92,6 +92,29 @@ async function findExistingPage(type, number) {
   }
 }
 
+// Labels 문자열을 배열로 파싱하는 함수
+function parseLabels(labelsString) {
+  if (!labelsString || labelsString.trim() === '') {
+    return []
+  }
+  // 쉼표로 구분된 문자열을 배열로 변환하고 공백 제거
+  return labelsString
+    .split(',')
+    .map((label) => label.trim())
+    .filter((label) => label.length > 0)
+}
+
+// Status 값을 적절히 매핑하는 함수
+function mapStatus(state) {
+  const statusMap = {
+    open: 'Open',
+    closed: 'Closed',
+    merged: 'Merged',
+    draft: 'Draft',
+  }
+  return statusMap[state.toLowerCase()] || 'Open'
+}
+
 // Notion 페이지 생성/업데이트
 async function createOrUpdateNotionPage(eventData, dbProperties) {
   try {
@@ -101,9 +124,15 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
       eventData.number
     )
 
-    // 기본 속성들
-    const pageProperties = {
-      Name: {
+    // Labels 처리
+    const labelsArray = parseLabels(eventData.labels)
+
+    // 기본 속성들 - 데이터베이스 스키마에 따라 동적으로 구성
+    const pageProperties = {}
+
+    // Name/Title 속성 (필수)
+    if (dbProperties['Name']) {
+      pageProperties['Name'] = {
         title: [
           {
             text: {
@@ -111,23 +140,56 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
             },
           },
         ],
-      },
-      Type: {
+      }
+    } else if (dbProperties['Title']) {
+      pageProperties['Title'] = {
+        title: [
+          {
+            text: {
+              content: `[${eventData.type} #${eventData.number}] ${eventData.title}`,
+            },
+          },
+        ],
+      }
+    }
+
+    // Type 속성
+    if (dbProperties['Type'] && dbProperties['Type'].type === 'select') {
+      pageProperties['Type'] = {
         select: {
           name: eventData.type,
         },
-      },
-      Status = {
-        status: {
-          name:
-            eventData.state.charAt(0).toUpperCase() +
-            eventData.state.slice(1),
-        },
       }
-      Number: {
+    }
+
+    // Status 속성 - status 타입인지 select 타입인지 확인
+    if (dbProperties['Status']) {
+      const statusValue = mapStatus(eventData.state)
+      if (dbProperties['Status'].type === 'status') {
+        pageProperties['Status'] = {
+          status: {
+            name: statusValue,
+          },
+        }
+      } else if (dbProperties['Status'].type === 'select') {
+        pageProperties['Status'] = {
+          select: {
+            name: statusValue,
+          },
+        }
+      }
+    }
+
+    // Number 속성
+    if (dbProperties['Number'] && dbProperties['Number'].type === 'number') {
+      pageProperties['Number'] = {
         number: parseInt(eventData.number) || 0,
-      },
-      Author: {
+      }
+    }
+
+    // Author 속성
+    if (dbProperties['Author'] && dbProperties['Author'].type === 'rich_text') {
+      pageProperties['Author'] = {
         rich_text: [
           {
             text: {
@@ -135,13 +197,21 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
             },
           },
         ],
-      },
-      Created: {
+      }
+    }
+
+    // Created 속성
+    if (dbProperties['Created'] && dbProperties['Created'].type === 'date') {
+      pageProperties['Created'] = {
         date: {
           start: eventData.created_at.split('T')[0],
         },
-      },
-      URL = {
+      }
+    }
+
+    // URL 속성 - rich_text 타입으로 처리
+    if (dbProperties['URL'] && dbProperties['URL'].type === 'rich_text') {
+      pageProperties['URL'] = {
         rich_text: [
           {
             text: {
@@ -153,9 +223,48 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
           },
         ],
       }
+    } else if (dbProperties['URL'] && dbProperties['URL'].type === 'url') {
+      pageProperties['URL'] = {
+        url: eventData.url,
+      }
+    }
+
+    // Body 속성 (있는 경우에만)
+    if (
+      dbProperties['Body'] &&
+      dbProperties['Body'].type === 'rich_text' &&
+      eventData.body
+    ) {
+      // Body 내용이 너무 길면 잘라내기 (Notion API 제한)
+      const bodyContent =
+        eventData.body.length > 2000
+          ? eventData.body.substring(0, 2000) + '...'
+          : eventData.body
+
+      pageProperties['Body'] = {
+        rich_text: [
+          {
+            text: {
+              content: bodyContent,
+            },
+          },
+        ],
+      }
+    }
+
+    // Labels 속성 (multi_select 타입인 경우)
+    if (
+      dbProperties['Labels'] &&
+      dbProperties['Labels'].type === 'multi_select' &&
+      labelsArray.length > 0
+    ) {
+      pageProperties['Labels'] = {
+        multi_select: labelsArray.map((label) => ({ name: label })),
+      }
     }
 
     console.log('전송할 속성들:', Object.keys(pageProperties))
+    console.log('속성 상세:', JSON.stringify(pageProperties, null, 2))
 
     if (existingPage) {
       // 기존 페이지 업데이트
@@ -181,6 +290,13 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
   } catch (error) {
     console.error('Notion 페이지 생성/업데이트 실패:', error)
     console.error('상세 에러:', error.message)
+    if (error.code) {
+      console.error('에러 코드:', error.code)
+    }
+    // API 응답 본문이 있으면 출력
+    if (error.body) {
+      console.error('에러 응답:', JSON.stringify(error.body, null, 2))
+    }
     throw error
   }
 }
@@ -195,6 +311,24 @@ async function debugDatabaseSchema() {
     console.log('=== 실제 데이터베이스 속성들 ===')
     for (const [key, value] of Object.entries(response.properties)) {
       console.log(`"${key}" -> ${value.type}`)
+      // 선택 옵션이 있는 경우 출력
+      if (value.type === 'select' && value.select?.options) {
+        console.log(
+          `  옵션: ${value.select.options.map((opt) => opt.name).join(', ')}`
+        )
+      }
+      if (value.type === 'multi_select' && value.multi_select?.options) {
+        console.log(
+          `  옵션: ${value.multi_select.options
+            .map((opt) => opt.name)
+            .join(', ')}`
+        )
+      }
+      if (value.type === 'status' && value.status?.options) {
+        console.log(
+          `  옵션: ${value.status.options.map((opt) => opt.name).join(', ')}`
+        )
+      }
     }
     return response.properties
   } catch (error) {
@@ -228,6 +362,7 @@ async function main() {
       title: eventData.title,
       author: eventData.author,
       state: eventData.state,
+      labels: eventData.labels,
     })
 
     // Notion에 동기화 (스키마 정보 전달)
