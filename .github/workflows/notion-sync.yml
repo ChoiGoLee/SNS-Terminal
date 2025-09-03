@@ -2,9 +2,10 @@ name: GitHub to Notion Sync
 
 on:
   issues:
-    types: [opened, closed, edited]
+    types: [opened, closed, reopened, edited, labeled, unlabeled]
   pull_request:
-    types: [opened, closed, merged]
+    types: [opened, closed, reopened, edited, merged, ready_for_review]
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -18,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -27,4 +29,25 @@ jobs:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GitHub 이벤트 데이터 전달
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # Issue 관련 데이터
+          GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_EVENT_ISSUE_TITLE: ${{ github.event.issue.title }}
+          GITHUB_EVENT_ISSUE_BODY: ${{ github.event.issue.body }}
+          GITHUB_EVENT_ISSUE_STATE: ${{ github.event.issue.state }}
+          GITHUB_EVENT_ISSUE_USER_LOGIN: ${{ github.event.issue.user.login }}
+          GITHUB_EVENT_ISSUE_HTML_URL: ${{ github.event.issue.html_url }}
+          GITHUB_EVENT_ISSUE_CREATED_AT: ${{ github.event.issue.created_at }}
+          # PR 관련 데이터
+          GITHUB_EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_EVENT_PR_TITLE: ${{ github.event.pull_request.title }}
+          GITHUB_EVENT_PR_BODY: ${{ github.event.pull_request.body }}
+          GITHUB_EVENT_PR_STATE: ${{ github.event.pull_request.state }}
+          GITHUB_EVENT_PR_MERGED: ${{ github.event.pull_request.merged }}
+          GITHUB_EVENT_PR_USER_LOGIN: ${{ github.event.pull_request.user.login }}
+          GITHUB_EVENT_PR_HTML_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_EVENT_PR_CREATED_AT: ${{ github.event.pull_request.created_at }}
         run: node scripts/sync-notion.js
