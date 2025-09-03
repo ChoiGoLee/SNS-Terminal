@@ -124,15 +124,15 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
       eventData.number
     )
 
-    // Labels 처리
-    const labelsArray = parseLabels(eventData.labels)
-
-    // 기본 속성들 - 데이터베이스 스키마에 따라 동적으로 구성
+    // 실제 데이터베이스에 존재하는 속성만 사용
     const pageProperties = {}
 
-    // Name/Title 속성 (필수)
-    if (dbProperties['Name']) {
-      pageProperties['Name'] = {
+    // Title 속성 찾기 (Name 또는 title 타입인 속성)
+    const titleProperty = Object.keys(dbProperties).find(
+      (key) => dbProperties[key].type === 'title'
+    )
+    if (titleProperty) {
+      pageProperties[titleProperty] = {
         title: [
           {
             text: {
@@ -141,127 +141,110 @@ async function createOrUpdateNotionPage(eventData, dbProperties) {
           },
         ],
       }
-    } else if (dbProperties['Title']) {
-      pageProperties['Title'] = {
-        title: [
-          {
-            text: {
-              content: `[${eventData.type} #${eventData.number}] ${eventData.title}`,
-            },
-          },
-        ],
-      }
     }
 
-    // Type 속성
-    if (dbProperties['Type'] && dbProperties['Type'].type === 'select') {
-      pageProperties['Type'] = {
-        select: {
-          name: eventData.type,
-        },
-      }
-    }
+    // 각 속성을 실제 데이터베이스 스키마에 맞춰 처리
+    Object.keys(dbProperties).forEach((propertyName) => {
+      const property = dbProperties[propertyName]
 
-    // Status 속성 - status 타입인지 select 타입인지 확인
-    if (dbProperties['Status']) {
-      const statusValue = mapStatus(eventData.state)
-      if (dbProperties['Status'].type === 'status') {
-        pageProperties['Status'] = {
-          status: {
-            name: statusValue,
-          },
-        }
-      } else if (dbProperties['Status'].type === 'select') {
-        pageProperties['Status'] = {
-          select: {
-            name: statusValue,
-          },
-        }
-      }
-    }
-
-    // Number 속성
-    if (dbProperties['Number'] && dbProperties['Number'].type === 'number') {
-      pageProperties['Number'] = {
-        number: parseInt(eventData.number) || 0,
-      }
-    }
-
-    // Author 속성
-    if (dbProperties['Author'] && dbProperties['Author'].type === 'rich_text') {
-      pageProperties['Author'] = {
-        rich_text: [
-          {
-            text: {
-              content: eventData.author,
-            },
-          },
-        ],
-      }
-    }
-
-    // Created 속성
-    if (dbProperties['Created'] && dbProperties['Created'].type === 'date') {
-      pageProperties['Created'] = {
-        date: {
-          start: eventData.created_at.split('T')[0],
-        },
-      }
-    }
-
-    // URL 속성 - rich_text 타입으로 처리
-    if (dbProperties['URL'] && dbProperties['URL'].type === 'rich_text') {
-      pageProperties['URL'] = {
-        rich_text: [
-          {
-            text: {
-              content: eventData.url,
-              link: {
-                url: eventData.url,
+      switch (propertyName) {
+        case 'Type':
+          if (property.type === 'select') {
+            pageProperties['Type'] = {
+              select: {
+                name: eventData.type,
               },
-            },
-          },
-        ],
-      }
-    } else if (dbProperties['URL'] && dbProperties['URL'].type === 'url') {
-      pageProperties['URL'] = {
-        url: eventData.url,
-      }
-    }
+            }
+          }
+          break
 
-    // Body 속성 (있는 경우에만)
-    if (
-      dbProperties['Body'] &&
-      dbProperties['Body'].type === 'rich_text' &&
-      eventData.body
-    ) {
-      // Body 내용이 너무 길면 잘라내기 (Notion API 제한)
-      const bodyContent =
-        eventData.body.length > 2000
-          ? eventData.body.substring(0, 2000) + '...'
-          : eventData.body
+        case 'Status':
+          const statusValue = mapStatus(eventData.state)
+          if (property.type === 'status') {
+            pageProperties['Status'] = {
+              status: {
+                name: statusValue,
+              },
+            }
+          } else if (property.type === 'select') {
+            pageProperties['Status'] = {
+              select: {
+                name: statusValue,
+              },
+            }
+          }
+          break
 
-      pageProperties['Body'] = {
-        rich_text: [
-          {
-            text: {
-              content: bodyContent,
-            },
-          },
-        ],
-      }
-    }
+        case 'Number':
+          if (property.type === 'number') {
+            pageProperties['Number'] = {
+              number: parseInt(eventData.number) || 0,
+            }
+          }
+          break
 
-    // Labels 속성 (multi_select 타입인 경우)
-    if (
-      dbProperties['Labels'] &&
-      dbProperties['Labels'].type === 'multi_select' &&
-      labelsArray.length > 0
-    ) {
-      pageProperties['Labels'] = {
-        multi_select: labelsArray.map((label) => ({ name: label })),
+        case 'Author':
+          if (property.type === 'rich_text') {
+            pageProperties['Author'] = {
+              rich_text: [
+                {
+                  text: {
+                    content: eventData.author,
+                  },
+                },
+              ],
+            }
+          }
+          break
+
+        case 'Created':
+          if (property.type === 'date') {
+            pageProperties['Created'] = {
+              date: {
+                start: eventData.created_at.split('T')[0],
+              },
+            }
+          }
+          break
+
+        case 'URL':
+          if (property.type === 'rich_text') {
+            pageProperties['URL'] = {
+              rich_text: [
+                {
+                  text: {
+                    content: eventData.url,
+                    link: {
+                      url: eventData.url,
+                    },
+                  },
+                },
+              ],
+            }
+          } else if (property.type === 'url') {
+            pageProperties['URL'] = {
+              url: eventData.url,
+            }
+          }
+          break
+
+        case 'Labels':
+          if (property.type === 'multi_select') {
+            const labelsArray = parseLabels(eventData.labels)
+            if (labelsArray.length > 0) {
+              pageProperties['Labels'] = {
+                multi_select: labelsArray.map((label) => ({ name: label })),
+              }
+            }
+          }
+          break
+
+        // Body는 존재하지 않는다고 했으니 제외
+        default:
+          // 다른 속성들은 무시
+          break
       }
-    }
+    })
 
     console.log('전송할 속성들:', Object.keys(pageProperties))
     console.log('속성 상세:', JSON.stringify(pageProperties, null, 2))
