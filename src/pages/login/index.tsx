@@ -1,8 +1,25 @@
-function Login() {
+import Btns from '../../components/common/Btns'
+import styles from '../../assets/css/login.module.css'
+
+function Login(): JSX.Element {
+  const provider = ['Google', 'Github']
   return (
-    <>
-      <h1>Login Page</h1>
-    </>
+    <div className="w-screen h-screen bg-black">
+      <div>
+        <div className={styles['login-btn-container']}>
+          {provider.map((p, i) => {
+            return (
+              <Btns
+                key={i}
+                content={`Continue with ${p}`}
+                img={`/src/assets/icons/${p}.svg`}
+                style={`btn full-width-btn primary-btn medium-font`}
+              />
+            )
+          })}
+        </div>
+      </div>
+    </div>
   )
 }
 export default Login
