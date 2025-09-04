@@ -1,5 +1,6 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Home from './pages/home/index'
+import { Header } from './components/common/header'
 // import Login from './pages/login/index'
 // import PostDetail from './pages/post-detail/index'
 // import PostCreate from './pages/post-create/index'
@@ -13,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Header title="홈" />
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/login" element={<Login />} />
