@@ -1,34 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import Home from './pages/home/index'
+// import Login from './pages/login/index'
+// import PostDetail from './pages/post-detail/index'
+// import PostCreate from './pages/post-create/index'
+// import Profile from './pages/profile/index'
+// import ProfileSetting from './pages/profile-setting/index'
+// import Messages from './pages/messages/index'
+// import Notification from './pages/notification/index'
+// import Settings from './pages/settings/index'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/login" element={<Login />} />
+          <Route path="/post-detail" element={<PostDetail />} />
+          <Route path="/post-create" element={<PostCreate />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile-setting" element={<ProfileSetting />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/settings" element={<Settings />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
