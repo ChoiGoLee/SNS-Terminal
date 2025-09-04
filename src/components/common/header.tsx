@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   rightButton,
 }) => {
   return (
-    <header>
+    <header className="bg-background-surface text-text-primary text-xl">
       {leftButton && (
         <button onClick={leftButton.onClick}>{leftButton.text}</button>
       )}
