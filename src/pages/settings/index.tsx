@@ -1,4 +1,10 @@
+import { Header } from '../../components/common/header'
 function Settings() {
-  return <div>Settings Page</div>
+  return (
+    <>
+      <Header title="설정" />
+      <div>Settings Page</div>
+    </>
+  )
 }
 export default Settings

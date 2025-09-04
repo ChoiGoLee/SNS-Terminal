@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src\\components\\common/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src\\components\\common/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src\\pages\\messages/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src/**)",
+      "Read(/C:\\Users\\chlwl\\Desktop\\Weniv\\FinalProject\\SNS-Terminal\\src/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
