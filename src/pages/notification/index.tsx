@@ -3,7 +3,13 @@ import { Header } from '../../components/common/header'
 function Notification() {
   return (
     <>
-      <Header title="알림" />
+      <Header
+        title="알림"
+        rightButton={{
+          text: '모두 읽음',
+          onClick: () => console.log('모두읽음클릭'),
+        }}
+      />
       <div>Notification Page</div>
     </>
   )
