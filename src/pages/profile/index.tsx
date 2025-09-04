@@ -1,4 +1,11 @@
+import { Header } from '../../components/common/header'
+
 function Profile() {
-  return <div>Profile Page</div>
+  return (
+    <>
+      <Header title="프로필" />
+      <div>Profile Page</div>
+    </>
+  )
 }
 export default Profile
