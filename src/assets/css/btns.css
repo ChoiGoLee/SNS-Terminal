@@ -1,0 +1,58 @@
+.btn {
+  @apply rounded-[30px] text-center flex justify-center items-center;
+}
+
+/** 
+* Button Sizes
+*
+* sm, md, lg, full-width
+**/
+.sm-btn {
+  @apply mt-6 mb-6 ml-[1rem] mr-[1rem] text-sm;
+}
+
+.md-btn {
+  @apply mt-8 mb-8 ml-[1rem] mr-[1rem] text-base;
+}
+
+.lg-btn {
+  @apply mt-12 mb-12 ml-[72.5px] mr-[72.5px] text-base font-bold;
+}
+
+.full-width-btn {
+  @apply pt-[1rem] pb-[1rem] w-full text-lg;
+}
+
+/**
+* font-size
+**/
+.medium-font {
+  @apply font-medium;
+}
+.regular-font {
+  @apply font-normal;
+}
+
+/** 
+* Button Colors
+*
+* Primary, Danger
+**/
+.primary-btn {
+  @apply bg-primary text-black;
+}
+.primary-btn:hover {
+  @apply bg-primary-dark;
+}
+.danger-btn {
+  @apply bg-danger text-black;
+}
+.danger-btn:hover {
+  @apply bg-danger-dark;
+}
+.secondary-btn .ghost-btn {
+  @apply bg-background-surface text-white;
+}
+.outline-btn {
+  @apply bg-background-surface text-primary;
+}
