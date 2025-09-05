@@ -2,8 +2,8 @@ import React from 'react'
 import '../../assets/css/btns.css'
 
 interface ButtonsProps {
-  content: string
-  img: string
+  content?: string
+  img?: string
   style: string
 }
 
