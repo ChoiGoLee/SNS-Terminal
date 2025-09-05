@@ -1,8 +1,8 @@
 import '../../assets/css/btns.css'
 
 interface ButtonsProps {
-  content: string
-  img: string
+  content?: string
+  img?: string
   style: string
 }
 
@@ -12,7 +12,7 @@ function Btns({ content, img, style }: ButtonsProps): JSX.Element {
     <>
       <button className={style} type="button">
         {img && <img className="mr-12" src={img} alt="" />}
-        {content && { content }}
+        {content && content}
       </button>
     </>
   )

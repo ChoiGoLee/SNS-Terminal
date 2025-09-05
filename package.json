@@ -10,9 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "-": "^0.0.1",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "github-markdown-css": "^5.8.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.8.2"
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.8.2",
+    "react-syntax-highlighter": "^15.6.6",
+    "save": "^2.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
