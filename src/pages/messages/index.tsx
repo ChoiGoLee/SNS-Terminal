@@ -1,4 +1,4 @@
-import { Header } from '../../components/common/header'
+import { Header } from '../../components/common/Header'
 import AddIcon from '../../assets/icons/add-line.svg'
 
 function Messages() {

@@ -1,4 +1,4 @@
-import { Header } from '../../components/common/header'
+import { Header } from '../../components/common/Header'
 import BackArrow from '../../assets/icons/back-arrow.svg'
 function ProfileSetting() {
   return (
