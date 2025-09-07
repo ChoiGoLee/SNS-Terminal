@@ -8,6 +8,10 @@ export default {
           DEFAULT: '#38E07A',
           dark: '#28C965',
         },
+        danger: {
+          DEFAULT: '#DC2626',
+          dark: '#B91C1C',
+        },
         background: {
           DEFAULT: '#000000',
           surface: '#16181C',
