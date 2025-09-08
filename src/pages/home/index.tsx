@@ -8,4 +8,5 @@ function Home(): any {
     </>
   )
 }
-export default Home
+
+export default HomePage
