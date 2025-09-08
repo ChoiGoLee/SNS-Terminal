@@ -1,10 +1,11 @@
-import { Header } from '../../components/common/header'
-import BackArrow from '../../assets/icons/back-arrow.svg'
+import { Header } from '../../components/common/Header'
+import BackArrow from '/icons/back-arrow.svg'
 
 function Profile() {
   return (
     <>
       <Header
+        title="프로필"
         leftButton={{
           icon: <img src={BackArrow} />,
           onClick: () => {
