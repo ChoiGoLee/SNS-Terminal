@@ -3,7 +3,11 @@ import Btns from '../../components/common/Btns'
 import styles from '../../assets/css/login.module.css'
 
 function Login(): React.JSX.Element {
+<<<<<<< HEAD
   const provider = ['google', 'github']
+=======
+  const provider = ['Google', 'Github']
+>>>>>>> 69404aedb8cfa2e6c4f356a1458a8a2008e2816e
   return (
     <div className="w-screen h-screen bg-black">
       <div>
