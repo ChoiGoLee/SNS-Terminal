@@ -1,5 +1,5 @@
-import { Header } from '../../components/common/header'
-import BackArrow from '../../assets/icons/back-arrow.svg'
+import { Header } from '../../components/common/Header'
+import BackArrow from '/icons/back-arrow.svg'
 function PostDetail() {
   return (
     <>

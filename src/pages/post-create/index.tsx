@@ -1,4 +1,4 @@
-import { Header } from '../../components/common/header'
+import { Header } from '../../components/common/Header'
 import CloseLine from '../../assets/icons/close-line.svg'
 
 function PostCreate() {
