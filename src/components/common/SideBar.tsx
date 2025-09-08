@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router'
 
 interface SideItem {
   path: string
@@ -19,6 +20,12 @@ export const SideBar: React.FC<SideProps> = ({
   isAuthenticated = false,
   activeItem,
 }): React.JSX.Element => {
+  const navigate = useNavigate()
+
+  const handleItemClick = (item: SideItem) => {
+    navigate(item.path)
+  }
+
   const isItemVisible = (item: SideItem): boolean => {
     if (item.requireAuth && !isAuthenticated) {
       return false
@@ -38,7 +45,7 @@ export const SideBar: React.FC<SideProps> = ({
 
     return (
       <li key={item.path} className="w-full">
-        <button className={style}>
+        <button className={style} onClick={() => handleItemClick(item)}>
           {item.img && (
             <div className="relative w-5 h-5 mr-3 flex-shrink-0">
               <img

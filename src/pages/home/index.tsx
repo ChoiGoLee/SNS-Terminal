@@ -17,18 +17,25 @@ const sidebarItems = [
     requireAuth: true,
   },
   {
-    img: '/icons/notification.svg',
-    path: '/notifications',
-    text: '알림',
-    href: '/notifications',
+    img: '/icons/profile.svg',
+    path: '/profile',
+    text: '프로필',
+    href: '/profile',
     requireAuth: true,
   },
+
   {
     img: '/icons/setting.svg',
     path: '/settings',
     text: '설정',
     href: '/settings',
     requireAuth: true,
+  },
+  {
+    path: '/login',
+    text: '로그인',
+    href: '/login',
+    requireAuth: false,
   },
 ]
 
