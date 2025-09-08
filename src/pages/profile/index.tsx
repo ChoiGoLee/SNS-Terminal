@@ -55,7 +55,11 @@ function Profile() {
         />
       </div>
       <div className="flex">
-        <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
+        <SideBar
+          items={sidebarItems}
+          isAuthenticated={true}
+          activeItem="/profile"
+        />
         <div>Profile Page</div>
       </div>
     </>

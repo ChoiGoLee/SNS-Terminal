@@ -54,7 +54,11 @@ function ProfileSetting() {
         />
       </div>
       <div className="flex">
-        <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
+        <SideBar
+          items={sidebarItems}
+          isAuthenticated={true}
+          activeItem="/settings"
+        />
         <div>Profile Setting Page</div>
       </div>
     </>

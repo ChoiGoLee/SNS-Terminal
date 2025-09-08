@@ -1,5 +1,4 @@
 import HeartLine from '../../assets/icons/heart-line.svg?react'
-import HeartFill from '../../assets/icons/heart-fill.svg?react'
 
 interface LikeButtonProps {
   likeCount: number
@@ -12,7 +11,11 @@ function LikeButton({ likeCount, isLiked, onLike }: LikeButtonProps) {
     <button onClick={onLike} className="flex items-center gap-2 p-2 group">
       <div className="w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-red-500/10 transition-colors">
         {isLiked ? (
-          <HeartFill className="w-5 h-5 text-red-500" />
+          <img
+            src="/icons/heart-fill.svg"
+            alt="heart-fill"
+            className="w-5 h-5"
+          />
         ) : (
           <HeartLine className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors" />
         )}
