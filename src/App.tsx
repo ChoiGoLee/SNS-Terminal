@@ -6,7 +6,6 @@ import PostCreate from './pages/post-create/index'
 import Profile from './pages/profile/index'
 import ProfileSetting from './pages/profile-setting/index'
 import Messages from './pages/messages/index'
-import Notification from './pages/notification/index'
 import Settings from './pages/settings/index'
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile-setting" element={<ProfileSetting />} />
           <Route path="/messages" element={<Messages />} />
-          <Route path="/notification" element={<Notification />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
