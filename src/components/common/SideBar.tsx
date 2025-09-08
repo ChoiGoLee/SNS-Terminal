@@ -63,7 +63,9 @@ export const SideBar: React.FC<SideProps> = ({
 
   return (
     <aside className="w-64 bg-background-surface border-r border-background-border">
-      <ul className="p-4 space-y-1">{visibleItems.map(renderSideItem)}</ul>
+      <ul className="p-4 space-y-1 h-screen">
+        {visibleItems.map(renderSideItem)}
+      </ul>
     </aside>
   )
 }

@@ -32,6 +32,12 @@ const sidebarItems = [
     requireAuth: true,
   },
   {
+    path: '/post-create',
+    text: '포스트 작성',
+    href: '/post-create',
+    requireAuth: true,
+  },
+  {
     path: '/login',
     text: '로그인',
     href: '/login',
@@ -45,7 +51,7 @@ function Home(): any {
       <div className="min-h-30">
         <Header title="홈" />
       </div>
-      <div className="flex">
+      <div className="flex h-full">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
         <h1>Home Page</h1>
       </div>

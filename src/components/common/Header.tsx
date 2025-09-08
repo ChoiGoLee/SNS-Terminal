@@ -4,12 +4,6 @@ import addButton from '/icons/add.svg'
 import closeButton from '/icons/close.svg'
 import backArrowButton from '/icons/back-arrow.svg'
 
-interface HeaderButton {
-  text?: string
-  icon?: React.ReactNode
-  onClick: () => void
-}
-
 interface HeaderProps {
   title?: string
   onBackClick?: () => void
@@ -21,6 +15,12 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
+  // 사용시 <Header title="제목" show버튼명={true} />
+  // show버튼명 = {true}로만 변경하면 onClick 설정없이 사용 가능
+
+  // 기본적으로 버튼은 fasle로 숨김처리 되어있음
+  // show버튼명 = { 로직에 클릭시 실행함수 포함되어있음 }
+
   title,
   onBackClick,
   onAddClick,
@@ -31,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const navigate = useNavigate()
 
+  // 버튼 눌렀을때 작동 함수 설정
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick()
@@ -60,32 +61,25 @@ export const Header: React.FC<HeaderProps> = ({
       {/* 왼쪽 버튼 */}
       <div className="flex items-center">
         {showBackButton && (
-          <button
-            onClick={handleBackClick}
-            className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded transition-colors"
-          >
-            {backArrowButton}
+          <button onClick={handleBackClick}>
+            <img src={backArrowButton} alt="뒤로가기" />
           </button>
         )}
         {showCancelButton && (
-          <button
-            onClick={handleCancelClick}
-            className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 rounded transition-colors text-gray-600"
-          >
-            취소
+          <button onClick={handleCancelClick}>
+            <img src={closeButton} alt="뒤로가기" />
           </button>
         )}
       </div>
+
       {/* 중앙 타이틀 */}
       <h1>{title}</h1>
+
       {/* 오른쪽 버튼 */}
       <div className="flex items-center">
         {showAddButton && (
-          <button
-            onClick={handleAddClick}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            {addButton}
+          <button onClick={handleAddClick}>
+            <img src={addButton} alt="추가" />
           </button>
         )}
       </div>

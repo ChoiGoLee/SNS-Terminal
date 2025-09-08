@@ -1,5 +1,4 @@
 import { Header } from '../../components/common/Header'
-import AddIcon from '/icons/add.svg'
 import { SideBar } from '../../components/common/SideBar'
 
 const sidebarItems = [
@@ -44,13 +43,7 @@ function Messages() {
   return (
     <>
       <div className="min-h-30">
-        <Header
-          title="메시지"
-          rightButton={{
-            icon: <img src={AddIcon} />,
-            onClick: () => console.log('+클릭'),
-          }}
-        />
+        <Header title="메시지" showAddButton={true} />
       </div>
       <div className="flex">
         <SideBar

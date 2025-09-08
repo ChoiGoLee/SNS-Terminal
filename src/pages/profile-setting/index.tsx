@@ -43,15 +43,7 @@ function ProfileSetting() {
   return (
     <>
       <div className="min-h-30">
-        <Header
-          title="프로필 편집"
-          leftButton={{
-            icon: <img src={BackArrow} />,
-            onClick: () => {
-              console.log('뒤로가기')
-            },
-          }}
-        />
+        <Header title="프로필 편집" showBackButton={true} />
       </div>
       <div className="flex">
         <SideBar
