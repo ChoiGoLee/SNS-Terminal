@@ -1,5 +1,5 @@
 import { Header } from '../../components/common/header'
-import Markdown from '../../components/common/markdown'
+import Markdown from '../../components/common/Markdown'
 
 function Home(): any {
   return (
@@ -10,4 +10,5 @@ function Home(): any {
     </>
   )
 }
+
 export default Home
