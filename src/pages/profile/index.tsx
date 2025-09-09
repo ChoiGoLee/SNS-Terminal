@@ -1,6 +1,5 @@
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
-import BackArrow from '/icons/back-arrow.svg'
 
 const sidebarItems = [
   {
@@ -44,7 +43,7 @@ function Profile() {
   return (
     <>
       <div className="min-h-30">
-        <Header title="프로필" showBackButton={true} />
+        <Header title="프로필" buttons={{ back: { show: true } }} />
       </div>
       <div className="flex">
         <SideBar

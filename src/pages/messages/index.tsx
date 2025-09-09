@@ -43,7 +43,7 @@ function Messages() {
   return (
     <>
       <div className="min-h-30">
-        <Header title="메시지" showAddButton={true} />
+        <Header title="메시지" buttons={{ add: { show: true } }} />
       </div>
       <div className="flex">
         <SideBar

@@ -1,6 +1,5 @@
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
-import BackArrow from '/icons/back-arrow.svg'
 
 const sidebarItems = [
   {
@@ -43,15 +42,7 @@ function PostDetail() {
   return (
     <>
       <div className="min-h-30">
-        <Header
-          title="포스트"
-          leftButton={{
-            icon: <img src={BackArrow} />,
-            onClick: () => {
-              console.log('뒤로가기')
-            },
-          }}
-        />
+        <Header title="포스트" buttons={{ back: { show: true } }} />
       </div>
       <div className="flex">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
