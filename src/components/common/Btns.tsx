@@ -1,3 +1,4 @@
+import React from 'react'
 import '../../assets/css/btns.css'
 
 interface ButtonsProps {
@@ -7,7 +8,7 @@ interface ButtonsProps {
 }
 
 // 매개변수를 객체로 받도록 수정
-function Btns({ content, img, style }: ButtonsProps): JSX.Element {
+function Btns({ content, img, style }: ButtonsProps): React.JSX.Element {
   return (
     <>
       <button className={style} type="button">

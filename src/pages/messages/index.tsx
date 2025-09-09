@@ -1,5 +1,5 @@
-import { Header } from '../../components/common/header'
-import AddIcon from '../../assets/icons/add-line.svg'
+import { Header } from '../../components/common/Header'
+import AddIcon from '/icons/add.svg'
 
 function Messages() {
   return (
