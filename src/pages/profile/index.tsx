@@ -5,6 +5,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'home',
     img: '/icons/home.svg',
+    activeImg: '/icons/home-fill.svg',
     path: '/',
     text: '홈',
     href: '/',
@@ -13,6 +14,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'messages',
     img: '/icons/message.svg',
+    activeImg: '/icons/message-fill.svg',
     path: '/messages',
     text: '메시지',
     href: '/messages',
@@ -21,6 +23,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'profile',
     img: '/icons/profile.svg',
+    activeImg: '/icons/profile-fill.svg',
     path: '/profile',
     text: '프로필',
     href: '/profile',
@@ -38,12 +41,11 @@ const sidebarItems: SideItem[] = [
   {
     type: 'login',
     path: '/login',
-    text: '로그인',
+    text: '로그인 또는 가입하기',
     href: '/login',
     requireAuth: false,
   },
 ]
-
 function Profile() {
   return (
     <>

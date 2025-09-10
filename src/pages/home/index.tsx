@@ -6,6 +6,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'home',
     img: '/icons/home.svg',
+    activeImg: '/icons/home-fill.svg',
     path: '/',
     text: '홈',
     href: '/',
@@ -14,6 +15,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'messages',
     img: '/icons/message.svg',
+    activeImg: '/icons/message-fill.svg',
     path: '/messages',
     text: '메시지',
     href: '/messages',
@@ -22,6 +24,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'profile',
     img: '/icons/profile.svg',
+    activeImg: '/icons/profile-fill.svg',
     path: '/profile',
     text: '프로필',
     href: '/profile',
@@ -47,11 +50,11 @@ const sidebarItems: SideItem[] = [
 
 function Home(): any {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <div className="h-full">
-        <SideBar items={sidebarItems} isAuthenticated={false} activeItem="/" />
+        <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
       </div>
-      <div className="min-h-30">
+      <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
         <Markdown />
       </div>

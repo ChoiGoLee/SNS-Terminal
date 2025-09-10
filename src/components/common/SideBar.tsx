@@ -13,6 +13,7 @@ export interface SideItem {
   type: SideItemType
   path: string
   img?: string
+  activeImg?: string
   text: string
   requireAuth?: boolean
   href: string
@@ -56,6 +57,14 @@ export const SideBar: React.FC<SideProps> = ({
     const isActive = activeItem === item.path
     const isLoginButton = item.type === 'login'
 
+    // active 상태 이미지 변경
+    const activeChangeImg = () => {
+      if (isActive && item.activeImg) {
+        return item.activeImg
+      }
+      return item.img
+    }
+
     // 현재 페이지인지에 따라 스타일 변경
     let buttonClass = ''
 
@@ -80,7 +89,7 @@ export const SideBar: React.FC<SideProps> = ({
           {item.img && (
             <div className="w-5 h-5 mr-3">
               <img
-                src={item.img}
+                src={activeChangeImg()}
                 alt={`${item.text} 아이콘`}
                 className="w-full h-full"
               />
@@ -94,11 +103,11 @@ export const SideBar: React.FC<SideProps> = ({
 
   return (
     <aside className="w-64 bg-background-surface border-r border-background-border p-4 flex flex-col">
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen ">
         {/* 로고 영역 */}
-        <div className="pb-8 text-3xl">
+        <div className="pb-8 text-3xl text-center">
           {/* 로고 이미지가 들어갈 자리 */}
-          <span>SNS-Terminal</span>
+          <span className="">SNS-Terminal</span>
         </div>
 
         {/* 메뉴 컨텐츠 영역 */}
