@@ -9,16 +9,16 @@ interface AvatarProps {
 function Avatar({ userImage, userName, size }: AvatarProps) {
   const [imageError, setImageError] = useState(false)
 
-  const sizeClasses = {
+  const SIZECLASSES = {
     xs: 'w-6 h-6 text-xs',
     sm: 'w-10 h-10 text-sm',
     md: 'w-12 h-12 text-base',
     lg: 'w-16 h-16 text-lg',
-  }
+  } as const
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-full bg-primary flex items-center justify-center font-bold text-black overflow-hidden`}
+      className={`${SIZECLASSES[size]} rounded-full bg-primary flex items-center justify-center font-bold text-black overflow-hidden`}
     >
       {userImage && !imageError ? (
         <img
