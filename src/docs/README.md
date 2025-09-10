@@ -59,6 +59,60 @@ function Button({ children, onClick, size = 'md' }: ButtonProps) {
 }
 ````
 
+```tsx
+interface HeaderProps {
+  title?: string
+  on버튼명Click?: () => void
+  show버튼명Button?: boolean
+}
+export const Header: React.FC<HeaderProps> = ({
+  title,
+  on버튼명Click,
+  showButton = false,
+}) => {
+  const navigate = useNavigate()
+
+  // 버튼 눌렀을때 작동 함수 설정
+  const handleBackClick = () => {
+    if (onBackClick) {
+      onBackClick()
+    } else {
+      navigate(-1)
+    }
+  }
+
+  const handle버튼명Click = () => {
+    if (onAddClick) {
+      onAddClick()
+    } else {
+      console.log('add버튼 누름')
+    }
+  }
+
+  return (
+    <header>
+      <div className="flex items-center">
+        {showBackButton && (
+          <button onClick={handleBackClick}>
+            <img src={backArrowButton} alt="뒤로가기" />
+          </button>
+        )}
+      </div>
+
+      <h1>{title}</h1>
+    </header>
+  )
+}
+현재 생성된 버튼은 아래 3가지가 있습니다.
+
+- showBackButton
+    - 현재 navigate -1로 로직 구성되어있어 외부페이지로 이탈 될 가능성이 있음 --> 수정 예정
+
+    - 아래 두 버튼은 로직미구현으로 console에만 작동하는지 확인함 --> 로직 구현 예정
+- showCancelButton
+- showAddButton
+```
+
 ## 주요 태그
 
 | 태그          | 용도          | 예시                                 |
