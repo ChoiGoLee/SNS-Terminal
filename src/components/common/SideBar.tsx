@@ -48,6 +48,9 @@ export const SideBar: React.FC<SideProps> = ({
   // 보여줄 아이템들만 필터링
   const visibleItems = items.filter(isItemVisible)
 
+  const mainMenuItems = visibleItems.filter((item) => item.type !== 'login')
+  const loginItem = visibleItems.find((item) => item.type === 'login')
+
   // 각 사이드바 아이템 렌더링
   const renderSideItem = (item: SideItem) => {
     const isActive = activeItem === item.path
@@ -82,9 +85,26 @@ export const SideBar: React.FC<SideProps> = ({
 
   return (
     <aside className="w-64 bg-background-surface border-r border-background-border">
-      <ul className="p-4 space-y-1 h-screen">
-        {visibleItems.map(renderSideItem)}
-      </ul>
+      <div className="flex flex-col h-screen">
+        {/* 로고 영역 */}
+        <div className="flex items-center justify-center p-4 border-b border-background-border">
+          {/* 로고 이미지가 들어갈 자리 */}
+          <span className="text-sm text-gray-500">SNS-Terminal</span>
+        </div>
+
+        {/* 메뉴 컨텐츠 영역 */}
+        <div className="flex flex-col flex-1 p-4">
+          {/* 메인 메뉴 항목들 */}
+          <ul className="space-y-1 flex-1">
+            {mainMenuItems.map(renderSideItem)}
+          </ul>
+
+          {/* 로그인 버튼 (아래쪽 고정) */}
+          {loginItem && (
+            <ul className="space-y-1 mt-auto">{renderSideItem(loginItem)}</ul>
+          )}
+        </div>
+      </div>
     </aside>
   )
 }
