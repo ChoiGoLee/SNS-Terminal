@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 interface AvatarProps {
   userImage?: string
   userName: string
@@ -5,6 +7,8 @@ interface AvatarProps {
 }
 
 function Avatar({ userImage, userName, size }: AvatarProps) {
+  const [imageError, setImageError] = useState(false)
+
   const sizeClasses = {
     xs: 'w-6 h-6 text-xs',
     sm: 'w-10 h-10 text-sm',
@@ -16,10 +20,11 @@ function Avatar({ userImage, userName, size }: AvatarProps) {
     <div
       className={`${sizeClasses[size]} rounded-full bg-primary flex items-center justify-center font-bold text-black overflow-hidden`}
     >
-      {userImage ? (
+      {userImage && !imageError ? (
         <img
           src={userImage}
           className="rounded-full object-cover w-full h-full"
+          onError={() => setImageError(true)}
         />
       ) : (
         userName.charAt(0)
