@@ -49,6 +49,7 @@ function Messages() {
     <>
       <div className="min-h-30">
         <Header title="메시지" buttons={{ add: { show: true } }} />
+        <div>Messages Page</div>
       </div>
       <div className="flex">
         <SideBar
@@ -56,7 +57,6 @@ function Messages() {
           isAuthenticated={true}
           activeItem="/messages"
         />
-        <div>Messages Page</div>
       </div>
     </>
   )

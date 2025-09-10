@@ -54,12 +54,21 @@ export const SideBar: React.FC<SideProps> = ({
   // 각 사이드바 아이템 렌더링
   const renderSideItem = (item: SideItem) => {
     const isActive = activeItem === item.path
+    const isLoginButton = item.type === 'login'
 
     // 현재 페이지인지에 따라 스타일 변경
-    const buttonClass = isActive
-      ? 'w-full flex items-center px-4 py-2 text-left transition-colors bg-primary/10 text-primary'
-      : 'w-full flex items-center px-4 py-2 text-left transition-colors text-text-primary hover:text-primary hover:bg-primary/10'
+    let buttonClass = ''
 
+    if (isLoginButton) {
+      // 로그인 버튼 전용 스타일
+      buttonClass =
+        'w-full flex items-center justify-center px-6 py-3 bg-primary text-black rounded-full hover:bg-primary-dark font-bold'
+    } else {
+      // 일반 메뉴 버튼 스타일
+      buttonClass = isActive
+        ? 'w-full flex items-center px-4 py-3 text-left bg-primary/10 text-primary rounded-full'
+        : 'w-full flex items-center px-4 py-3 text-left rounded-full hover:bg-background-border hover:rounded-full'
+    }
     return (
       <li key={item.type} className="w-full">
         <button
@@ -77,33 +86,40 @@ export const SideBar: React.FC<SideProps> = ({
               />
             </div>
           )}
-          <span className="font-medium">{item.text}</span>
+          <span>{item.text}</span>
         </button>
       </li>
     )
   }
 
   return (
-    <aside className="w-64 bg-background-surface border-r border-background-border">
+    <aside className="w-64 bg-background-surface border-r border-background-border p-4 flex flex-col">
       <div className="flex flex-col h-screen">
         {/* 로고 영역 */}
-        <div className="flex items-center justify-center p-4 border-b border-background-border">
+        <div className="pb-8 text-3xl">
           {/* 로고 이미지가 들어갈 자리 */}
-          <span className="text-sm text-gray-500">SNS-Terminal</span>
+          <span>SNS-Terminal</span>
         </div>
 
         {/* 메뉴 컨텐츠 영역 */}
-        <div className="flex flex-col flex-1 p-4">
+        <div className=" flex-1">
           {/* 메인 메뉴 항목들 */}
-          <ul className="space-y-1 flex-1">
+          <ul className="space-y-2 flex-1 text-text-primary text-xl font-medium">
             {mainMenuItems.map(renderSideItem)}
           </ul>
-
-          {/* 로그인 버튼 (아래쪽 고정) */}
-          {loginItem && (
-            <ul className="space-y-1 mt-auto">{renderSideItem(loginItem)}</ul>
-          )}
         </div>
+        {/* 로그인 버튼 (아래쪽 고정) */}
+        {loginItem && (
+          <div className="bg-background-surface border border-background-border rounded-2xl p-4 ">
+            <h3 className="font-bold text-lg pb-2">로그인 또는 가입하기</h3>
+            <p className="text-text-secondary text-sm pb-4">
+              사람들의 이야기를 확인하고 대화에 참여해보세요
+            </p>
+            <ul className="space-y-1 mt-auto text-black whitespace-nowrap">
+              {renderSideItem(loginItem)}
+            </ul>
+          </div>
+        )}
       </div>
     </aside>
   )

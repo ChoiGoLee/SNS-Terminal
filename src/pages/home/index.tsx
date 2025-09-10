@@ -1,5 +1,6 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
+import Markdown from '../../components/common/Markdown'
 
 const sidebarItems: SideItem[] = [
   {
@@ -38,7 +39,7 @@ const sidebarItems: SideItem[] = [
   {
     type: 'login',
     path: '/login',
-    text: '로그인',
+    text: '로그인 또는 가입하기',
     href: '/login',
     requireAuth: false,
   },
@@ -46,15 +47,15 @@ const sidebarItems: SideItem[] = [
 
 function Home(): any {
   return (
-    <>
+    <div className="flex">
+      <div className="h-full">
+        <SideBar items={sidebarItems} isAuthenticated={false} activeItem="/" />
+      </div>
       <div className="min-h-30">
         <Header title="홈" />
+        <Markdown />
       </div>
-      <div className="flex h-full">
-        <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
-        <h1>Home Page</h1>
-      </div>
-    </>
+    </div>
   )
 }
 
