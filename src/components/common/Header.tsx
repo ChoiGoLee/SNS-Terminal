@@ -81,15 +81,15 @@ export const Header: React.FC<HeaderProps> = ({ title = '', buttons = {} }) => {
   const rightButtons = (['add'] as const).map(renderButton).filter(Boolean)
 
   return (
-    <header className="flex items-center justify-between bg-background-surface min-h-[60px] text-text-primary border-b border-gray-200">
+    <header className="flex items-center justify-between bg-background-surface min-h-15 text-text-primary border-b border-gray-200">
       {/* 왼쪽 버튼들 */}
-      <div className="flex items-center min-w-[80px]">{leftButtons}</div>
+      <div className="flex items-center min-w-20">{leftButtons}</div>
 
       {/* 중앙 제목 */}
       <h1 className="flex-1 text-center font-medium text-lg  px-4">{title}</h1>
 
       {/* 오른쪽 버튼들 */}
-      <div className="flex items-center min-w-[80px] justify-end">
+      <div className="flex items-center min-w-20 justify-end">
         {rightButtons}
       </div>
     </header>

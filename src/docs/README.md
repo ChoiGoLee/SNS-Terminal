@@ -68,7 +68,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   title,
   on버튼명Click,
-  show버튼명Button = false,
+  showButton = false,
 }) => {
   const navigate = useNavigate()
 
@@ -90,8 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <header className="min-w-[670px] bg-background-surface text-text-primary text-xl flex">
-      {/* 왼쪽 버튼 */}
+    <header>
       <div className="flex items-center">
         {showBackButton && (
           <button onClick={handleBackClick}>
@@ -100,11 +99,18 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* 중앙 타이틀 */}
       <h1>{title}</h1>
     </header>
   )
 }
+현재 생성된 버튼은 아래 3가지가 있습니다.
+
+- showBackButton
+    - 현재 navigate -1로 로직 구성되어있어 외부페이지로 이탈 될 가능성이 있음 --> 수정 예정
+
+    - 아래 두 버튼은 로직미구현으로 console에만 작동하는지 확인함 --> 로직 구현 예정
+- showCancelButton
+- showAddButton
 ```
 
 ## 주요 태그

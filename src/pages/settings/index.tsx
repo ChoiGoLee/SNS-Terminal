@@ -1,8 +1,9 @@
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
+import { SideBar, type SideItem } from '../../components/common/SideBar'
 
-const sidebarItems = [
+const sidebarItems: SideItem[] = [
   {
+    type: 'home',
     img: '/icons/home.svg',
     path: '/',
     text: '홈',
@@ -10,6 +11,7 @@ const sidebarItems = [
     requireAuth: false,
   },
   {
+    type: 'messages',
     img: '/icons/message.svg',
     path: '/messages',
     text: '메시지',
@@ -17,6 +19,7 @@ const sidebarItems = [
     requireAuth: true,
   },
   {
+    type: 'profile',
     img: '/icons/profile.svg',
     path: '/profile',
     text: '프로필',
@@ -25,6 +28,7 @@ const sidebarItems = [
   },
 
   {
+    type: 'settings',
     img: '/icons/setting.svg',
     path: '/settings',
     text: '설정',
@@ -32,6 +36,7 @@ const sidebarItems = [
     requireAuth: true,
   },
   {
+    type: 'login',
     path: '/login',
     text: '로그인',
     href: '/login',
@@ -44,7 +49,11 @@ function Settings() {
       <div className="min-h-30">
         <Header title="설정" />
         <div className="flex">
-          <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
+          <SideBar
+            items={sidebarItems}
+            isAuthenticated={true}
+            activeItem="/settings"
+          />
           <div>Settings Page</div>
         </div>
       </div>
