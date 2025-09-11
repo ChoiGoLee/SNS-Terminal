@@ -2,8 +2,9 @@ import React from 'react'
 import Btns from '../../components/common/Btns'
 import styles from '../../assets/css/login.module.css'
 
-function Login(): React.JSX.Element {
+function Login(): JSX.Element {
   const provider = ['google', 'github']
+
   return (
     <div className="w-screen h-screen bg-black">
       <div>
@@ -14,7 +15,9 @@ function Login(): React.JSX.Element {
                 key={i}
                 content={`Continue with ${p}`}
                 img={`/public/icons/${p}.svg`}
-                style={`btn full-width-btn primary-btn medium-font`}
+                variant="primary"
+                size="full-width"
+                fontWeight="medium"
               />
             )
           })}
@@ -23,4 +26,5 @@ function Login(): React.JSX.Element {
     </div>
   )
 }
+
 export default Login
