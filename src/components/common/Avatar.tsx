@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 interface AvatarProps {
   userImage?: string
@@ -6,15 +6,17 @@ interface AvatarProps {
   size: 'xs' | 'sm' | 'md' | 'lg'
 }
 
+const SIZECLASSES = {
+  xs: 'w-6 h-6 text-xs',
+  sm: 'w-10 h-10 text-sm',
+  md: 'w-12 h-12 text-base',
+  lg: 'w-16 h-16 text-lg',
+} as const
+
 function Avatar({ userImage, userName, size }: AvatarProps) {
   const [imageError, setImageError] = useState(false)
 
-  const SIZECLASSES = {
-    xs: 'w-6 h-6 text-xs',
-    sm: 'w-10 h-10 text-sm',
-    md: 'w-12 h-12 text-base',
-    lg: 'w-16 h-16 text-lg',
-  } as const
+  const handleError = useCallback(() => setImageError(true), [])
 
   return (
     <div
@@ -23,8 +25,9 @@ function Avatar({ userImage, userName, size }: AvatarProps) {
       {userImage && !imageError ? (
         <img
           src={userImage}
+          alt={userName}
           className="rounded-full object-cover w-full h-full"
-          onError={() => setImageError(true)}
+          onError={handleError}
         />
       ) : (
         userName.charAt(0)
