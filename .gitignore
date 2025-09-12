@@ -56,3 +56,6 @@ coverage/
 # Temporary folders
 tmp/
 temp/
+
+# JSDoc 생성 문서
+docs/
