@@ -1,6 +1,7 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 import Markdown from '../../components/common/Markdown'
+import CommentInput from '../../components/common/CommentInput'
 
 const sidebarItems: SideItem[] = [
   {
@@ -48,6 +49,11 @@ const sidebarItems: SideItem[] = [
   },
 ]
 
+const handleCommentSubmit = (comment: string) => {
+  console.log('댓글 제출:', comment)
+  alert(`댓글: ${comment}`)
+}
+
 function Home(): any {
   return (
     <div className="flex min-h-screen">
@@ -57,6 +63,11 @@ function Home(): any {
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
         <Markdown />
+        <CommentInput
+          userName="테스트유저"
+          userImage="https://picsum.photos/40/40"
+          onSubmit={handleCommentSubmit}
+        />
       </div>
     </div>
   )
