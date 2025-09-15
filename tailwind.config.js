@@ -9,17 +9,17 @@ export default {
           dark: '#28C965',
         },
         danger: {
-          DEFAULT: '#DC2626',
+          DEFAULT: '#D11C1C',
           dark: '#B91C1C',
         },
         background: {
-          DEFAULT: '#000000',
-          surface: '#16181C',
-          border: '#2F3336',
+          DEFAULT: '#0f0f10',
+          surface: '#1a1a1c ',
+          border: '#2a2a2f ',
         },
         text: {
-          primary: '#E7E9EA',
-          secondary: '#71767B',
+          primary: '#f4f4f5 ',
+          secondary: '#a1a1aa ',
         },
       },
     },
