@@ -1,5 +1,5 @@
 import React from 'react'
-import Btns from '../../components/common/Btns'
+import BaseButton from '../../components/common/BaseButton'
 import styles from '../../assets/css/login.module.css'
 
 function Login(): JSX.Element {
@@ -11,12 +11,15 @@ function Login(): JSX.Element {
         <div className={styles['login-btn-container']}>
           {provider.map((p, i) => {
             return (
-              <Btns
+              <BaseButton
                 key={i}
-                content={`Continue with ${p}`}
-                img={`/public/icons/${p}.svg`}
-                variant="primary"
-                size="full-width"
+                content={`Continue with ${
+                  p.charAt(0).toUpperCase() + p.slice(1)
+                }`}
+                img={`public/icons/${p}.svg`}
+                size="lg"
+                color="primary"
+                width="fullWidth"
                 fontWeight="medium"
               />
             )
