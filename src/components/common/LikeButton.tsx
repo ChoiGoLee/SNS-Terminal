@@ -8,7 +8,7 @@ interface LikeButtonProps {
 
 function LikeButton({ likeCount, isLiked, onLike }: LikeButtonProps) {
   return (
-    <button onClick={onLike} className="flex items-center gap-2 p-2 group">
+    <button onClick={onLike} className="flex items-center gap-2 group">
       <div className="w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-red-500/10 transition-colors">
         {isLiked ? (
           <img

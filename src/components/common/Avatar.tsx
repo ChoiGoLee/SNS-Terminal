@@ -15,12 +15,17 @@ const SIZECLASSES = {
 
 function Avatar({ userImage, userName, size }: AvatarProps) {
   const [imageError, setImageError] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   const handleError = useCallback(() => setImageError(true), [])
 
   return (
     <div
-      className={`${SIZECLASSES[size]} rounded-full bg-primary flex items-center justify-center font-bold text-black overflow-hidden`}
+      className={`${
+        SIZECLASSES[size]
+      } rounded-full flex items-center justify-center font-bold text-black overflow-hidden ${
+        userImage && !imageError && imageLoaded ? '' : 'bg-primary'
+      }`}
     >
       {userImage && !imageError ? (
         <img
@@ -28,6 +33,7 @@ function Avatar({ userImage, userName, size }: AvatarProps) {
           alt={userName}
           className="rounded-full object-cover w-full h-full"
           onError={handleError}
+          onLoad={() => setImageLoaded(true)}
         />
       ) : (
         userName.charAt(0)
