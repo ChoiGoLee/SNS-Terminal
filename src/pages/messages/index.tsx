@@ -50,16 +50,25 @@ const sidebarItems: SideItem[] = [
 function Messages() {
   return (
     <>
-      <div className="min-h-30">
-        <Header title="메시지" buttons={{ add: { show: true } }} />
-        <div>Messages Page</div>
-      </div>
-      <div className="flex">
-        <SideBar
-          items={sidebarItems}
-          isAuthenticated={true}
-          activeItem="/messages"
-        />
+      <div className="flex ">
+        <nav className="flex-shrink-0">
+          <SideBar
+            items={sidebarItems}
+            isAuthenticated={true}
+            activeItem="/messages"
+          />
+        </nav>
+        <div className=" border-background-border border-x mx-auto max-w-2xl">
+          <Header title="메시지" buttons={{ add: { show: true } }} />
+          <main className="">
+            <div>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit
+              magnam doloribus atque, aliquam sed laborum culpa deleniti numquam
+              beatae amet eaque fugiat quibusdam sequi laudantium adipisci. Quae
+              est sed nostrum?
+            </div>
+          </main>
+        </div>
       </div>
     </>
   )

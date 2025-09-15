@@ -102,29 +102,28 @@ export const SideBar: React.FC<SideProps> = ({
   }
 
   return (
-    <aside className="w-64 bg-background-surface border-r border-background-border p-4 flex flex-col">
-      <div className="flex flex-col h-screen ">
+    <aside className="w-64 bg-background-surface border-r border-background-border p-4 h-screen sticky top-0">
+      <div className="flex flex-col h-full">
         {/* 로고 영역 */}
         <div className="pb-8 text-3xl text-center">
-          {/* 로고 이미지가 들어갈 자리 */}
-          <span className="">SNS-Terminal</span>
+          <span>SNS-Terminal</span>
         </div>
 
         {/* 메뉴 컨텐츠 영역 */}
-        <div className=" flex-1">
-          {/* 메인 메뉴 항목들 */}
-          <ul className="space-y-2 flex-1 text-text-primary text-xl font-medium">
+        <div className="flex-1 overflow-y-auto">
+          <ul className="space-y-2 text-text-primary text-xl font-medium">
             {mainMenuItems.map(renderSideItem)}
           </ul>
         </div>
+
         {/* 로그인 버튼 (아래쪽 고정) */}
         {loginItem && (
-          <div className="bg-background-surface border border-background-border rounded-2xl p-4 ">
+          <div className="border border-background-border rounded-2xl p-4">
             <h3 className="font-bold text-lg pb-2">로그인 또는 가입하기</h3>
             <p className="text-text-secondary text-sm pb-4">
               사람들의 이야기를 확인하고 대화에 참여해보세요
             </p>
-            <ul className="space-y-1 mt-auto text-black whitespace-nowrap">
+            <ul className="space-y-1 text-text-primary whitespace-nowrap">
               {renderSideItem(loginItem)}
             </ul>
           </div>

@@ -51,12 +51,14 @@ const sidebarItems: SideItem[] = [
 function Home(): any {
   return (
     <div className="flex min-h-screen">
-      <div className="h-full">
+      <nav className="flex-shrink-0 hidden lg:block">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
-      </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
+      </nav>
+      <div className="border-background-border border-x mx-auto flex-auto max-w-[35vw]">
         <Header title="홈" />
-        <Markdown />
+        <article>
+          <Markdown />
+        </article>
       </div>
     </div>
   )
