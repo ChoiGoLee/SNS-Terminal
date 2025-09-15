@@ -24,7 +24,7 @@ interface CommentItemProps {
  *   userName="김개발자"
  *   level="senior"
  *   content="정말 유용한 정보네요!"
- *   createdAt={Date.now() - 180000}
+ *   createdAt={Date.now() - 180000} // 감귤마켓 API 참고
  *   isLiked={false}
  *   likeCount={5}
  *   onLikeToggle={() => console.log('좋아요')}
