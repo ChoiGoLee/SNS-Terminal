@@ -1,8 +1,6 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 import Markdown from '../../components/common/Markdown'
-import CommentInput from '../../components/common/CommentInput'
-import CommentItem from '../../components/common/CommentItem'
 
 const sidebarItems: SideItem[] = [
   {
@@ -50,11 +48,6 @@ const sidebarItems: SideItem[] = [
   },
 ]
 
-const handleCommentSubmit = (comment: string) => {
-  console.log('댓글 제출:', comment)
-  alert(`댓글: ${comment}`)
-}
-
 function Home(): any {
   return (
     <div className="flex min-h-screen">
@@ -64,30 +57,6 @@ function Home(): any {
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
         <Markdown />
-        <CommentInput
-          userName="테스트유저"
-          userImage="https://picsum.photos/40/40"
-          onSubmit={handleCommentSubmit}
-        />
-        <CommentItem
-          userName="김개발"
-          level="senior"
-          content="좋은 코드네요! 참고하겠습니다."
-          createdAt={Date.now() - 180000} // 3분 전 (직접 계산)
-          isLiked={false}
-          likeCount={3}
-          onLikeToggle={() => console.log('좋아요 토글')}
-        />
-
-        <CommentItem
-          userName="박프론트"
-          level="junior"
-          content="질문이 있습니다!"
-          createdAt={Date.now() - 3600000} // 1시간 전
-          isLiked={true}
-          likeCount={5}
-          onLikeToggle={() => console.log('좋아요 토글')}
-        />
       </div>
     </div>
   )
