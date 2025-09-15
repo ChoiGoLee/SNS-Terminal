@@ -46,6 +46,34 @@ const ICON_TYPES = {
  * @param {Array} [props.buttons] - 버튼 배열 (선택적)
  * @param {boolean} [props.showCard] - 추가 정보 카드 표시 여부 (선택적)
  * @returns {JSX.Element} 설명 컴포넌트 JSX 요소
+ *  * @example
+ * // 회원탈퇴 (카드 + 버튼)
+ * <Description
+ *   iconType="resign"
+ *   title="계정을 탈퇴하시겠습니까?"
+ *   description="탈퇴 시 모든 데이터가 영구적으로 삭제됩니다."
+ *   showCard={true}
+ *   buttons={[
+ *     { text: '취소', onClick: () => {}, variant: 'secondary' },
+ *     { text: '탈퇴하기', onClick: () => {}, variant: 'danger' }
+ *   ]}
+ * />
+ *
+ * @example
+ * // 검색 결과 없음 (텍스트만)
+ * <Description
+ *   iconType="search"
+ *   title="검색 결과가 없습니다"
+ *   description="다른 키워드로 시도해보세요"
+ * />
+ *
+ * @example
+ * // 포스트 빈 상태
+ * <Description
+ *   iconType="post"
+ *   title="아직 포스트가 없습니다"
+ *   description="첫 번째 포스트를 작성해보세요"
+ * />
  */
 
 function Description({
