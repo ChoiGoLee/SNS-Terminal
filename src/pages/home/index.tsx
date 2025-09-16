@@ -1,6 +1,6 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
-import Markdown from '../../components/common/Markdown'
+import PostCard from '../../components/common/PostCard'
 
 const sidebarItems: SideItem[] = [
   {
@@ -48,7 +48,7 @@ const sidebarItems: SideItem[] = [
   },
 ]
 
-function Home(): any {
+function Home(): React.JSX.Element {
   return (
     <div className="flex min-h-screen">
       <div className="h-full">
@@ -56,7 +56,7 @@ function Home(): any {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        <Markdown />
+        <PostCard />
       </div>
     </div>
   )
