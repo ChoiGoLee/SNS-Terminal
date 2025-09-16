@@ -1,3 +1,5 @@
+import { sampleRooms } from '../../components/common/Chatting-list'
+import ChatList from '../../components/common/Chatting-list'
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 
@@ -49,11 +51,7 @@ const sidebarItems: SideItem[] = [
 
 function Messages() {
   return (
-    <>
-      <div className="min-h-30">
-        <Header title="메시지" buttons={{ add: { show: true } }} />
-        <div>Messages Page</div>
-      </div>
+    <div className="flex min-h-screen">
       <div className="flex">
         <SideBar
           items={sidebarItems}
@@ -61,7 +59,18 @@ function Messages() {
           activeItem="/messages"
         />
       </div>
-    </>
+      <div className="mx-auto border-x border-background-border">
+        <Header title="메시지" buttons={{ add: { show: true } }} />
+        <div>
+          <ChatList
+            currentUserId="me123"
+            rooms={sampleRooms}
+            selectedId="3"
+            onSelect={(id) => console.log(`채팅방 선택: ${id}`)}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 export default Messages

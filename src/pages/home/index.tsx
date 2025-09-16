@@ -54,7 +54,7 @@ function Home(): any {
       <div className="h-full">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
       </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
+      <div className="mx-auto border-x border-background-border">
         <Header title="홈" />
         <Markdown />
       </div>
