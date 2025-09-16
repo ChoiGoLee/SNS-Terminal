@@ -7,8 +7,14 @@ interface LikeButtonProps {
 }
 
 function LikeButton({ likeCount, isLiked, onLike }: LikeButtonProps) {
+  // 이벤트 버블링 방지
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onLike()
+  }
+
   return (
-    <button onClick={onLike} className="flex items-center gap-2 group">
+    <button onClick={handleClick} className="flex items-center gap-2 group">
       <div className="w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-red-500/10 transition-colors">
         {isLiked ? (
           <img
