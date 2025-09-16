@@ -1,6 +1,13 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 import Markdown from '../../components/common/Markdown'
+import Avatar from '../../components/common/Avatar'
+import CommentButton from '../../components/common/CommentButton'
+import CommentInput from '../../components/common/CommentInput'
+import CommentItem from '../../components/common/CommentItem'
+import LikeButton from '../../components/common/LikeButton'
+import UserLevel from '../../components/common/UserLevel'
+import Description from '../../components/common/Description'
 
 const sidebarItems: SideItem[] = [
   {
@@ -56,7 +63,6 @@ function Home(): any {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        <Markdown />
       </div>
     </div>
   )

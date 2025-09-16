@@ -1,5 +1,6 @@
 import React from 'react'
 import BaseButton from '../../components/common/BaseButton'
+import SidebarButton from '../../components/common/SidebarButton'
 import styles from '../../assets/css/login.module.css'
 
 function Login(): JSX.Element {
@@ -16,7 +17,8 @@ function Login(): JSX.Element {
                 content={`Continue with ${
                   p.charAt(0).toUpperCase() + p.slice(1)
                 }`}
-                img={`public/icons/${p}.svg`}
+                icon={`public/icons/${p}.svg`}
+                ariaLabel={`login with ${p} button`}
                 size="lg"
                 color="primary"
                 width="fullWidth"
