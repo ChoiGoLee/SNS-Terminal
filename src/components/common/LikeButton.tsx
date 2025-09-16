@@ -23,12 +23,14 @@ function LikeButton({ likeCount, isLiked, onLike }: LikeButtonProps) {
             className="w-5 h-5"
           />
         ) : (
-          <HeartLine className="w-5 h-5 text-gray-500 group-hover:text-red-500 transition-colors" />
+          <HeartLine className="w-5 h-5 text-text-secondary group-hover:text-red-500 transition-colors" />
         )}
       </div>
       <span
         className={`text-sm transition-colors ${
-          isLiked ? 'text-red-500' : 'text-gray-500 group-hover:text-red-500'
+          isLiked
+            ? 'text-red-500'
+            : 'text-text-secondary group-hover:text-red-500'
         }`}
       >
         {likeCount}
