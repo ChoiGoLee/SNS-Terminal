@@ -1,14 +1,17 @@
+import React from 'react'
 import { Header } from '../../components/common/Header'
-import Markdown from '../../components/common/Markdown'
+import { SideBar } from '../../components/common/SideBar'
 
-function Home(): any {
+function Home(): React.JSX.Element {
   return (
-    <>
-      <Header title="홈" />
-      <h1>Home Page</h1>
-      <Markdown />
-    </>
+    <div className="flex min-h-screen">
+      <div className="h-full">
+        <SideBar isAuthenticated={true} activeItem="/" />
+      </div>
+      <div className="mx-auto border-x border-background-border border-r border-l">
+        <Header title="홈" />
+      </div>
+    </div>
   )
 }
-
 export default Home
