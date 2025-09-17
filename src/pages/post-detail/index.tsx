@@ -1,5 +1,6 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
+import PostCard from '../../components/common/PostCard'
 
 const sidebarItems: SideItem[] = [
   {
@@ -55,6 +56,7 @@ function PostDetail() {
       <div className="flex">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
         <div>Post Detail Page</div>
+        <PostCard isDetail={true} />
       </div>
     </>
   )

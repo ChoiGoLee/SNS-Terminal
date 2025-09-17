@@ -1,6 +1,7 @@
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 import PostCard from '../../components/common/PostCard'
+import Avatar from '../../components/common/Avatar'
 
 const sidebarItems: SideItem[] = [
   {

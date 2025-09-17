@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import Comment from '../../assets/icons/comment.svg?react'
 
 interface CommentButtonProps {
-  commentCount: number
+  commentCount?: number
   postId: string | number
 }
 

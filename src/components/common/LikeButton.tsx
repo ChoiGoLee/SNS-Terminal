@@ -1,7 +1,7 @@
 import HeartLine from '../../assets/icons/heart-line.svg?react'
 
 interface LikeButtonProps {
-  likeCount: number
+  likeCount?: number
   isLiked: boolean
   onLike: () => void
 }
