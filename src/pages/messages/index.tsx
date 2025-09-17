@@ -1,5 +1,6 @@
-import { sampleRooms } from '../../components/common/Chatting-list'
-import ChatList from '../../components/common/Chatting-list'
+import { useState } from 'react'
+import { sampleRooms } from '../../components/common/ChatRoomList'
+import ChatRoomList from '../../components/common/ChatRoomList'
 import { Header } from '../../components/common/Header'
 import { SideBar, type SideItem } from '../../components/common/SideBar'
 
@@ -50,6 +51,7 @@ const sidebarItems: SideItem[] = [
 ]
 
 function Messages() {
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
   return (
     <div className="flex min-h-screen">
       <div className="flex">
@@ -61,12 +63,12 @@ function Messages() {
       </div>
       <div className="mx-auto border-x border-background-border">
         <Header title="메시지" buttons={{ add: { show: true } }} />
-        <div>
-          <ChatList
+        <div className="w-80 border-r border-background-border">
+          <ChatRoomList
             currentUserId="me123"
             rooms={sampleRooms}
-            selectedId="3"
-            onSelect={(id) => console.log(`채팅방 선택: ${id}`)}
+            selectedId={selectedChatId}
+            onSelect={setSelectedChatId}
           />
         </div>
       </div>
