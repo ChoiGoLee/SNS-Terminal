@@ -2,7 +2,7 @@ import React from 'react'
 import Avatar from './Avatar'
 import UnreadBadge from './Unread'
 
-export interface Participant {
+export interface ChatUser {
   id: string
   name: string
   avatarUrl?: string | null
@@ -10,7 +10,7 @@ export interface Participant {
 
 export interface ChatRoom {
   id: string
-  participants: Participant[]
+  ChatUsers: ChatUser[]
   lastMessage?: string | null
   lastTimestamp?: string | number
   unreadCount?: number
@@ -49,8 +49,8 @@ function ChatRoomItem({
   isSelected,
   onClick,
 }: ChatRoomItemProps) {
-  const otherUser = room.participants.find(
-    (person: Participant) => person.id !== currentUserId
+  const otherUser = room.ChatUsers.find(
+    (person: ChatUser) => person.id !== currentUserId
   )
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import ChatRoomItem from './ChatRoomItem'
 
-export interface Participant {
+export interface ChatUser {
   id: string
   name: string
   avatarUrl?: string | null
@@ -9,31 +9,12 @@ export interface Participant {
 
 export interface ChatRoom {
   id: string
-  participants: Participant[]
+  ChatUsers: ChatUser[]
   lastMessage?: string | null
   lastTimestamp?: string | number
   unreadCount?: number
 }
 
-export function formatTime(ts?: string | number | null): string {
-  if (!ts) return ''
-  const t = typeof ts === 'number' ? new Date(ts) : new Date(ts)
-  if (isNaN(t.getTime())) return ''
-  const now = new Date()
-  const diff = Math.floor((now.getTime() - t.getTime()) / 1000)
-
-  if (diff < 60) return `${diff}초 전`
-  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`
-  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`
-
-  const days = Math.floor(diff / 86400)
-  if (days < 30) return `${days}일 전`
-
-  return t.toLocaleDateString('ko-KR', {
-    month: 'numeric',
-    day: 'numeric',
-  })
-}
 interface ChatRoomListProps {
   currentUserId: string
   rooms: ChatRoom[]
@@ -76,7 +57,7 @@ export default ChatRoomList
 export const sampleRooms: ChatRoom[] = [
   {
     id: '1',
-    participants: [
+    ChatUsers: [
       { id: 'me123', name: '나' },
       { id: 'u456', name: '박개발' },
     ],
@@ -86,7 +67,7 @@ export const sampleRooms: ChatRoom[] = [
   },
   {
     id: '2',
-    participants: [
+    ChatUsers: [
       { id: 'me123', name: '나' },
       { id: 'u789', name: '이디자인' },
     ],
@@ -96,7 +77,7 @@ export const sampleRooms: ChatRoom[] = [
   },
   {
     id: '3',
-    participants: [
+    ChatUsers: [
       { id: 'me123', name: '나' },
       { id: 'u101', name: '최기획' },
     ],
@@ -106,7 +87,7 @@ export const sampleRooms: ChatRoom[] = [
   },
   {
     id: '4',
-    participants: [
+    ChatUsers: [
       { id: 'me123', name: '나' },
       { id: 'u202', name: '김마케팅' },
     ],
@@ -116,7 +97,7 @@ export const sampleRooms: ChatRoom[] = [
   },
   {
     id: '5',
-    participants: [
+    ChatUsers: [
       { id: 'me123', name: '나' },
       { id: 'u303', name: '한테스터' },
     ],
