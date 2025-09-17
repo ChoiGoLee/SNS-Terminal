@@ -8,7 +8,6 @@ import { useRef, useState, useEffect } from 'react'
 
 interface PostCardProps {
   isDetail?: boolean
-  lineclamp?: number
 }
 
 function PostCard({ isDetail = false }: PostCardProps) {
@@ -47,9 +46,9 @@ function PostCard({ isDetail = false }: PostCardProps) {
           </div>
 
           <div className="mb-3">
-            <button className={`${isDetail ? 'flex' : 'hidden'}`}>
+            <span className={`${isDetail ? 'flex' : 'hidden'}`}>
               기술스택(임시)
-            </button>
+            </span>
             <div className="line-clamp-1">
               {isEllipsed && <button className="float-right">더보기</button>}
               <p ref={commentRef}>
