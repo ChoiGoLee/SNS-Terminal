@@ -12,13 +12,11 @@ function PostDetail(): React.JSX.Element {
       <div className="flex">
         <SideBar isAuthenticated={true} activeItem="/" />
         <div>Post Detail Page</div>
-        <section>
-          <PostCard
-            isDetail={true}
-            comment="fsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsd"
-            onClick={() => {}}
-          />
-        </section>
+        <PostCard
+          isDetail={true}
+          comment="fsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsd"
+          onClick={() => {}}
+        />
       </div>
     </>
   )

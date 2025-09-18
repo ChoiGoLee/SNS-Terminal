@@ -4,6 +4,7 @@ import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import UserLevel from './UserLevel'
 import { useNavigate } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -21,13 +22,38 @@ interface PostCardProps {
  * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
-function PostCard({ isDetail = false }: PostCardProps) {
+function PostCard({ isDetail = false, onClick }: PostCardProps) {
+  const maxHeight = 100
+
   const navigate = useNavigate()
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [showMoreBtn, setShowMoreBtn] = useState(false)
+  const [showGradient, SetShowGradient] = useState(false)
+  const commentRef = useRef<HTMLDivElement>(null)
+
+  // 이벤트 버블링 방지
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onClick()
+  }
+
+  useEffect(() => {
+    if (commentRef.current && commentRef.current.offsetHeight > maxHeight) {
+      setShowMoreBtn(true)
+      SetShowGradient(true)
+    } else if (
+      commentRef.current &&
+      commentRef.current.scrollHeight < maxHeight
+    ) {
+      setShowMoreBtn(false)
+      SetShowGradient(false)
+    }
+  }, [maxHeight])
 
   return (
     <article
       onClick={() => navigate('/post-detail')}
-      className={`bg-background border-background-border p-4 hover:bg-background-surface/30 transition-colors relative ${
+      className={`bg-background border-background-border w-full p-4 transition-colors relative ${
         isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >
@@ -54,29 +80,44 @@ function PostCard({ isDetail = false }: PostCardProps) {
             </li>
           </ul>
 
-          <div className="mb-3">
+          <div
+            className={`${
+              !isDetail &&
+              (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
+            }`}
+            ref={commentRef}
+          >
+            {!isDetail && !isExpanded && showGradient && (
+              <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
+            )}
             <Markdown
               content={`
   # 제목
-
   일반 텍스트입니다.
-
   \`\`\`javascript
   console.log('Hello, world!');
   const greeting = 'React Markdown';
   console.log(greeting);
   \`\`\`
-
   \`\`\`python
   def hello():
     print("Hello from Python!")
-
   hello()
   \`\`\`
     `}
             />
           </div>
-
+          <div className="flex justify-center">
+            {showMoreBtn && !isDetail && (
+              <button
+                className="py-2 px-5 transition bg-background-border hover:bg-background-surface text-sm text-text-primary rounded-full"
+                onClick={(e) => {
+                  setIsExpanded((prevState) => !prevState)
+                  handleClick(e)
+                }}
+              >{`${isExpanded ? '접기' : '더보기'}`}</button>
+            )}
+          </div>
           {isDetail && (
             <section>
               <p className="text-text-secondary text-sm mb-4 border-b py-4 border-background-border">
