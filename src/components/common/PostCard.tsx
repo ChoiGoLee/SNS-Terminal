@@ -4,7 +4,6 @@ import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import UserLevel from './UserLevel'
 import { useNavigate } from 'react-router'
-import { useState } from 'react'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -22,23 +21,8 @@ interface PostCardProps {
  * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
-function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
+function PostCard({ isDetail = false }: PostCardProps) {
   const navigate = useNavigate()
-
-  // 더보기/접기 버튼
-  const [showMore, setShowMore] = useState(false)
-  const isLong = comment.length > 100
-
-  const displayText =
-    (!isDetail && showMore) || isDetail === true
-      ? comment
-      : comment.slice(0, 100) + (isLong ? '...' : '')
-
-  //이벤트 버블링 방지
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onClick()
-  }
 
   return (
     <article
@@ -69,23 +53,6 @@ function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
               기술스택
             </li>
           </ul>
-          <p
-            className={`${
-              isDetail ? 'text-xl' : ''
-            } text-text-primary leading-relaxed`}
-          >
-            {displayText}
-          </p>
-          {!isDetail && isLong && (
-            <button
-              onClick={(e) => {
-                setShowMore(!showMore)
-                handleClick(e)
-              }}
-            >
-              {showMore ? '접기' : '더보기'}
-            </button>
-          )}
 
           <div className="mb-3">
             <Markdown
