@@ -68,8 +68,7 @@ function Home(): any {
         <div className="w-auto">
           {sampleMessages.map((msg) => (
             <MessageBubble
-              key={msg.id}
-              message={msg.type}
+              type={msg.type}
               text={msg.text}
               userName={msg.userName} // 없으면 기본값 사용
             />

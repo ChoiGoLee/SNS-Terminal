@@ -1,16 +1,17 @@
 import { useState } from 'react'
+
 import Avatar from './Avatar'
 
 type Message = 'me' | 'other'
 
 interface MessageBubbleProps {
-  message: Message
+  type: Message
   text: string
   userName?: string
 }
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
-  message,
+  type,
   text,
   userName = '알수없는 사용자',
 }) => {
@@ -23,7 +24,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     ? text
     : text.slice(0, 100) + (isLong ? '...' : '')
 
-  if (message === 'other') {
+  if (type === 'other') {
     return (
       <div className="flex justify-start p-4 gap-2 w-96">
         <Avatar userName={userName} size={'md'} />
@@ -39,7 +40,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     )
   }
 
-  if (message === 'me') {
+  if (type === 'me') {
     return (
       <div className="flex justify-end p-4 gap-2">
         <div className="bg-primary rounded-2xl w-auto max-w-64 px-4 py-3 text-black">
@@ -57,7 +58,14 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 }
 
 // 샘플 메시지들
-export const sampleMessages = [
+
+interface SampleMessage {
+  type: Message
+  text: string
+  userName?: string
+}
+
+export const sampleMessages: SampleMessage[] = [
   {
     type: 'other',
     text: '안녕하세요!',
