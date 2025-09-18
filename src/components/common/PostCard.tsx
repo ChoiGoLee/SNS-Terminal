@@ -4,30 +4,53 @@ import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import UserLevel from './UserLevel'
 import { useNavigate } from 'react-router'
-import { useRef, useState, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface PostCardProps {
   isDetail?: boolean
+  content: string
+  lineClamp?: number
 }
 
-function PostCard({ isDetail = false }: PostCardProps) {
+function PostCard({ isDetail = false, content, lineClamp }: PostCardProps) {
   const navigate = useNavigate()
 
-  const [isEllipsed, setIEllipsed] = useState(false)
-  const commentRef = useRef<HTMLParagraphElement>(null)
-  const originalCommentRef = useRef<HTMLParagraphElement>(null)
+  const pRef = useRef<HTMLParagraphElement>(null)
+  const [lineHeight, setLineHeight] = useState<number | null>(null)
+  const [expanded, setExpanded] = useState(false)
+  const originalRef = useRef<HTMLParagraphElement>(null)
 
   useEffect(() => {
-    if (!originalCommentRef.current || !commentRef.current) return
-    const { clientHeight: originalHeight } = originalCommentRef.current
-    const { clientHeight: commentHeight } = commentRef.current
-    setIEllipsed(originalHeight !== commentHeight)
+    const observer = new ResizeObserver(() => {
+      if (!pRef.current) {
+        return
+      }
+      setLineHeight(parseFloat(getComputedStyle(pRef.current).lineHeight))
+    })
+
+    if (pRef.current) {
+      observer.observe(pRef.current)
+    }
+
+    return () => {
+      observer.disconnect()
+    }
   }, [])
+
+  const maxHeight =
+    lineHeight && lineClamp !== undefined ? lineHeight * lineClamp : undefined
+
+  const isOverFlown = originalRef.current?scrollHeight && maxHeight && originalRef.current?.scrollHeight > maxHeight;
+
+
+  const handleClick = () => {
+    setExpanded((prev) => !prev)
+  }
 
   return (
     <article
       onClick={() => navigate('/post-detail')}
-      className={`bg-background border-background-border border-b p-4 hover:bg-background-surface/30 transition-colors relative ${
+      className={`bg-background border-background-border border-b p-4 hover:bg-background-surface/30 transition-colors relative w-full ${
         !isDetail && 'cursor-pointer'
       }`}
     >
@@ -49,16 +72,20 @@ function PostCard({ isDetail = false }: PostCardProps) {
             <span className={`${isDetail ? 'flex' : 'hidden'}`}>
               기술스택(임시)
             </span>
-            <div className="line-clamp-1">
-              {isEllipsed && <button className="float-right">더보기</button>}
-              <p ref={commentRef}>
-                testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
-                testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
-                testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+            <div>
+              <p className='h-0 overflow-hidden' ref={originalRef}>{content}</p>
+              <p
+                ref={pRef}
+                className="overflow-hidden"
+                style={{ maxHeight: !expanded ? maxHeight : undefined }}
+              >
+                {content}
               </p>
-            </div>
-            <div className="overflow-hidden h-0">
-              <p ref={originalCommentRef}>test</p>
+              {!isOverFlown ? null : !expanded ? (
+                <button onClick={handleClick}>더보기</button>
+              ) : (
+                <button onClick={handleClick}>접기</button>
+              )}
             </div>
             <Markdown
               content={`
@@ -84,19 +111,9 @@ function PostCard({ isDetail = false }: PostCardProps) {
 
           {isDetail && (
             <section>
-              <p className="text-text-secondary text-sm mb-4">
+              <p className="text-text-secondary text-sm mb-4 border-b py-4 border-background-border">
                 2024년 1월 15일 오후 06:15
               </p>
-              <div className="flex gap-6 py-3 border-y border-background-border">
-                {/* <div className="flex gap-2">
-                  <span className="font-bold text-text-primary">6</span>
-                  <span className="text-text-secondary">댓글</span>
-                </div>
-                <div className="flex gap-2">
-                  <span className="font-bold text-text-primary">28</span>
-                  <span className="text-text-secondary">마음에 들어요</span>
-                </div> */}
-              </div>
             </section>
           )}
 
