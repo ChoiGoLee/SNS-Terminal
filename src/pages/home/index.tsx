@@ -8,6 +8,8 @@ import CommentItem from '../../components/common/CommentItem'
 import LikeButton from '../../components/common/LikeButton'
 import UserLevel from '../../components/common/UserLevel'
 import Description from '../../components/common/Description'
+import { MessageBubble } from '../../components/common/MessageBubble'
+import { sampleMessages } from '../../components/common/MessageBubble'
 
 const sidebarItems: SideItem[] = [
   {
@@ -63,6 +65,16 @@ function Home(): any {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
+        <div className="w-auto">
+          {sampleMessages.map((msg) => (
+            <MessageBubble
+              key={msg.id}
+              message={msg.type}
+              text={msg.text}
+              userName={msg.userName} // 없으면 기본값 사용
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
