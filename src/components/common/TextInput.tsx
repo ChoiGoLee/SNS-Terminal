@@ -22,11 +22,10 @@ const BORDER_TYPES = {
   lgRound: 'rounded-lg',
 } as const
 
-function Input({
+function TextInput({
   label,
   placeholder,
   icon,
-  isLeft,
   fontWeight,
   size,
   type,
@@ -47,7 +46,7 @@ function Input({
         {label}
       </label>
 
-      {isLeft && icon && (
+      {icon && (
         <img
           src={icon}
           className="absolute inset-y-0 pl-4 flex items-center pointer-events-none"
@@ -67,4 +66,4 @@ function Input({
   )
 }
 
-export default Input
+export default TextInput
