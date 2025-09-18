@@ -8,7 +8,7 @@ function Home(): React.JSX.Element {
       <div className="h-full">
         <SideBar isAuthenticated={true} activeItem="/" />
       </div>
-      <div className="mx-auto border-x border-background-border">
+      <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
       </div>
     </div>
