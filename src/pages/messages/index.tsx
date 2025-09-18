@@ -1,4 +1,7 @@
 import React from 'react'
+import { useState } from 'react'
+import { sampleRooms } from '../../components/common/ChatRoomList'
+import ChatRoomList from '../../components/common/ChatRoomList'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 import Description from '../../components/common/Description'
@@ -8,16 +11,25 @@ import {
 } from '../../components/common/MessageBubble'
 
 function Messages(): React.JSX.Element {
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
   return (
-    <>
-      <div className="flex min-h-screen">
-        <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/messages" />
-        </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="메시지" buttons={{ add: { show: true } }} />
-          <div className="w-auto">
-            {/* 메세지가 없을때 */}
+    <div className="flex h-screen overflow-hidden">
+      <div className="sticky top-0 h-screen">
+        <SideBar isAuthenticated={true} activeItem="/messages" />
+      </div>
+      <div className="mx-auto border-background-border border-x">
+        <div className="flex ">
+          <aside className=" border-background-border border-x overflow-y-scroll max-h-svh">
+            <Header title="메시지" buttons={{ add: { show: true } }} />
+            <ChatRoomList
+              currentUserId="me123"
+              rooms={sampleRooms}
+              selectedId={selectedChatId}
+              onSelect={setSelectedChatId}
+            />
+          </aside>
+          {/* 메세지가 없을때 */}
+          <div className="overflow-y-scroll max-h-svh">
             {sampleMessages.length === 0 ? (
               <Description
                 iconType="post"
@@ -39,7 +51,7 @@ function Messages(): React.JSX.Element {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 export default Messages

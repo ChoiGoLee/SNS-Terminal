@@ -28,7 +28,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     return (
       <div className="flex justify-start p-4 gap-2 w-96">
         <Avatar userName={userName} size={'md'} />
-        <div className="bg-background-surface rounded-2xl w-auto max-w-64 py-3">
+        <div className="bg-background-border rounded-2xl w-auto max-w-64 py-3">
           <p className="px-4">{displayText}</p>
           {isLong && (
             <button
