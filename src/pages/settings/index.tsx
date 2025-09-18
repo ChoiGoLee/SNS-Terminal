@@ -1,9 +1,17 @@
+import React from 'react'
 import { Header } from '../../components/common/Header'
-function Settings() {
+import { SideBar } from '../../components/common/SideBar'
+
+function Settings(): React.JSX.Element {
   return (
     <>
-      <Header title="설정" />
-      <div>Settings Page</div>
+      <div className="min-h-30">
+        <Header title="설정" />
+        <div className="flex">
+          <SideBar isAuthenticated={true} activeItem="/settings" />
+          <div>Settings Page</div>
+        </div>
+      </div>
     </>
   )
 }
