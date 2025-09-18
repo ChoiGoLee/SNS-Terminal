@@ -8,6 +8,7 @@ import CommentItem from '../../components/common/CommentItem'
 import LikeButton from '../../components/common/LikeButton'
 import UserLevel from '../../components/common/UserLevel'
 import Description from '../../components/common/Description'
+import Input from '../../components/common/TextInput'
 
 const sidebarItems: SideItem[] = [
   {
@@ -63,6 +64,15 @@ function Home(): any {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
+        <Input
+          fontWeight="normal"
+          border="fullRound"
+          type="text"
+          placeholder="test"
+          size="sm"
+          label=""
+          icon="/src/assets/icons/hash.svg"
+        ></Input>
       </div>
     </div>
   )
