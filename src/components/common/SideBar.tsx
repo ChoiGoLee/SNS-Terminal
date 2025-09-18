@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import BaseButton from './BaseButton'
 import SidebarButton from './SidebarButton'
+import { sidebarItems as items } from '../constants/sidebarItems.ts'
 
 export type SideItemType =
   | 'home'
@@ -21,7 +22,6 @@ export interface SideItem {
 }
 
 interface SideProps {
-  items: SideItem[]
   isAuthenticated?: boolean
   activeItem?: string
 }
@@ -71,7 +71,6 @@ const SidebarMenuItem = ({
 }
 
 export const SideBar: React.FC<SideProps> = ({
-  items,
   isAuthenticated = false,
   activeItem,
 }) => {
