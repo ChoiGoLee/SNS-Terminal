@@ -1,9 +1,8 @@
 import React from 'react'
 import BaseButton from '../../components/common/BaseButton'
-import SidebarButton from '../../components/common/SidebarButton'
 import styles from '../../assets/css/login.module.css'
 
-function Login(): JSX.Element {
+function Login(): React.JSX.Element {
   const provider = ['google', 'github']
 
   return (
