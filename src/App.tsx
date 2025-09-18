@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter, useLoaderData } from 'react-router-dom'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Home from './pages/home/index'
 import Login from './pages/login/index'
 import PostDetail from './pages/post-detail/index'

@@ -1,9 +1,11 @@
+import React from 'react'
 import { useState } from 'react'
 import { sampleRooms } from '../../components/common/ChatRoomList'
 import ChatRoomList from '../../components/common/ChatRoomList'
 import { Header } from '../../components/common/Header'
-import { SideBar, type SideItem } from '../../components/common/SideBar'
+import { SideBar } from '../../components/common/SideBar'
 
+function Messages(): React.JSX.Element {
 const sidebarItems: SideItem[] = [
   {
     type: 'home',
@@ -55,11 +57,7 @@ function Messages() {
   return (
     <div className="flex min-h-screen">
       <div className="flex">
-        <SideBar
-          items={sidebarItems}
-          isAuthenticated={true}
-          activeItem="/messages"
-        />
+        <SideBar isAuthenticated={true} activeItem="/messages" />
       </div>
       <div className="mx-auto border-x border-background-border">
         <Header title="메시지" buttons={{ add: { show: true } }} />
