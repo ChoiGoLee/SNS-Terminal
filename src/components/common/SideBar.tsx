@@ -93,8 +93,8 @@ export const SideBar: React.FC<SideProps> = ({
   }
 
   return (
-    <aside className="w-64 bg-background-surface border-r border-background-border p-4 flex flex-col">
-      <div className="flex flex-col h-screen">
+    <aside className="w-64 bg-background-surface border-r border-background-border flex flex-col top-0 sticky">
+      <div className="flex flex-col h-screen p-4">
         {/* 로고 */}
         <header className="pb-8 text-3xl text-center">
           <span>SNS-Terminal</span>

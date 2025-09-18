@@ -29,7 +29,7 @@ function ChatRoomList({
   onSelect,
 }: ChatRoomListProps) {
   return (
-    <aside className="w-full bg-background-surface text-white min-h-screen flex flex-col">
+    <aside className="w-full bg-background-surface text-white flex flex-col">
       {/* 채팅 목록 */}
       <ul className="flex-1 overflow-y-auto">
         {rooms.length === 0 ? (
