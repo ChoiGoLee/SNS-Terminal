@@ -7,20 +7,32 @@ import { useNavigate } from 'react-router'
 import { useState } from 'react'
 
 interface PostCardProps {
+  /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
+  /**게시글 텍스트 **/
   comment: string
+  // 게시글 더보기 클릭 이벤트 핸들러 함수
   onClick: () => void
 }
 
+/**
+ *
+ * @param {boolean} isDetail - 홈/피드페이지 or 상세페이지 여부
+ * @param {string} comment - 게시글 텍스트
+ * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
+ * @returns
+ */
 function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
   const navigate = useNavigate()
 
+  // 더보기/접기 버튼
   const [showMore, setShowMore] = useState(false)
   const isLong = comment.length > 100
 
-  const displayText = showMore
-    ? comment
-    : comment.slice(0, 100) + (isLong ? '...' : '')
+  const displayText =
+    (!isDetail && showMore) || isDetail === true
+      ? comment
+      : comment.slice(0, 100) + (isLong ? '...' : '')
 
   //이벤트 버블링 방지
   const handleClick = (e: React.MouseEvent) => {
@@ -31,8 +43,8 @@ function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
   return (
     <article
       onClick={() => navigate('/post-detail')}
-      className={`bg-background border-background-border border-b p-4 hover:bg-background-surface/30 transition-colors relative ${
-        !isDetail && 'cursor-pointer'
+      className={`bg-background border-background-border p-4 hover:bg-background-surface/30 transition-colors relative ${
+        isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >
       <section className="flex space-x-3">
@@ -42,30 +54,40 @@ function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
           size="md"
         />
         <section className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <span className="font-bold text-text-primary">고우리</span>
-            <UserLevel level="mid" />
-            <span className="text-text-secondary">·</span>
-            <span className="text-text-secondary text-sm">3시간 전</span>
-          </div>
+          <ul className="flex items-center gap-1 mb-2">
+            <li className="font-bold text-text-primary">고우리</li>
+            <li>
+              <UserLevel level="mid" />
+            </li>
+            <li className="text-text-secondary">·</li>
+            <li className="text-text-secondary text-sm">3시간 전</li>
+          </ul>
+          <ul
+            className={`${isDetail ? 'flex flex-wrap gap-1 mb-3' : 'hidden'}`}
+          >
+            <li className="px-2 py-1 bg-background-surface text-text-secondary text-xs rounded border border-background-border">
+              기술스택
+            </li>
+          </ul>
+          <p
+            className={`${
+              isDetail ? 'text-xl' : ''
+            } text-text-primary leading-relaxed`}
+          >
+            {displayText}
+          </p>
+          {!isDetail && isLong && (
+            <button
+              onClick={(e) => {
+                setShowMore(!showMore)
+                handleClick(e)
+              }}
+            >
+              {showMore ? '접기' : '더보기'}
+            </button>
+          )}
 
           <div className="mb-3">
-            <span className={`${isDetail ? 'flex' : 'hidden'}`}>
-              기술스택(임시)
-            </span>
-            <div>
-              <p>{displayText}</p>
-              {isLong && (
-                <button
-                  onClick={(e) => {
-                    setShowMore(!showMore)
-                    handleClick(e)
-                  }}
-                >
-                  {showMore ? '접기' : '더보기'}
-                </button>
-              )}
-            </div>
             <Markdown
               content={`
   # 제목

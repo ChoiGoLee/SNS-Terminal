@@ -1,6 +1,7 @@
 import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
+import PostCard from '../../components/common/PostCard'
 
 function Home(): React.JSX.Element {
   return (
