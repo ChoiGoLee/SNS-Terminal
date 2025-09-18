@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode", // Prettier
+    "pmneo.tsimporter", // TypeScript Importer
+    "oouo-diogo-perdigao.docthis" // Document This
+  ]
+}
