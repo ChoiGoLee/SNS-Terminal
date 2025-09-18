@@ -88,14 +88,14 @@ function PostCard({ isDetail = false }: PostCardProps) {
                 2024년 1월 15일 오후 06:15
               </p>
               <div className="flex gap-6 py-3 border-y border-background-border">
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                   <span className="font-bold text-text-primary">6</span>
                   <span className="text-text-secondary">댓글</span>
                 </div>
                 <div className="flex gap-2">
                   <span className="font-bold text-text-primary">28</span>
                   <span className="text-text-secondary">마음에 들어요</span>
-                </div>
+                </div> */}
               </div>
             </section>
           )}

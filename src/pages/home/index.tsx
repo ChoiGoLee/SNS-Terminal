@@ -8,6 +8,7 @@ import CommentItem from '../../components/common/CommentItem'
 import LikeButton from '../../components/common/LikeButton'
 import UserLevel from '../../components/common/UserLevel'
 import Description from '../../components/common/Description'
+import PostCard from '../../components/common/PostCard'
 
 const sidebarItems: SideItem[] = [
   {
@@ -63,6 +64,7 @@ function Home(): React.JSX.Element {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
+        <PostCard />
       </div>
     </div>
   )
