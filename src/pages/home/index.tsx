@@ -64,7 +64,10 @@ function Home(): React.JSX.Element {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        <PostCard content="djfdksjflsdk" />
+        <PostCard
+          comment="testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
+          onClick={() => {}}
+        />
       </div>
     </div>
   )

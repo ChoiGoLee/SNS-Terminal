@@ -4,53 +4,34 @@ import LikeButton from './LikeButton'
 import CommentButton from './CommentButton'
 import UserLevel from './UserLevel'
 import { useNavigate } from 'react-router'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 
 interface PostCardProps {
   isDetail?: boolean
-  content: string
-  lineClamp?: number
+  comment: string
+  onClick: () => void
 }
 
-function PostCard({ isDetail = false, content, lineClamp }: PostCardProps) {
+function PostCard({ isDetail = false, comment, onClick }: PostCardProps) {
   const navigate = useNavigate()
 
-  const pRef = useRef<HTMLParagraphElement>(null)
-  const [lineHeight, setLineHeight] = useState<number | null>(null)
-  const [expanded, setExpanded] = useState(false)
-  const originalRef = useRef<HTMLParagraphElement>(null)
+  const [showMore, setShowMore] = useState(false)
+  const isLong = comment.length > 100
 
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      if (!pRef.current) {
-        return
-      }
-      setLineHeight(parseFloat(getComputedStyle(pRef.current).lineHeight))
-    })
+  const displayText = showMore
+    ? comment
+    : comment.slice(0, 100) + (isLong ? '...' : '')
 
-    if (pRef.current) {
-      observer.observe(pRef.current)
-    }
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
-  const maxHeight =
-    lineHeight && lineClamp !== undefined ? lineHeight * lineClamp : undefined
-
-  const isOverFlown = originalRef.current?scrollHeight && maxHeight && originalRef.current?.scrollHeight > maxHeight;
-
-
-  const handleClick = () => {
-    setExpanded((prev) => !prev)
+  //이벤트 버블링 방지
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onClick()
   }
 
   return (
     <article
       onClick={() => navigate('/post-detail')}
-      className={`bg-background border-background-border border-b p-4 hover:bg-background-surface/30 transition-colors relative w-full ${
+      className={`bg-background border-background-border border-b p-4 hover:bg-background-surface/30 transition-colors relative ${
         !isDetail && 'cursor-pointer'
       }`}
     >
@@ -73,18 +54,16 @@ function PostCard({ isDetail = false, content, lineClamp }: PostCardProps) {
               기술스택(임시)
             </span>
             <div>
-              <p className='h-0 overflow-hidden' ref={originalRef}>{content}</p>
-              <p
-                ref={pRef}
-                className="overflow-hidden"
-                style={{ maxHeight: !expanded ? maxHeight : undefined }}
-              >
-                {content}
-              </p>
-              {!isOverFlown ? null : !expanded ? (
-                <button onClick={handleClick}>더보기</button>
-              ) : (
-                <button onClick={handleClick}>접기</button>
+              <p>{displayText}</p>
+              {isLong && (
+                <button
+                  onClick={(e) => {
+                    setShowMore(!showMore)
+                    handleClick(e)
+                  }}
+                >
+                  {showMore ? '접기' : '더보기'}
+                </button>
               )}
             </div>
             <Markdown

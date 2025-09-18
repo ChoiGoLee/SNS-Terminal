@@ -56,7 +56,11 @@ function PostDetail() {
       <div className="flex">
         <SideBar items={sidebarItems} isAuthenticated={true} activeItem="/" />
         <div>Post Detail Page</div>
-        <PostCard isDetail={true} />
+        <PostCard
+          isDetail={true}
+          comment="fsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsd"
+          onClick={() => {}}
+        />
       </div>
     </>
   )
