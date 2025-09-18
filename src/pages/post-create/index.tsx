@@ -1,18 +1,10 @@
+import type React from 'react'
 import { Header } from '../../components/common/Header'
-import Close from '/public/icons/close.svg'
 
-function PostCreate() {
+function PostCreate(): React.JSX.Element {
   return (
     <>
-      <Header
-        title="새 게시물 작성"
-        leftButton={{
-          icon: <img src={Close} />,
-          onClick: () => {
-            console.log('뒤로가기')
-          },
-        }}
-      />
+      <Header title="새 포스트 작성" buttons={{ cancel: { show: true } }} />
       <div>Post Create Page</div>
     </>
   )

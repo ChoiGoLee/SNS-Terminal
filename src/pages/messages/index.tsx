@@ -1,7 +1,8 @@
+import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 
-function Messages() {
+function Messages(): React.JSX.Element {
   return (
     <>
       <div className="min-h-30">

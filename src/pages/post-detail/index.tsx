@@ -1,18 +1,17 @@
+import React from 'react'
 import { Header } from '../../components/common/Header'
-import BackArrow from '/icons/back-arrow.svg'
-function PostDetail() {
+import { SideBar } from '../../components/common/SideBar'
+
+function PostDetail(): React.JSX.Element {
   return (
     <>
-      <Header
-        title="포스트"
-        leftButton={{
-          icon: <img src={BackArrow} />,
-          onClick: () => {
-            console.log('뒤로가기')
-          },
-        }}
-      />
-      <div>Post Detail Page</div>
+      <div className="min-h-30">
+        <Header title="포스트" buttons={{ back: { show: true } }} />
+      </div>
+      <div className="flex">
+        <SideBar isAuthenticated={true} activeItem="/" />
+        <div>Post Detail Page</div>
+      </div>
     </>
   )
 }
