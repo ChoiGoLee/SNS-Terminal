@@ -2,11 +2,7 @@ interface SidebarButtonProps {
   /** 버튼에 표시될 텍스트 */
   content: string
   /** 버튼 아이콘 이미지 URL */
-<<<<<<< HEAD
   icon?: string
-=======
-  icon: string
->>>>>>> dev
   /** 버튼에 대한 설명 */
   ariaLabel: string
   /** 버튼 활성화 상태 */
@@ -30,11 +26,7 @@ function SidebarButton({
   isActive = false,
   ariaLabel,
   onclick,
-<<<<<<< HEAD
 }: SidebarButtonProps) {
-=======
-}) {
->>>>>>> dev
   return (
     <button
       aria-label={ariaLabel}
