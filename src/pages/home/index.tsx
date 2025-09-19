@@ -2,8 +2,16 @@ import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 import TextInput from '../../components/common/TextInput'
+import { useState } from 'react'
 
 function Home(): React.JSX.Element {
+  const [inputValue, setInputValue] = useState('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
+    console.log(e.target.value)
+  }
+
   return (
     <div className="flex min-h-screen">
       <div className="h-full">
@@ -12,13 +20,15 @@ function Home(): React.JSX.Element {
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
         <TextInput
-          fontWeight="normal"
-          border="fullRound"
+          onchange={handleChange}
+          value={inputValue}
+          placeholder="기술 스택 검색"
+          size="md"
+          border={'fullRound'}
+          hasIcon={true}
+          id="password"
+          label="라벨"
           type="text"
-          placeholder="test"
-          size="sm"
-          label="test"
-          icon="/src/assets/icons/hash.svg"
         ></TextInput>
       </div>
     </div>
