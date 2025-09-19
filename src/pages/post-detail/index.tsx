@@ -1,6 +1,7 @@
 import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
+import PostCard from '../../components/common/PostCard'
 
 function PostDetail(): React.JSX.Element {
   return (
@@ -11,6 +12,11 @@ function PostDetail(): React.JSX.Element {
       <div className="flex">
         <SideBar isAuthenticated={true} activeItem="/" />
         <div>Post Detail Page</div>
+        <PostCard
+          isDetail={true}
+          comment="fsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsdfsdffsdfdsfsdfsd"
+          onClick={() => {}}
+        />
       </div>
     </>
   )
