@@ -9,8 +9,6 @@ import { useEffect, useRef, useState } from 'react'
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
-  /**게시글 텍스트 **/
-  comment: string
   // 게시글 더보기 클릭 이벤트 핸들러 함수
   onClick: () => void
 }
@@ -18,7 +16,6 @@ interface PostCardProps {
 /**
  *
  * @param {boolean} isDetail - 홈/피드페이지 or 상세페이지 여부
- * @param {string} comment - 게시글 텍스트
  * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
@@ -43,12 +40,12 @@ function PostCard({ isDetail = false, onClick }: PostCardProps) {
       SetShowGradient(true)
     } else if (
       commentRef.current &&
-      commentRef.current.scrollHeight < maxHeight
+      commentRef.current.offsetHeight < maxHeight
     ) {
       setShowMoreBtn(false)
       SetShowGradient(false)
     }
-  }, [maxHeight])
+  }, [])
 
   return (
     <article
