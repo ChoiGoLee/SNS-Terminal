@@ -11,6 +11,7 @@ interface PostCardProps {
   isDetail?: boolean
   // 게시글 더보기 클릭 이벤트 핸들러 함수
   onClick: () => void
+  comment: string
 }
 
 /**
@@ -19,7 +20,7 @@ interface PostCardProps {
  * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
-function PostCard({ isDetail = false, onClick }: PostCardProps) {
+function PostCard({ isDetail = false, onClick, comment }: PostCardProps) {
   const maxHeight = 100
 
   const navigate = useNavigate()
@@ -87,22 +88,8 @@ function PostCard({ isDetail = false, onClick }: PostCardProps) {
             {!isDetail && !isExpanded && showGradient && (
               <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
             )}
-            <Markdown
-              content={`
-  # 제목
-  일반 텍스트입니다.
-  \`\`\`javascript
-  console.log('Hello, world!');
-  const greeting = 'React Markdown';
-  console.log(greeting);
-  \`\`\`
-  \`\`\`python
-  def hello():
-    print("Hello from Python!")
-  hello()
-  \`\`\`
-    `}
-            />
+
+            <Markdown content={comment} />
           </div>
           <div className="flex justify-center">
             {showMoreBtn && !isDetail && (
