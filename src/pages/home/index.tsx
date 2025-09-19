@@ -1,6 +1,7 @@
 import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
+import TextInput from '../../components/common/TextInput'
 
 function Home(): React.JSX.Element {
   return (
