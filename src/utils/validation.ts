@@ -54,7 +54,7 @@ function validateUserName(userName: string): boolean {
  */
 
 function validateAccountID(id: string): boolean {
-  const idPattern = /^[a-zA-z0-9._]/
+  const idPattern = /^[a-zA-Z0-9._]+$/
   return idPattern.test(id)
 }
 
@@ -79,7 +79,7 @@ function validatePassword(password: string): boolean {
  */
 function validateImageExtend(file: File): boolean {
   const allowExtends = ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'tif', 'heic']
-  const extend = file.name.split('.').pop() ?? ''
+  const extend = file.name.split('.').pop()?.toLowerCase() ?? ''
 
   if (!allowExtends.includes(extend)) {
     return false
