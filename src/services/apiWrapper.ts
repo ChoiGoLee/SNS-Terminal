@@ -1,4 +1,3 @@
-import { API_BASE_URL as BASE_URL } from '../utils/configs'
 import { tokenManager } from './tokenManager'
 import type { Common } from '../types/api'
 
@@ -47,13 +46,14 @@ const request = async <T>(
 
   // fetch 구문
   const config: RequestInit = {
+    // credentials: 'include', // httpOnly 쿠키 사용 시
     method,
     headers,
     ...customConfig,
     ...(data && { body: JSON.stringify(data) }),
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config)
+  const response = await fetch(`/api${endpoint}`, config)
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
