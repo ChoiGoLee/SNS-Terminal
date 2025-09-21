@@ -12,7 +12,7 @@ import { API_BASE_URL } from '../../utils/configs'
 function ProfileSetting(): React.JSX.Element {
   const navigate = useNavigate()
 
-  // 상태관리(유저정보,프로필 이미지 업로드)
+  // 유저 정보 및 프로필 이미지 상태 관리
   const [inputNameValue, setInputNameValue] = useState('')
   const [inputIntroValue, setInputIntroValue] = useState('')
   const [inputStackValue, setInputStackValue] = useState('')
@@ -22,14 +22,16 @@ function ProfileSetting(): React.JSX.Element {
   const [isUploadLoading, setIsUploadLoading] = useState(false)
   const [textCount, setTextCount] = useState(0)
 
-  // 유저 이미지 관리
-  // 이미지 URL 경로
+  // 프로필 이미지 관련 상태
+
+  // 서버에서 받은 이미지 URL
   const [userImage, setUserImage] = useState('')
-  // 이미지 파일
+  // 업로드할 이미지 파일
   const [image, setImage] = useState<File | null>(null)
-  // 이미지 미리보기
+  // 미리보기용 이미지 URL
   const [previewUrl, setPrivewUrl] = useState('')
 
+  // 입력값 및 폼 이벤트 핸들러
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNameValue(e.target.value)
     setNameError('')
@@ -45,7 +47,7 @@ function ProfileSetting(): React.JSX.Element {
     setInputStackValue(e.target.value)
   }
 
-  //프로필 불러오기
+  // 프로필 정보 불러오기 함수
   const handleProfileLoad = async (): Promise<void> => {
     try {
       const response: UserAPI.MyInfo.Res = await api.get('/user/myinfo')
@@ -56,25 +58,27 @@ function ProfileSetting(): React.JSX.Element {
       setUserAcountName(response.user.accountname)
 
       console.log('프로필 불러오기를 성공했습니다.', response)
-    } catch (error: any) {
+    } catch (error) {
       console.error('프로필 불러오기 실패:', error)
+      alert('프로필 불러오기를 실패했습니다.')
     }
   }
 
+  // 마운트 시 1회만 실행
   useEffect(() => {
     handleProfileLoad()
   }, [])
 
-  // 프로필 수정
+  // 프로필 수정 함수
 
   const handleProfileUpdate = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
-    // todo
-    // 1. 이미지파일 여부 확인하기
     let imageUrl = userImage
 
     e.preventDefault()
+
+    // 기존 이미지와 업로드된 이미지 중 표시할 이미지를 선택
 
     async function checkImage() {
       console.log(image)
@@ -89,25 +93,19 @@ function ProfileSetting(): React.JSX.Element {
           })
 
           if (!response.ok) {
-            throw new Error('으악 에러났다!')
+            throw new Error('프로필 이미지 표시 에러가 발생했습니다.')
           }
 
           const data = await response.json()
 
           return (imageUrl = data.info.filename)
-
-          // console.log('유저이미지 확인용', imageUrl)
         } catch (error) {
           console.error(error)
+          alert(error)
         }
       }
     }
     console.log('imageurl:', imageUrl)
-
-    // 2. 이미지파일이 있다면 서버에 이미지 업로드 요청
-    // 3. 요청해서 받아온 response에 파일 네임 가져오기
-    // 4. 가져온 파일네임을 변수에 저장하기(userImage에 넣기)
-    // 5. 요청데이터 이미지에 넣기
 
     await checkImage()
 
@@ -122,7 +120,6 @@ function ProfileSetting(): React.JSX.Element {
     }
 
     console.log('요청 데이터:', userUpdateData)
-    console.log('username:', userAcountName)
 
     // 이름 입력하지 않을 때 에러메세지
     if (!inputNameValue) {
@@ -148,16 +145,14 @@ function ProfileSetting(): React.JSX.Element {
 
       console.log('프로필 수정 성공:', response)
       navigate('/profile')
-    } catch (error: any) {
+    } catch (error) {
       console.error('프로필 수정 실패', error)
     } finally {
       setIsUploadLoading(false)
     }
   }
 
-  // 프로필 업데이트
-
-  // 이미지 미리보기
+  // 프로필 이미지 미리보기 함수
 
   const handleUserImagePrivew = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
@@ -167,21 +162,16 @@ function ProfileSetting(): React.JSX.Element {
         setPrivewUrl(url)
         setImage(file)
       }
-      // const selectedFiles = Array.from(e.target.files)
-      // setImage(selectedFiles)
-      // console.log('업로드한 이미지:', selectedFiles[0])
     }
   }
 
-  // 이미지 삭제
+  // 프로필 이미지 삭제 함수
 
   const handleUserImageDelete = () => {
     window.URL.revokeObjectURL(previewUrl)
     setPrivewUrl('')
     setImage(null)
   }
-
-  // 이미지 저장
 
   return (
     <>
@@ -191,11 +181,12 @@ function ProfileSetting(): React.JSX.Element {
       <div className="flex">
         <SideBar isAuthenticated={true} activeItem="/settings" />
         <form
+          onSubmit={handleProfileUpdate}
           encType="multipart/form-data"
           className="mx-auto bg-background border-background-border w-full p-4 transition-colors flex flex-col gap-8"
         >
           <p className="text-lg font-bold mb-4">프로필 사진</p>
-          <section className="flex gap-4">
+          <section className="flex  gap-8">
             <Avatar
               userImage={
                 previewUrl ? previewUrl : API_BASE_URL + '/' + userImage
@@ -203,26 +194,22 @@ function ProfileSetting(): React.JSX.Element {
               userName={inputNameValue}
               size="lg"
             />
-            <div className="flex flex-col justify-between gap-2">
-              <div>
-                <label
-                  htmlFor="useImageUpload"
-                  className="flex-1 flex bg-background-surface border-background-border rounded-lg border text-white hover:bg-background-border disabled:opacity-30 cursor-pointer px-4 py-3 text-4 gap-2"
-                  aria-label="프로필 사진 업로드"
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="useImageUpload"
-                    className="hidden"
-                    name="프로필 사진 업로드"
-                    onChange={handleUserImagePrivew}
-                  />
-                  프로필 이미지 업로드
-                </label>
-              </div>
-              <p>JPG,PNG 파일을 업로드하세요</p>
-
+            <div className="flex gap-4 items-center">
+              <label
+                htmlFor="useImageUpload"
+                className="flex text-center items-center bg-primary border-background-border text-black hover:bg-primary-dark disabled:opacity-30  rounded-full cursor-pointer justify-center px-4 py-2 text-[14px] gap-2"
+                aria-label="프로필 이미지 업로드"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="useImageUpload"
+                  className="hidden"
+                  name="프로필 이미지 업로드"
+                  onChange={handleUserImagePrivew}
+                />
+                프로필 이미지 업로드
+              </label>
               <BaseButton
                 content="삭제하기"
                 fontWeight="normal"
@@ -331,7 +318,6 @@ function ProfileSetting(): React.JSX.Element {
                 color="primary"
                 size="md"
                 btnType="submit"
-                onClick={handleProfileUpdate}
               />
             </div>
           </section>
