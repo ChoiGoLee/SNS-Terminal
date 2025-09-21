@@ -1,5 +1,3 @@
-import { API_BASE_URL } from '../../utils/configs'
-
 interface AvatarProps {
   /** user image 주소 */
   userImage?: string
