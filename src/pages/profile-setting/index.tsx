@@ -7,113 +7,124 @@ import TextInput from '../../components/common/TextInput'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/apiWrapper'
-import { UserAPI } from '../../types/api'
+import type { UserAPI, ProfileAPI } from '../../types/api'
 
-function ProfileSetting() {
+function ProfileSetting(): React.JSX.Element {
+  const navigate = useNavigate()
+
+  // 상태관리(유저정보,프로필 이미지 업로드)
   const [inputNameValue, setInputNameValue] = useState('')
   const [inputIntroValue, setInputIntroValue] = useState('')
   const [inputStackValue, setInputStackValue] = useState('')
   const [userAcountName, setUserAcountName] = useState('')
-  //유저 이미지 관리(url) - 실제 업로드용
-  const [userImage, setUserImage] = useState('')
-  //이미지 파일 관리
-  const [image, setImage] = useState<File[]>([])
-  //이미지 미리보기 url - base64용
-  const [previewUrl, setPreviewUrl] = useState('')
+  const [error, setError] = useState<string>('')
+  const [isUploadLoading, setIsUploadLoading] = useState(false)
 
-  const navigate = useNavigate()
+  const [userImage, setUserImage] = useState('')
+  const [image, setImage] = useState<File[]>([])
+  const [previewUrl, setPreviewUrl] = useState('')
 
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNameValue(e.target.value)
+    setError('')
   }
 
   const handleInputIntro = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputIntroValue(e.target.value)
+    setError('')
   }
 
   const handleInputStack = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputStackValue(e.target.value)
   }
 
-  async function handleProfileLoad() {
+  //프로필 불러오기
+  const handleProfileLoad = async (): Promise<void> => {
     try {
       const response: UserAPI.MyInfo.Res = await api.get('/user/myinfo')
-      const userName = await response.username
-      setInputNameValue(userName)
-    } catch (error) {
-      alert(error)
+
+      setInputNameValue(response.user.username)
+      setInputIntroValue(response.user.intro)
+      setUserImage(response.user.image)
+      setUserAcountName(response.user.accountname)
+
+      console.log('프로필 불러오기를 성공했습니다.', response)
+    } catch (error: any) {
+      console.error('프로필 불러오기 실패:', error)
+    }
+  }
+
+  // 마이프로필 수정
+
+  const handleProfileUpdate = async (): Promise<void> => {
+    // 요청 데이터
+    const userUpdateData: ProfileAPI.UpdateProfile.Req = {
+      user: {
+        username: inputNameValue,
+        accountname: userAcountName,
+        intro: inputIntroValue,
+        image: userImage,
+      },
+    }
+
+    // 이름 입력하지 않았을 때 에러메세지(필수)
+    if (!inputNameValue) {
+      setError('이름을 입력해주세요.')
+    }
+
+    setIsUploadLoading(true)
+    setError('')
+
+    try {
+      const response: ProfileAPI.UpdateProfile.Res = await api.put(
+        '/user',
+        userUpdateData
+      )
+
+      console.log('프로필 수정 성공:', response)
+      navigate('/profile')
+    } catch (error: any) {
+      console.error('프로필 수정 실패', error)
+    } finally {
+      setIsUploadLoading(false)
     }
   }
 
   useEffect(() => {
     handleProfileLoad()
+    handleProfileUpdate()
   }, [])
 
-  // 마이 프로필 불러오기
-  // const url = 'https://dev.wenivops.co.kr/services/mandarin'
-
-  // const token = localStorage.getItem('token')
-
-  // async function handleProfileLoad() {
+  // async function handleProfileUpdate() {
   //   try {
-  //     const response = await fetch(url + '/user/myinfo', {
-  //       method: 'GET',
+  //     const response = await fetch(url + '/user', {
+  //       method: 'PUT',
   //       headers: {
   //         Authorization: `Bearer ${token}`,
+  //         'Content-type': 'application/json',
   //       },
+  //       body: JSON.stringify({
+  //         user: {
+  //           username: inputNameValue,
+  //           accountname: userAcountName,
+  //           intro: inputIntroValue,
+  //           image: userImage,
+  //         },
+  //       }),
   //     })
+
+  //     navigate('/profile')
 
   //     if (!response.ok) {
   //       throw new Error('으악! 에러 발생!')
   //     }
 
   //     const data = await response.json()
-
-  //     setInputNameValue(data.user.username)
-  //     setInputIntroValue(data.user.intro)
-  //     setUserImage(data.user.image)
-  //     setUserAcountName(data.user.accountname)
+  //     console.log('수정된 프로필 데이터:', data)
   //   } catch (error) {
   //     console.error(error)
   //   }
   // }
-
-  // 마이프로필 수정
-
-  async function handleProfileUpdate() {
-    try {
-      const response = await fetch(url + '/user', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: {
-            username: inputNameValue,
-            accountname: userAcountName,
-            intro: inputIntroValue,
-            image: userImage,
-          },
-        }),
-      })
-
-      navigate('/profile')
-
-      if (!response.ok) {
-        throw new Error('으악! 에러 발생!')
-      }
-
-      const data = await response.json()
-      console.log('수정된 프로필 데이터:', data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    handleProfileLoad()
-  }, [])
 
   // 이미지 업로드 fetch
 
@@ -177,6 +188,9 @@ function ProfileSetting() {
               id="profileName"
               type="text"
             />
+            {error && (
+              <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+            )}
           </section>
 
           <section>
@@ -243,7 +257,7 @@ function ProfileSetting() {
                 size="md"
               />
               <BaseButton
-                content="저장하기"
+                content={isUploadLoading ? '저장 중..' : '저장하기'}
                 ariaLabel="저장하기"
                 fontWeight="bold"
                 width="fullWidth"
