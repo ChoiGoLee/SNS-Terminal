@@ -67,21 +67,30 @@ function Profile(): React.JSX.Element {
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="프로필" />
         {/* 내 프로필 섹션 */}
-        <div className="flex items-center p-4 border-b border-background-border">
-          <div className="mr-4">
-            <Avatar userName={user?.accountname || ''} size={'md'} />
-          </div>
-          <div>
-            {/* 사용자 이름 */}
-            <h2 className="text-xl font-bold">{user?.username || '사용자'}</h2>
-            {/* 유저 이름 @어쩌고 이메일 앞부분*/}
-            <p className="text-sm text-text-secondary">
-              @{user?.accountname || 'accountname'}
-            </p>
-            {/* 소개글 */}
-            <p className="mt-2 text-text-secondary">
-              {user?.intro || '소개글 없음'}
-            </p>
+        <div className="p-6 border-b border-background-border">
+          <div className="flex items-start gap-4">
+            {/* 프로필 이미지 */}
+            <div className="flex-shrink-0">
+              <Avatar userName={user?.accountname || ''} size={'md'} />
+            </div>
+
+            {/* 사용자 정보 */}
+            <div className="flex-1">
+              {/* 사용자 이름 userName */}
+              <h2 className="text-xl font-bold text-text-primary mb-1">
+                {user?.username || '사용자'}
+              </h2>
+
+              {/* 계정명@accountName */}
+              <p className="text-sm text-text-secondary mb-3">
+                @{user?.accountname || 'accountname'}
+              </p>
+
+              {/* 소개글 */}
+              <p className="text-text-secondary">
+                {user?.intro || '소개글 없음'}
+              </p>
+            </div>
           </div>
         </div>
         {/* 게시글 섹션 */}
