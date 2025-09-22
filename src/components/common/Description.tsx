@@ -98,7 +98,11 @@ function Description({
       <div
         className={`w-16 lg:w-20 h-16 lg:h-20 bg-dark-surface rounded-full flex items-center justify-center mx-auto mb-6 ${BgComponent}`}
       >
-        <IconComponent className="w-6 h-6 lg:w-7 lg:h-7 text-dark-text-secondary text-text-secondary" />
+        <IconComponent
+          className={`w-6 h-6 lg:w-7 lg:h-7 ${
+            iconType === 'resign' ? 'text-red-500' : 'text-text-secondary'
+          }`}
+        />
       </div>
       <h3 className="text-lg lg:text-xl font-bold text-dark-text-primary mb-2">
         {title}
