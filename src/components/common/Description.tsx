@@ -126,7 +126,7 @@ function Description({
       )}
       {buttons && (
         <div className="flex w-full gap-3 mt-6">
-          {/* 임시,버튼 컴포넌트로 교체 예정 */}
+          {/* 버튼 컴포넌트로 교체 */}
           {buttons.map((button, index) => (
             <BaseButton
               key={index}
