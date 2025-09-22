@@ -29,7 +29,7 @@ function Settings(): React.JSX.Element {
         <div className="sticky top-0 h-screen">
           <SideBar isAuthenticated={true} activeItem="/settings" />
         </div>
-        <div className="max-w-full min-h-screen flex lg:max-w-4xl  mx-auto border-background-border border-x">
+        <div className="w-full min-h-screen flex max-w-4xl mx-auto border-background-border border-x">
           <aside className="w-full lg:w-80 border-r border-background-border hidden lg:flex flex-col">
             <Header title="설정" />
             {/* 왼쪽 사이드 메뉴 */}
