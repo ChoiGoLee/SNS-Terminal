@@ -4,6 +4,7 @@ import PostIcon from '../../assets/icons/post.svg?react'
 import HeartIcon from '../../assets/icons/heart-line.svg?react'
 import CommentIcon from '../../assets/icons/comment.svg?react'
 import SearchIcon from '../../assets/icons/search-g.svg?react'
+import BaseButton from './BaseButton'
 
 /**
  * Description 컴포넌트 Props 타입
@@ -19,7 +20,7 @@ interface ExplainProps {
   buttons?: Array<{
     text: string
     onClick: () => void
-    variant: 'primary' | 'secondary' | 'danger'
+    variant: 'primary' | 'surface' | 'danger'
   }>
   /** 카드 표시 (선택적) */
   showCard?: boolean
@@ -33,7 +34,13 @@ const ICON_TYPES = {
   like: { icon: HeartIcon, bgColor: 'bg-background-border' },
   comment: { icon: CommentIcon, bgColor: 'bg-background-border' },
   search: { icon: SearchIcon, bgColor: 'bg-background-border' },
-}
+} as const
+
+const BUTTON_COLOR_TYPES = {
+  primary: 'primary',
+  danger: 'danger',
+  surface: 'surface',
+} as const
 
 /**
  * 다양한 상황에서 사용되는 설명/안내 컴포넌트
@@ -114,35 +121,19 @@ function Description({
         </div>
       )}
       {buttons && (
-        <div className="flex gap-3 mt-6">
+        <div className="flex w-full gap-3 mt-6">
           {/* 임시,버튼 컴포넌트로 교체 예정 */}
           {buttons.map((button, index) => (
-            <button
+            <BaseButton
               key={index}
+              content={button.text}
+              ariaLabel={button.text}
               onClick={button.onClick}
-              className={`
-          font-bold rounded-full transition-all duration-200 cursor-pointer 
-          whitespace-nowrap flex items-center justify-center border-0 outline-none 
-          px-8 py-3 text-lg h-12 flex-1
-          ${
-            button.variant === 'primary'
-              ? 'bg-primary text-black hover:bg-primary-dark'
-              : ''
-          }
-          ${
-            button.variant === 'secondary'
-              ? 'bg-dark-surface text-dark-text-primary border border-background-border hover:bg-background-border active:bg-background-border'
-              : ''
-          }
-          ${
-            button.variant === 'danger'
-              ? 'bg-red-600 text-white hover:bg-red-700 active:bg-red-700'
-              : ''
-          }
-        `}
-            >
-              {button.text}
-            </button>
+              size="md"
+              width="fullWidth"
+              fontWeight="bold"
+              color={BUTTON_COLOR_TYPES[button.variant]}
+            />
           ))}
         </div>
       )}
