@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 import { useNavigate } from 'react-router-dom'
-
 import Description from '../../components/common/Description'
+import LogoutIcon from '../../assets/icons/logout.svg?react'
+import TrashIcon from '../../assets/icons/trash.svg?react'
 
 function Settings(): React.JSX.Element {
   const navigate = useNavigate()
@@ -42,6 +43,7 @@ function Settings(): React.JSX.Element {
                     : 'text-text-primary hover:bg-background-surface'
                 }`}
               >
+                <LogoutIcon className="w-4 h-4 mr-3" />
                 로그아웃
               </button>
               <button
@@ -52,6 +54,7 @@ function Settings(): React.JSX.Element {
                     : 'text-text-primary hover:bg-background-surface'
                 }`}
               >
+                <TrashIcon className="w-4 h-4 mr-3" />
                 계정 탈퇴
               </button>
             </nav>
@@ -59,7 +62,7 @@ function Settings(): React.JSX.Element {
           {/* 오른쪽 컨텐츠 */}
           <section className="flex-1 flex flex-col">
             <div className="sticky top-0 border-b border-background-border p-4">
-              <h2 className="text-base lg:text-lg font-bold text-text-primary ">
+              <h2 className="text-base lg:text-lg font-bold text-text-primary">
                 {activeMenu === 'logout' ? '로그아웃' : '회원탈퇴'}
               </h2>
             </div>
