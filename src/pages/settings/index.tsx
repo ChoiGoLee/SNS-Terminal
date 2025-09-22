@@ -14,12 +14,14 @@ function Settings(): React.JSX.Element {
 
   // 이벤트 핸들러
   const handleLogout = () => {
+    localStorage.removeItem('token')
     sessionStorage.removeItem('token')
     navigate('/login')
   }
 
   const handleResign = () => {
     // 회원탈퇴는 따로 명시된 내용이 없어 removeItem으로 대체
+    localStorage.removeItem('token')
     sessionStorage.removeItem('token')
     navigate('/login')
   }
