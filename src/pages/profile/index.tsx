@@ -39,6 +39,11 @@ function Profile(): React.JSX.Element {
 
   // 컴포넌트 마운트 시 데이터 로드
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setError('로그인이 필요합니다.')
+      return
+    }
     const loadProfileData = async () => {
       setError(null)
 
