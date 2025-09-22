@@ -16,7 +16,7 @@ const getDefaultHeaders = async (
   }
 
   if (requiresAuth) {
-    const token = localStorage.getItem('TOKEN_KEY')
+    const token = localStorage.getItem('token')
     if (token) {
       const result = await tokenManager(token)
       if (result.isValid) {
