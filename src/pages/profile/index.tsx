@@ -5,6 +5,7 @@ import PostCard from '../../components/common/PostCard'
 import { useEffect, useState } from 'react'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI, PostAPI, Common } from '../../types/api'
+import Avatar from '../../components/common/Avatar'
 
 function Profile(): React.JSX.Element {
   const [user, setUser] = useState<Common.User | null>(null)
@@ -65,6 +66,25 @@ function Profile(): React.JSX.Element {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="프로필" />
+        {/* 내 프로필 섹션 */}
+        <div className="flex items-center p-4 border-b border-background-border">
+          <div className="mr-4">
+            <Avatar userName={user?.accountname || ''} size={'md'} />
+          </div>
+          <div>
+            {/* 사용자 이름 */}
+            <h2 className="text-xl font-bold">{user?.username || '사용자'}</h2>
+            {/* 유저 이름 @어쩌고 이메일 앞부분*/}
+            <p className="text-sm text-text-secondary">
+              @{user?.accountname || 'accountname'}
+            </p>
+            {/* 소개글 */}
+            <p className="mt-2 text-text-secondary">
+              {user?.intro || '소개글 없음'}
+            </p>
+          </div>
+        </div>
+        {/* 게시글 섹션 */}
         <div className="">
           {error ? (
             <p className="p-4 text-red-500">{error}</p>
