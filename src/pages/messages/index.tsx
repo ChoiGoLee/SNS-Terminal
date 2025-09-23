@@ -9,9 +9,18 @@ import {
   MessageBubble,
   sampleMessages,
 } from '../../components/common/MessageBubble'
+import TextInput from '../../components/common/TextInput'
+import { useSearchUser } from '../../hooks/useSearchUser'
 
 function Messages(): React.JSX.Element {
+  const { users, isLoading, error, searchUsers } = useSearchUser()
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    searchUsers(selectedChatId)
+  }
+
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="sticky top-0 h-screen">
@@ -21,6 +30,13 @@ function Messages(): React.JSX.Element {
         <div className="flex ">
           <aside className=" border-background-border border-x overflow-y-scroll max-h-svh">
             <Header title="메시지" buttons={{ add: { show: true } }} />
+            <TextInput
+              size="lg"
+              placeholder="채팅하고 싶은 사용자를 찾아보세요"
+              id="유저 검색창"
+              label="유저 검색창"
+              onchange={(e) => setSelectedChatId(e.target.value)}
+            />
             <ChatRoomList
               currentUserId="me123"
               rooms={sampleRooms}

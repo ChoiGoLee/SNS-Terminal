@@ -10,9 +10,9 @@ interface inputProps {
   /** input의 id(label과 연결 - 웹접근성으로 사용) */
   id: string
   /** input의 label(id와 연결 - 웹접근성으로 사용) */
-  label?: string
+  label: string
   /** input요소의 입력값 변경을 감지함 */
-  onchange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onchange: (e: React.ChangeEvent<HTMLInputElement>) => void
   /** input의 value 값(상태값) */
   value: string
   /** input 클릭 인식(클릭시 삭제 버튼 나오게) */
