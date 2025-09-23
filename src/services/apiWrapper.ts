@@ -1,5 +1,6 @@
 import { tokenManager } from './tokenManager'
 import type { Common } from '../types/api'
+import { useNavigate } from 'react-router-dom'
 
 interface RequestOptions {
   headers?: Common.AuthHeaders
@@ -14,14 +15,17 @@ const getDefaultHeaders = async (
     'Content-type': 'application/json',
   }
 
-  if (requiresAuth) {
+  const navigate = useNavigate()
 
+  if (requiresAuth) {
     const token = sessionStorage.getItem('token')
-    
     if (token) {
       const result = await tokenManager(token)
       if (result.isValid) {
         headers['Authorization'] = `Bearer ${token}`
+      } else {
+        sessionStorage.removeItem('token')
+        navigate('/login')
       }
     }
   }
@@ -48,12 +52,14 @@ const request = async <T>(
 
   // fetch 구문
   const config: RequestInit = {
+    // credentials: 'include', // httpOnly 쿠키 사용 시
     method,
     headers,
     ...customConfig,
     ...(data && { body: JSON.stringify(data) }),
   }
 
+  const response = await fetch(`/api${endpoint}`, config)
   const response = await fetch(`/api${endpoint}`, config)
 
   if (!response.ok) {
