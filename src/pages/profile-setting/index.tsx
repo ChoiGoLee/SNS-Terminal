@@ -251,7 +251,11 @@ function ProfileSetting(): React.JSX.Element {
             <section className="flex gap-8 mb-8">
               <Avatar
                 userImage={
-                  previewUrl ? previewUrl : API_BASE_URL + '/' + userImage
+                  previewUrl
+                    ? previewUrl
+                    : userImage.includes('Ellipse')
+                    ? undefined
+                    : API_BASE_URL + '/' + userImage
                 }
                 userName={inputNameValue}
                 size="lg"
