@@ -17,6 +17,8 @@ interface inputProps {
   value: string
   /** input 클릭 인식(클릭시 삭제 버튼 나오게) */
   onclick?: () => void
+  /** 닫기 아이콘 클릭시 실행 */
+  onIconClick?: () => void
   /** border-radius */
   border: 'fullRound' | 'lgRound'
   /** 아이콘 여부 */
@@ -56,6 +58,7 @@ function TextInput({
   hasIcon,
   id,
   type,
+  onIconClick,
 }: inputProps) {
   const [showCloseIcon, setShowCloseIcon] = useState(false)
 
@@ -103,9 +106,11 @@ function TextInput({
         )}
         {/* input클릭시 닫기버튼이 나오게 함 */}
         {hasIcon && showCloseIcon && (
-          <CloseIcon
-            className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
-          />
+          <button type="button" onClick={onIconClick}>
+            <CloseIcon
+              className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
+            />
+          </button>
         )}
       </div>
     </div>
