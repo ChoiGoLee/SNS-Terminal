@@ -87,10 +87,9 @@ function ProfileSetting(): React.JSX.Element {
       setUserImage(response.user.image)
       setUserAcountName(response.user.accountname)
 
-      // intro를 자기소개,기술스택 분리해서 세터함수에 넣음
       const serverIntroData = response.user.intro
 
-      // 기술스택 불러오기 함수 사용
+      // 기술스택 불러오기 함수 사용(자기소개 텍스트,기술스택 나누기)
       const { finalIntroduce, finalStack } = LoadIntroData(serverIntroData)
 
       setInputIntroValue(finalIntroduce)
