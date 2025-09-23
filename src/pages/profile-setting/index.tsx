@@ -9,6 +9,15 @@ import { api } from '../../services/apiWrapper'
 import type { UserAPI, ProfileAPI } from '../../types/api'
 import { API_BASE_URL } from '../../utils/configs'
 
+// todo
+// 0. 기술스택을 저장할 상태를 만든다.
+// 1. 기술스택 데이터를 만든다.(o)
+// 2. 기술스택 데이터를 저장하는 로직을 만든다.(유틸)()
+// - 기술스택, 자기소개 input 값 2개를 합쳐야 한다.(%$ 형태로 구분)
+// 4. 기술스택 상태 관리를 만든다.()
+// 5. 기술스택 기능을 구현한다.()
+// 6. 유효성 검증 함수 불러온다.()
+
 function ProfileSetting(): React.JSX.Element {
   const navigate = useNavigate()
 
@@ -16,6 +25,7 @@ function ProfileSetting(): React.JSX.Element {
   const [inputNameValue, setInputNameValue] = useState('')
   const [inputIntroValue, setInputIntroValue] = useState('')
   const [inputStackValue, setInputStackValue] = useState('')
+  const [stackSaveValue, setStackSaveValue] = useState<string[]>([])
   const [userAcountName, setUserAcountName] = useState('')
   const [nameError, setNameError] = useState<string>('')
   const [introError, setIntroError] = useState<string>('')
