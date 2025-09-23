@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../../utils/configs'
+
 interface AvatarProps {
   /** user image 주소 */
   userImage?: string
@@ -15,22 +17,20 @@ const SIZECLASSES = {
 } as const
 
 function Avatar({ userImage, userName, size }: AvatarProps) {
-  // const [imageError, setImageError] = useState(false)
-  // const [imageLoaded, setImageLoaded] = useState(false)
-  // const handleError = useCallback(() => setImageError(true), [])
-
   return (
     <div
-      className={`${SIZECLASSES[size]} rounded-full flex items-center justify-center font-bold text-black overflow-hidden bg-primary`}
+      className={`${SIZECLASSES[size]} rounded-full flex items-center justify-center font-bold text-black overflow-hidden bg-primary leading-none`}
     >
       {userImage ? (
-        <img
-          src={userImage}
-          alt={userName}
-          className="rounded-full object-cover w-full h-full"
-          // onError={handleError}
-          // onLoad={() => setImageLoaded(true)}
-        />
+        userImage === '/Ellipse.png' ? (
+          userName?.charAt(0)
+        ) : (
+          <img
+            src={userImage}
+            alt={userName}
+            className="rounded-full object-cover w-full h-full"
+          />
+        )
       ) : (
         userName?.charAt(0)
       )}
