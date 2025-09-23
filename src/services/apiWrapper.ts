@@ -60,7 +60,6 @@ const request = async <T>(
   }
 
   const response = await fetch(`/api${endpoint}`, config)
-  const response = await fetch(`/api${endpoint}`, config)
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
