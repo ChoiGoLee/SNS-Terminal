@@ -17,6 +17,8 @@ interface IBaseButtonProps {
   size: 'sm' | 'md' | 'lg'
   /** 클릭 이벤트 핸들러 */
   onClick?: () => void
+  /** 버튼 타입 지정 */
+  btnType?: 'button' | 'submit'
 }
 
 const WIDTH_TYPES = {
@@ -64,9 +66,11 @@ function BaseButton({
   width,
   fontWeight = 'normal',
   onClick,
+  btnType = 'button',
 }: IBaseButtonProps) {
   return (
     <button
+      type={btnType}
       onClick={onClick}
       className={`
       flex items-center justify-center rounded-full
