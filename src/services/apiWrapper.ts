@@ -17,7 +17,7 @@ const getDefaultHeaders = async (
   if (requiresAuth) {
 
     const token = sessionStorage.getItem('token')
-
+    
     if (token) {
       const result = await tokenManager(token)
       if (result.isValid) {
