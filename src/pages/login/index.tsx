@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BaseButton from '../../components/common/BaseButton'
-import styles from '../../assets/css/login.module.css'
+import TextInput from '../../components/common/TextInput'
+import { api } from '../../services/apiWrapper'
+import { Header } from '../../components/common/Header'
+import type { UserAPI } from '../../types/api'
+import { useNavigate } from 'react-router-dom'
 
 function Login(): React.JSX.Element {
   const navigate = useNavigate()
@@ -49,8 +53,8 @@ function Login(): React.JSX.Element {
 
       console.log('로그인 성공:', response)
 
-      // 토큰 저장 세션 스토리지에 저장
-      sessionStorage.setItem('token', response.token)
+      // 토큰 저장
+      localStorage.setItem('token', response.token)
 
       // 홈 페이지로 이동
       navigate('/')
@@ -72,24 +76,45 @@ function Login(): React.JSX.Element {
 
   return (
     <div className="w-screen h-screen bg-black">
-      <div>
-        <div className={styles['login-btn-container']}>
-          {provider.map((p, i) => {
-            return (
-              <BaseButton
-                key={i}
-                content={`Continue with ${
-                  p.charAt(0).toUpperCase() + p.slice(1)
-                }`}
-                icon={`public/icons/${p}.svg`}
-                ariaLabel={`login with ${p} button`}
-                size="lg"
-                color="primary"
-                width="fullWidth"
-                fontWeight="medium"
-              />
-            )
-          })}
+      <Header title="로그인" buttons={{ back: { show: true } }} />
+
+      <div className="px-6 pt-8 space-y-4">
+        <TextInput
+          onchange={handleInputEmail}
+          value={inputEmail}
+          placeholder="이메일을 입력하세요"
+          size="md"
+          border="fullRound"
+          id="email"
+          label="email"
+          type="email"
+        />
+
+        <TextInput
+          onchange={handleInputPw}
+          value={inputPw}
+          placeholder="비밀번호를 입력하세요"
+          size="md"
+          border="fullRound"
+          id="password"
+          label="password"
+          type="password"
+        />
+
+        {error && (
+          <div className="text-red-500 text-sm text-center mt-2">{error}</div>
+        )}
+
+        <div className="pt-4">
+          <BaseButton
+            content={isLoading ? '로그인 중...' : '로그인'}
+            ariaLabel="로그인 버튼"
+            size="lg"
+            color="primary"
+            width="fullWidth"
+            fontWeight="medium"
+            onClick={handleLogin}
+          />
         </div>
       </div>
     </div>
