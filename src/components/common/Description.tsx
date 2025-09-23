@@ -4,6 +4,7 @@ import PostIcon from '../../assets/icons/post.svg?react'
 import HeartIcon from '../../assets/icons/heart-line.svg?react'
 import CommentIcon from '../../assets/icons/comment.svg?react'
 import SearchIcon from '../../assets/icons/search-g.svg?react'
+import BaseButton from './BaseButton'
 
 /**
  * Description 컴포넌트 Props 타입
@@ -19,7 +20,7 @@ interface ExplainProps {
   buttons?: Array<{
     text: string
     onClick: () => void
-    variant: 'primary' | 'secondary' | 'danger'
+    variant: 'primary' | 'surface' | 'danger'
   }>
   /** 카드 표시 (선택적) */
   showCard?: boolean
@@ -33,7 +34,13 @@ const ICON_TYPES = {
   like: { icon: HeartIcon, bgColor: 'bg-background-border' },
   comment: { icon: CommentIcon, bgColor: 'bg-background-border' },
   search: { icon: SearchIcon, bgColor: 'bg-background-border' },
-}
+} as const
+
+const BUTTON_COLOR_TYPES = {
+  primary: 'primary',
+  danger: 'danger',
+  surface: 'surface',
+} as const
 
 /**
  * 다양한 상황에서 사용되는 설명/안내 컴포넌트
@@ -91,7 +98,11 @@ function Description({
       <div
         className={`w-16 lg:w-20 h-16 lg:h-20 bg-dark-surface rounded-full flex items-center justify-center mx-auto mb-6 ${BgComponent}`}
       >
-        <IconComponent className="w-6 h-6 lg:w-7 lg:h-7 text-dark-text-secondary text-text-secondary" />
+        <IconComponent
+          className={`w-6 h-6 lg:w-7 lg:h-7 ${
+            iconType === 'resign' ? 'text-red-500' : 'text-text-secondary'
+          }`}
+        />
       </div>
       <h3 className="text-lg lg:text-xl font-bold text-dark-text-primary mb-2">
         {title}
@@ -114,35 +125,19 @@ function Description({
         </div>
       )}
       {buttons && (
-        <div className="flex gap-3 mt-6">
-          {/* 임시,버튼 컴포넌트로 교체 예정 */}
+        <div className="flex w-full gap-3 mt-6">
+          {/* 버튼 컴포넌트로 교체 */}
           {buttons.map((button, index) => (
-            <button
+            <BaseButton
               key={index}
+              content={button.text}
+              ariaLabel={button.text}
               onClick={button.onClick}
-              className={`
-          font-bold rounded-full transition-all duration-200 cursor-pointer 
-          whitespace-nowrap flex items-center justify-center border-0 outline-none 
-          px-8 py-3 text-lg h-12 flex-1
-          ${
-            button.variant === 'primary'
-              ? 'bg-primary text-black hover:bg-primary-dark'
-              : ''
-          }
-          ${
-            button.variant === 'secondary'
-              ? 'bg-dark-surface text-dark-text-primary border border-background-border hover:bg-background-border active:bg-background-border'
-              : ''
-          }
-          ${
-            button.variant === 'danger'
-              ? 'bg-red-600 text-white hover:bg-red-700 active:bg-red-700'
-              : ''
-          }
-        `}
-            >
-              {button.text}
-            </button>
+              size="md"
+              width="fullWidth"
+              fontWeight="bold"
+              color={BUTTON_COLOR_TYPES[button.variant]}
+            />
           ))}
         </div>
       )}

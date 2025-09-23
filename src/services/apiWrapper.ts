@@ -15,7 +15,7 @@ const getDefaultHeaders = async (
   }
 
   if (requiresAuth) {
-    
+
     const token = sessionStorage.getItem('token')
     
     if (token) {
