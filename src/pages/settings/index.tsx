@@ -20,9 +20,7 @@ function Settings(): React.JSX.Element {
   }
 
   const handleResign = () => {
-    // 회원탈퇴는 따로 명시된 내용이 없어 removeItem으로 대체
-    localStorage.removeItem('token')
-    sessionStorage.removeItem('token')
+    alert('짜잔! 열심히 개발 준비 중이에요. 조금만 기다려 주세요.')
     navigate('/login')
   }
 
