@@ -90,7 +90,7 @@ function ProfileSetting(): React.JSX.Element {
       // intro를 자기소개,기술스택 분리해서 세터함수에 넣음
       const serverIntroData = response.user.intro
 
-      // 기술스택 파싱 함수 불러오기
+      // 기술스택 불러오기 함수 사용
       const { finalIntroduce, finalStack } = LoadIntroData(serverIntroData)
 
       setInputIntroValue(finalIntroduce)
