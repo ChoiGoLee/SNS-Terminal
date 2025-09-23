@@ -7,6 +7,7 @@ import { api } from '../../services/apiWrapper'
 import type { UserAPI, PostAPI, Common, ProfileAPI } from '../../types/api'
 import Avatar from '../../components/common/Avatar'
 import { useParams } from 'react-router-dom'
+import BaseButton from '../../components/common/BaseButton'
 
 /**
  * todo
@@ -18,11 +19,19 @@ import { useParams } from 'react-router-dom'
  * - [x] 게시글 UI 구현
  * - [x] 에러 처리
  * - [x] 로딩스피너 처리
- * - [ ] github api 연결?
- * - [ ] 팔로우/언팔로우 기능
+ * - [x] github api 연결?
+ * - [x] 팔로우/언팔로우 기능
  * - [ ] 프로필 수정 페이지로 이동 기능
  * - [ ] 게시글 클릭 시 상세 페이지로 이동 기능
  * - [ ] 페이지네이션 또는 무한 스크롤 구현
+ */
+
+/**
+ * todo
+ * 팔로우 상태관리
+ * 팔로우 언팔로우 함수
+ * 유저 정보에서 팔로우 상태 받아오기
+ * 내 프로필 아닐때 팔로우 버튼 보이기
  */
 
 function Profile(): React.JSX.Element {
@@ -33,6 +42,8 @@ function Profile(): React.JSX.Element {
   const [profileUser, setProfileUser] = useState<Common.User | null>(null) //  프로필 주인 정보
   const [posts, setPosts] = useState<Common.Post[]>([])
   const [error, setError] = useState<string | null>(null)
+  // 팔로우 상태
+  const [isFollowing, setIsFollowing] = useState(false)
 
   // 내 정보 가져오기
   const fetchMyInfo = async () => {
@@ -53,6 +64,7 @@ function Profile(): React.JSX.Element {
         `/profile/${accountname}`
       )
       setProfileUser(response.profile)
+      setIsFollowing(response.profile.isfollow) // 팔로우 상태 설정
       return response.profile
     } catch (err) {
       console.error('사용자 정보 조회 실패:', err)
@@ -71,6 +83,38 @@ function Profile(): React.JSX.Element {
     } catch (err) {
       console.error('게시글 조회 실패:', err)
       setError('게시글을 불러올 수 없습니다.')
+    }
+  }
+
+  const toggleFollow = async () => {
+    if (!profileUser) return
+    try {
+      if (isFollowing) {
+        // 언팔로우
+        await api.delete<ProfileAPI.Unfollow.Res>(
+          `/profile/${profileUser.accountname}/unfollow`
+        )
+        setIsFollowing(false)
+        // 팔로워 수 업데이트
+        setProfileUser({
+          ...profileUser,
+          followerCount: profileUser.followerCount - 1,
+        })
+      } else {
+        // 팔로우
+        await api.post<ProfileAPI.Follow.Res>(
+          `/profile/${profileUser.accountname}/follow`
+        )
+        setIsFollowing(true)
+        // 팔로워 수 업데이트
+        setProfileUser({
+          ...profileUser,
+          followerCount: profileUser.followerCount + 1,
+        })
+      }
+    } catch (err) {
+      console.error('팔로우/언팔로우 실패:', err)
+      setError('팔로우 상태를 변경할 수 없습니다.')
     }
   }
 
@@ -120,7 +164,7 @@ function Profile(): React.JSX.Element {
         <div className="h-full">
           <SideBar isAuthenticated={true} activeItem="/profile" />
         </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
+        <div className="mx-auto border-x border-background-border border-r border-l min-w-[769px]">
           <Header title="프로필" />
           <div className="flex items-center justify-center min-h-96">
             {/* 로딩 스피너 */}
@@ -140,16 +184,17 @@ function Profile(): React.JSX.Element {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen min-w-[769px]">
       <div className="h-full">
         <SideBar isAuthenticated={true} activeItem="/profile" />
       </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
+      <div className="mx-auto border-x border-background-border border-r border-l min-w-[769px]">
         <Header
           title={
             isMyProfile ? '내 프로필' : `${profileUser?.username}님의 프로필`
           }
         />
+
         {/* 내 프로필 섹션 */}
         <div className="p-6 border-b border-background-border">
           <div className="flex items-start gap-4">
@@ -159,12 +204,26 @@ function Profile(): React.JSX.Element {
             </div>
 
             {/* 사용자 정보 */}
-            <div className="flex-1">
+            <div className="flex-1 ">
               {/* 사용자 이름 userName */}
-              <h2 className="text-xl font-bold text-text-primary mb-1">
-                {profileUser?.username || '사용자'}
-              </h2>
-
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold text-text-primary mb-1">
+                  {profileUser?.username || '사용자'}
+                </h2>
+                {/* 팔로우 버튼 */}
+                {!isMyProfile && profileUser && (
+                  <div>
+                    <BaseButton
+                      ariaLabel={isFollowing ? '언팔로우' : '팔로우'}
+                      width={'flexWidth'}
+                      color={'primary'}
+                      size={'sm'}
+                      content={isFollowing ? '언팔로우' : '팔로우'}
+                      onClick={toggleFollow}
+                    />
+                  </div>
+                )}
+              </div>
               {/* 계정명@accountName */}
               <p className="text-sm text-text-secondary mb-3">
                 @{profileUser?.accountname || 'accountname'}
@@ -174,8 +233,15 @@ function Profile(): React.JSX.Element {
               <p className="text-text-secondary">
                 {profileUser?.intro || '소개글 없음'}
               </p>
+              <div className="mt-3 text-sm text-text-secondary">
+                <p>
+                  {profileUser?.followerCount || 0} 팔로워{' '}
+                  {profileUser?.followingCount || 0} 팔로잉
+                </p>
+              </div>
               {/* 깃허브 잔디 */}
               <div className="mt-4">
+                {/* 임의로 accountname 하드코딩 */}
                 <img src="https://ghchart.rshah.org/chlwlsgh777" />
               </div>
             </div>
