@@ -21,7 +21,6 @@ function Settings(): React.JSX.Element {
 
   const handleResign = () => {
     alert('짜잔! 열심히 개발 준비 중이에요. 조금만 기다려 주세요.')
-    navigate('/login')
   }
 
   return (
