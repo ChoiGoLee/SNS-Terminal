@@ -1,7 +1,6 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import Home from './pages/home/index'
 import Login from './pages/login/index'
-import Signup from './pages/signup/index'
 import PostDetail from './pages/post-detail/index'
 import PostCreate from './pages/post-create/index'
 import Profile from './pages/profile/index'
@@ -16,7 +15,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/post-detail" element={<PostDetail />} />
           <Route path="/post-create" element={<PostCreate />} />
           <Route path="/profile" element={<Profile />} />

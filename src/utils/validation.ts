@@ -30,7 +30,7 @@
  * 이메일 검증
  */
 
-function validateEmail(email: string): boolean {
+export function validateEmail(email: string): boolean {
   // 정규식 검사
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   return emailPattern.test(email)
@@ -40,7 +40,7 @@ function validateEmail(email: string): boolean {
  * 사용자 이름 검증
  * userName이 없거나 공백이면 false
  */
-function validateUserName(userName: string): boolean {
+export function validateUserName(userName: string): boolean {
   // 공백인 경우
   if (userName.trim().length === 0) {
     return false
@@ -53,7 +53,7 @@ function validateUserName(userName: string): boolean {
  * 계정 ID 검증
  */
 
-function validateAccountID(id: string): boolean {
+export function validateAccountID(id: string): boolean {
   const idPattern = /^[a-zA-Z0-9._]+$/
   return idPattern.test(id)
 }
@@ -62,7 +62,7 @@ function validateAccountID(id: string): boolean {
  * 비밀번호 검증
  */
 
-function validatePassword(password: string): boolean {
+export function validatePassword(password: string): boolean {
   if (!password) {
     return false
   }
@@ -77,7 +77,7 @@ function validatePassword(password: string): boolean {
  * 이미지 확장자 검증
  * 이미지 확장자: jpg, gif, png, jpeg, bmp, tif, heic
  */
-function validateImageExtend(file: File): boolean {
+export function validateImageExtend(file: File): boolean {
   const allowExtends = ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'tif', 'heic']
   const extend = file.name.split('.').pop()?.toLowerCase() ?? ''
 
@@ -93,7 +93,7 @@ function validateImageExtend(file: File): boolean {
  * 10MB이하
  */
 
-function validateImageSize(file: File): boolean {
+export function validateImageSize(file: File): boolean {
   const maxSize = 10 * 1024 * 1024
   if (maxSize < file.size) {
     return false
@@ -106,7 +106,7 @@ function validateImageSize(file: File): boolean {
  * 이미지 최대 3개 업로드 []
  */
 
-function validateMultiImage(files: File[]): boolean {
+export function validateMultiImage(files: File[]): boolean {
   if (files.length >= 4) {
     return false
   }
