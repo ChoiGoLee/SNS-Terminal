@@ -51,7 +51,7 @@ function PostCard({ isDetail = false, onClick, comment }: PostCardProps) {
   return (
     <article
       onClick={() => navigate('/post-detail')}
-      className={`bg-background border-background-border w-full p-4 transition-colors relative ${
+      className={`bg-background border-background-border min-w-[769px] p-4 transition-colors relative ${
         isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >

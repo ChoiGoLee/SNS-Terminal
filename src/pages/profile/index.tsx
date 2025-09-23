@@ -8,6 +8,7 @@ import type { UserAPI, PostAPI, Common, ProfileAPI } from '../../types/api'
 import Avatar from '../../components/common/Avatar'
 import { useParams } from 'react-router-dom'
 import BaseButton from '../../components/common/BaseButton'
+import UserLevel from '../../components/common/UserLevel'
 
 /**
  * todo
@@ -21,17 +22,7 @@ import BaseButton from '../../components/common/BaseButton'
  * - [x] 로딩스피너 처리
  * - [x] github api 연결?
  * - [x] 팔로우/언팔로우 기능
- * - [ ] 프로필 수정 페이지로 이동 기능
- * - [ ] 게시글 클릭 시 상세 페이지로 이동 기능
  * - [ ] 페이지네이션 또는 무한 스크롤 구현
- */
-
-/**
- * todo
- * 팔로우 상태관리
- * 팔로우 언팔로우 함수
- * 유저 정보에서 팔로우 상태 받아오기
- * 내 프로필 아닐때 팔로우 버튼 보이기
  */
 
 function Profile(): React.JSX.Element {
@@ -160,11 +151,11 @@ function Profile(): React.JSX.Element {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen ">
         <div className="h-full">
           <SideBar isAuthenticated={true} activeItem="/profile" />
         </div>
-        <div className="mx-auto border-x border-background-border border-r border-l min-w-[769px]">
+        <div className="mx-auto border-x border-background-border border-r border-">
           <Header title="프로필" />
           <div className="flex items-center justify-center min-h-96">
             {/* 로딩 스피너 */}
@@ -184,11 +175,11 @@ function Profile(): React.JSX.Element {
   }
 
   return (
-    <div className="flex min-h-screen min-w-[769px]">
-      <div className="h-full">
+    <div className="flex min-h-screen">
+      <div className="h-full top-0 sticky">
         <SideBar isAuthenticated={true} activeItem="/profile" />
       </div>
-      <div className="mx-auto border-x border-background-border border-r border-l min-w-[769px]">
+      <div className="mx-auto border-x border-background-border border-r border-l">
         <Header
           title={
             isMyProfile ? '내 프로필' : `${profileUser?.username}님의 프로필`
@@ -197,58 +188,89 @@ function Profile(): React.JSX.Element {
 
         {/* 내 프로필 섹션 */}
         <div className="p-6 border-b border-background-border">
-          <div className="flex items-start gap-4">
+          <div className="flex w-full">
             {/* 프로필 이미지 */}
             <div className="flex-shrink-0">
-              <Avatar userName={profileUser?.accountname || ''} size={'md'} />
-            </div>
-
-            {/* 사용자 정보 */}
-            <div className="flex-1 ">
-              {/* 사용자 이름 userName */}
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold text-text-primary mb-1">
-                  {profileUser?.username || '사용자'}
-                </h2>
+              <div className="flex justify-between">
+                <Avatar userName={profileUser?.accountname || ''} size={'lg'} />
                 {/* 팔로우 버튼 */}
-                {!isMyProfile && profileUser && (
+                {!isMyProfile ? (
                   <div>
                     <BaseButton
                       ariaLabel={isFollowing ? '언팔로우' : '팔로우'}
                       width={'flexWidth'}
-                      color={'primary'}
+                      color={isFollowing ? 'surface' : 'primary'}
                       size={'sm'}
-                      content={isFollowing ? '언팔로우' : '팔로우'}
+                      content={isFollowing ? 'Unfollow' : 'Follow'}
                       onClick={toggleFollow}
                     />
                   </div>
+                ) : (
+                  <div>
+                    <BaseButton
+                      ariaLabel="프로필 수정"
+                      width={'flexWidth'}
+                      color={'surface'}
+                      size={'sm'}
+                      content={'프로필 수정'}
+                      onClick={() => {
+                        // 프로필 수정 페이지로 이동
+                        window.location.href = '/profile/settings'
+                      }}
+                    />
+                  </div>
                 )}
+              </div>
+              {/* 사용자 정보 */}
+              <div className="flex-1 mt-4">
+                {/* 사용자 이름 userName */}
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-text-primary mb-1">
+                    {profileUser?.username || '사용자'}
+                  </h2>
+                </div>
               </div>
               {/* 계정명@accountName */}
               <p className="text-sm text-text-secondary mb-3">
                 @{profileUser?.accountname || 'accountname'}
               </p>
-
+              {/* 회원 등급 */}
+              <div className="flex mb-2 bg-emerald-500/15 border-primary-dark border rounded-full items-center px-4 py-2 w-fit gap-2">
+                <UserLevel level={'junior'} />
+                <span className="text-primary-dark">주니어 개발자</span>
+              </div>
               {/* 소개글 */}
               <p className="text-text-secondary">
                 {profileUser?.intro || '소개글 없음'}
               </p>
               <div className="mt-3 text-sm text-text-secondary">
-                <p>
-                  {profileUser?.followerCount || 0} 팔로워{' '}
-                  {profileUser?.followingCount || 0} 팔로잉
-                </p>
+                {/* 팔로워 팔로잉 수 */}
+                <div className="flex items-center gap-2">
+                  <p className="text-lg font-bold text-text-primary">
+                    {profileUser?.followerCount || 0}
+                  </p>{' '}
+                  팔로워
+                  <p className="text-lg font-bold text-text-primary">
+                    {profileUser?.followingCount || 0}
+                  </p>{' '}
+                  팔로잉
+                </div>
               </div>
               {/* 깃허브 잔디 */}
-              <div className="mt-4">
+              <div className=" p-4 mt-4 w-full bg-background-surface border-background-border border-2 rounded-lg">
+                <h2>GitHub 활동</h2>
                 {/* 임의로 accountname 하드코딩 */}
-                <img src="https://ghchart.rshah.org/chlwlsgh777" />
+                <img
+                  src="https://ghchart.rshah.org/219138/chlwlsgh777"
+                  className="w-[769px] mt-3"
+                />
               </div>
             </div>
           </div>
         </div>
         {/* 게시글 섹션 */}
-        <div className="">
+        <div className="max-w-[769px]">
+          <h2 className="text-lg p-4">게시글</h2>
           {error ? (
             <p className="p-4 text-red-500">{error}</p>
           ) : (
