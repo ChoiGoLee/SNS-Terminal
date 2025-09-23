@@ -8,6 +8,13 @@ import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI, ProfileAPI } from '../../types/api'
 import { API_BASE_URL } from '../../utils/configs'
+import { TECH_STACK } from '../../utils/profileStack'
+import {
+  validateImageExtend,
+  validateImageSize,
+  validateUserName,
+} from '../../utils/validation'
+import { LoadIntroData } from '../../utils/profileStackLoad'
 
 function ProfileSetting(): React.JSX.Element {
   const navigate = useNavigate()
@@ -16,8 +23,7 @@ function ProfileSetting(): React.JSX.Element {
   const [inputNameValue, setInputNameValue] = useState('')
   const [inputIntroValue, setInputIntroValue] = useState('')
   const [inputStackValue, setInputStackValue] = useState('')
-  const [선택된기술들, set선택된기술들] = useState<string[]>([])
-  const [검색가능한기술들, set검색가능한기술들] = useState<string[]>([])
+  const [selectedStack, setSelectedStack] = useState<string[]>([])
   const [userAcountName, setUserAcountName] = useState('')
   const [nameError, setNameError] = useState<string>('')
   const [introError, setIntroError] = useState<string>('')
@@ -31,7 +37,7 @@ function ProfileSetting(): React.JSX.Element {
   // 업로드할 이미지 파일
   const [image, setImage] = useState<File | null>(null)
   // 미리보기용 이미지 URL
-  const [previewUrl, setPrivewUrl] = useState('')
+  const [previewUrl, setpriviewUrl] = useState('')
 
   // 입력값 및 폼 이벤트 핸들러
   const handleInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +55,28 @@ function ProfileSetting(): React.JSX.Element {
     setInputStackValue(e.target.value)
   }
 
+  const handleStackReset = () => {
+    setInputStackValue('')
+  }
+
+  // 기술스택 필터링
+  const stackFilter = TECH_STACK.filter(
+    (stack: string) =>
+      stack.toLowerCase().includes(inputStackValue.toLowerCase()) &&
+      !selectedStack.includes(stack)
+  )
+
+  // 기술스택 추가
+  const stackAdd = (stack: string) => {
+    setSelectedStack([...selectedStack, stack])
+    setInputStackValue('')
+  }
+
+  // 기술스택 삭제
+  const stackDelete = (stack: string) => {
+    setSelectedStack(selectedStack.filter((item) => item !== stack))
+  }
+
   // 프로필 정보 불러오기 함수
   const handleProfileLoad = async (): Promise<void> => {
     try {
@@ -59,18 +87,14 @@ function ProfileSetting(): React.JSX.Element {
       setUserImage(response.user.image)
       setUserAcountName(response.user.accountname)
 
-      const 서버에서받은자기소개 = response.user.intro
+      // intro를 자기소개,기술스택 분리해서 세터함수에 넣음
+      const serverIntroData = response.user.intro
 
-      if (서버에서받은자기소개.includes('%$') === true) {
-        const 나눈결과 = 서버에서받은자기소개.split('%$')
-        const 자기소개 = 나눈결과[0]
-        const 기술스택배열 = 나눈결과[1].split(',')
+      // 기술스택 파싱 함수 불러오기
+      const { finalIntroduce, finalStack } = LoadIntroData(serverIntroData)
 
-        setInputIntroValue(자기소개)
-        set선택된기술들(기술스택배열)
-
-        console.log(기술스택배열)
-      }
+      setInputIntroValue(finalIntroduce)
+      setSelectedStack(finalStack)
 
       console.log('프로필 불러오기를 성공했습니다.', response)
     } catch (error) {
@@ -124,27 +148,31 @@ function ProfileSetting(): React.JSX.Element {
 
     await checkImage()
 
+    // 기술스택 저장
+    const stackToString = selectedStack.join(',')
+    const stackToSave = `${inputIntroValue}%$${stackToString}`
+
     // 요청 데이터
     const userUpdateData: ProfileAPI.UpdateProfile.Req = {
       user: {
         username: inputNameValue,
         accountname: userAcountName,
-        intro: inputIntroValue,
+        intro: stackToSave,
         image: imageUrl,
       },
     }
 
     console.log('요청 데이터:', userUpdateData)
 
-    // 이름 입력하지 않을 때 에러메세지
-    if (!inputNameValue) {
+    // 유저네임 검증
+    if (!validateUserName(inputNameValue)) {
       setNameError('이름을 입력해주세요.')
       return
     }
 
-    //자기소개 입력하지 않을 때 에러메세지
+    //자기소개 검증
     if (!inputIntroValue) {
-      setIntroError('자기소개를 입력해주세요.')
+      setIntroError('introduce를 입력해주세요.')
       return
     }
 
@@ -169,12 +197,24 @@ function ProfileSetting(): React.JSX.Element {
 
   // 프로필 이미지 미리보기 함수
 
-  const handleUserImagePrivew = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserImagepriview = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files !== null) {
       const file = e.target.files[0]
       if (file) {
+        // 이미지 확장자 검증
+        if (!validateImageExtend(file)) {
+          alert('jpg,gif,png,jpeg,bmp,tif,heic 확장자만 업로드 가능합니다.')
+          return
+        }
+
+        // 이미지 크기 검증
+        if (!validateImageSize(file)) {
+          alert('이미지 크기는 10mb를 초과할 수 없습니다.')
+          return
+        }
+
         const url = window.URL.createObjectURL(file)
-        setPrivewUrl(url)
+        setpriviewUrl(url)
         setImage(file)
       }
     }
@@ -184,159 +224,184 @@ function ProfileSetting(): React.JSX.Element {
 
   const handleUserImageDelete = () => {
     window.URL.revokeObjectURL(previewUrl)
-    setPrivewUrl('')
+    setpriviewUrl('')
     setImage(null)
   }
 
   return (
     <>
-      <div className="min-h-30">
-        <Header title="프로필 편집" buttons={{ back: { show: true } }} />
-      </div>
-      <div className="flex">
-        <SideBar isAuthenticated={true} activeItem="/settings" />
-        <form
-          onSubmit={handleProfileUpdate}
-          encType="multipart/form-data"
-          className="mx-auto bg-background border-background-border w-full p-4 transition-colors flex flex-col gap-8"
-        >
-          <p className="text-lg font-bold mb-4">프로필 사진</p>
-          <section className="flex  gap-8">
-            <Avatar
-              userImage={
-                previewUrl ? previewUrl : API_BASE_URL + '/' + userImage
-              }
-              userName={inputNameValue}
-              size="lg"
-            />
-            <div className="flex gap-4 items-center">
-              <label
-                htmlFor="useImageUpload"
-                className="flex text-center items-center bg-primary border-background-border text-black hover:bg-primary-dark disabled:opacity-30  rounded-full cursor-pointer justify-center px-4 py-2 text-[14px] gap-2"
-                aria-label="프로필 이미지 업로드"
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="useImageUpload"
-                  className="hidden"
-                  name="프로필 이미지 업로드"
-                  onChange={handleUserImagePrivew}
-                />
-                프로필 이미지 업로드
-              </label>
-              <BaseButton
-                content="삭제하기"
-                fontWeight="normal"
-                ariaLabel="프로필 업로드 이미지 삭제"
-                width="flexWidth"
-                color="surface"
-                size="sm"
-                onClick={() => handleUserImageDelete()}
+      <div className="flex min-h-screen">
+        <div>
+          <SideBar isAuthenticated={true} activeItem="/settings" />
+        </div>
+        <div className="mx-auto border-x min-w-[769px] border-background-border border-r border-l">
+          <Header title="프로필 편집" buttons={{ back: { show: true } }} />
+          <form
+            className="p-6"
+            onSubmit={handleProfileUpdate}
+            encType="multipart/form-data"
+          >
+            <p className="text-lg font-bold mb-4">프로필 사진</p>
+            <section className="flex gap-8 mb-8">
+              <Avatar
+                userImage={
+                  previewUrl ? previewUrl : API_BASE_URL + '/' + userImage
+                }
+                userName={inputNameValue}
+                size="lg"
               />
-            </div>
-          </section>
-          <section>
-            <p className="text-lg font-bold mb-4">이름</p>
-            <TextInput
-              size="lg"
-              placeholder="이름을 입력하세요."
-              label="profileName"
-              value={inputNameValue}
-              border="lgRound"
-              onchange={handleInputName}
-              hasIcon={false}
-              id="profileName"
-              type="text"
-            />
-            {nameError && (
-              <p className="text-red-500 text-sm text-left mt-2">{nameError}</p>
-            )}
-          </section>
+              <div className="flex flex-col items-start gap-2">
+                <div className="flex gap-4">
+                  <label
+                    htmlFor="useImageUpload"
+                    className="flex text-center items-center bg-primary border-background-border text-black hover:bg-primary-dark disabled:opacity-30  rounded-full cursor-pointer justify-center px-4 py-2 text-[14px] gap-2"
+                    aria-label="프로필 이미지 업로드"
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="useImageUpload"
+                      className="hidden"
+                      name="프로필 이미지 업로드"
+                      onChange={handleUserImagepriview}
+                    />
+                    프로필 이미지 업로드
+                  </label>
+                  <BaseButton
+                    content="삭제하기"
+                    fontWeight="normal"
+                    ariaLabel="프로필 업로드 이미지 삭제"
+                    width="flexWidth"
+                    color="surface"
+                    size="sm"
+                    onClick={() => handleUserImageDelete()}
+                  />
+                </div>
+                <p className="text-sm text-text-secondary">
+                  이미지는 10mb이하의 jpg,gif,png,jpeg,bmp,tif,heic 확장자로
+                  올려주세요.
+                </p>
+              </div>
+            </section>
+            <section className="mb-8">
+              <p className="text-lg font-bold mb-4">이름</p>
+              <TextInput
+                size="lg"
+                placeholder="이름을 입력하세요."
+                label="profileName"
+                value={inputNameValue}
+                border="lgRound"
+                onchange={handleInputName}
+                hasIcon={false}
+                id="profileName"
+                type="text"
+              />
+              {nameError && (
+                <p className="text-red-500 text-sm text-left mt-2">
+                  {nameError}
+                </p>
+              )}
+            </section>
 
-          <section>
-            <p className="text-lg font-bold mb-4">자기소개</p>
-            <textarea
-              className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors
+            <section className="mb-8">
+              <p className="text-lg font-bold mb-4">introduce</p>
+              <textarea
+                className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors
               w-full px-8 lg:p-10 py-2.5 lg:py-3 text-[18px] gap-3"
-              placeholder="자기소개를 입력해주세요."
-              name="자기소개"
-              id="profileIntroduce"
-              onChange={handleInputIntro}
-              value={inputIntroValue}
-              maxLength={500}
-            ></textarea>
-            <span>{textCount}</span>
-            <span>/500</span>
-            {introError && (
-              <p className="text-red-500 text-sm text-left mt-2">
-                {introError}
-              </p>
-            )}
-          </section>
+                placeholder="introduce를 입력해주세요."
+                name="introduce"
+                id="profileIntroduce"
+                onChange={handleInputIntro}
+                value={inputIntroValue}
+                maxLength={500}
+              ></textarea>
+              <span>{textCount}</span>
+              <span>/500</span>
+              {introError && (
+                <p className="text-red-500 text-sm text-left mt-2">
+                  {introError}
+                </p>
+              )}
+            </section>
 
-          <section>
-            <p className="text-lg font-bold mb-4">기술 스택</p>
-            <TextInput
-              onchange={handleInputStack}
-              value={inputStackValue}
-              placeholder="기술 스택 검색"
-              size="lg"
-              border={'lgRound'}
-              hasIcon={true}
-              id=""
-              label=""
-              type="text"
-            ></TextInput>
-            <section className="mt-4">
-              <p className="text-sm lg:text-base font-bold mb-3">
-                선택된 기술 스택
-              </p>
-              <BaseButton
-                content="JavaScript"
-                ariaLabel="JavaScript"
-                fontWeight="normal"
-                width="flexWidth"
-                color="primary"
-                size="sm"
-                icon="/src/assets/icons/close-b-sm.svg"
-                isLeft={false}
+            <section className="mb-8">
+              <p className="text-lg font-bold mb-4">기술 스택</p>
+              <TextInput
+                onchange={handleInputStack}
+                value={inputStackValue}
+                placeholder="기술 스택 검색"
+                size="lg"
+                border={'lgRound'}
+                hasIcon={true}
+                id="searchStack"
+                label="searchStack"
+                onIconClick={() => handleStackReset()}
+                type="text"
               />
+              <section className="mt-4">
+                <p className="text-sm lg:text-base font-bold mb-3">
+                  선택된 기술 스택
+                </p>
+                <div className="grid grid-cols-4 gap-4">
+                  {selectedStack.map((stack) => (
+                    <BaseButton
+                      key={stack}
+                      content={stack}
+                      ariaLabel={stack}
+                      onClick={() => stackDelete(stack)}
+                      fontWeight="normal"
+                      width="flexWidth"
+                      color="primary"
+                      size="sm"
+                      icon="/src/assets/icons/close-b-sm.svg"
+                      isLeft={false}
+                    />
+                  ))}
+                </div>
+              </section>
+              <section className=" mt-4 border-b border-background-border mb-8">
+                <p className="text-sm lg:text-base font-bold mb-3">
+                  사용 가능한 기술 스택
+                </p>
+                <div className="grid grid-cols-4 gap-4 max-h-60 overflow-y-auto pb-8">
+                  {stackFilter.map((stack) => (
+                    <div className="flex border-2 border-background-border rounded-full">
+                      <BaseButton
+                        key={stack}
+                        content={stack}
+                        ariaLabel={stack}
+                        onClick={() => stackAdd(stack)}
+                        fontWeight="normal"
+                        width="flexWidth"
+                        color="surface"
+                        size="sm"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </section>
+              <div className="flex gap-4">
+                <BaseButton
+                  content="취소"
+                  ariaLabel="취소"
+                  fontWeight="bold"
+                  width="fullWidth"
+                  color="surface"
+                  size="md"
+                />
+                <BaseButton
+                  content={isUploadLoading ? '저장 중..' : '저장하기'}
+                  ariaLabel="저장하기"
+                  fontWeight="bold"
+                  width="fullWidth"
+                  color="primary"
+                  size="md"
+                  btnType="submit"
+                />
+              </div>
             </section>
-            <section className="mt-4 border-b border-background-border pb-8 mb-8">
-              <p className="text-sm lg:text-base font-bold mb-3">
-                사용 가능한 기술 스택
-              </p>
-              <BaseButton
-                content="JavaScript"
-                ariaLabel="JavaScript"
-                fontWeight="normal"
-                width="flexWidth"
-                color="surface"
-                size="sm"
-              />
-            </section>
-            <div className="flex gap-4">
-              <BaseButton
-                content="취소"
-                ariaLabel="취소"
-                fontWeight="bold"
-                width="fullWidth"
-                color="surface"
-                size="md"
-              />
-              <BaseButton
-                content={isUploadLoading ? '저장 중..' : '저장하기'}
-                ariaLabel="저장하기"
-                fontWeight="bold"
-                width="fullWidth"
-                color="primary"
-                size="md"
-                btnType="submit"
-              />
-            </div>
-          </section>
-        </form>
+          </form>
+        </div>
       </div>
     </>
   )
