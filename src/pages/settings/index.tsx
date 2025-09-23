@@ -14,7 +14,6 @@ function Settings(): React.JSX.Element {
 
   // 이벤트 핸들러
   const handleLogout = () => {
-    localStorage.removeItem('token')
     sessionStorage.removeItem('token')
     navigate('/login')
   }
