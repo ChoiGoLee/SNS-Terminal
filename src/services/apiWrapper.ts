@@ -1,4 +1,3 @@
-import { API_BASE_URL as BASE_URL } from '../utils/configs'
 import { tokenManager } from './tokenManager'
 import type { Common } from '../types/api'
 
@@ -16,7 +15,9 @@ const getDefaultHeaders = async (
   }
 
   if (requiresAuth) {
-    const token = localStorage.getItem('token')
+
+    const token = sessionStorage.getItem('token')
+    
     if (token) {
       const result = await tokenManager(token)
       if (result.isValid) {
@@ -53,7 +54,7 @@ const request = async <T>(
     ...(data && { body: JSON.stringify(data) }),
   }
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config)
+  const response = await fetch(`/api${endpoint}`, config)
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
