@@ -253,7 +253,7 @@ function Profile(): React.JSX.Element {
                 <p className="text-text-secondary mb-3">{displayIntro}</p>
                 {techStack.length > 0 && (
                   <div className="mb-3">
-                    <h3 className="text-sm font-semibold text-text-primary mb-2">
+                    <h3 className="text-lg text-text-primary mb-2">
                       기술 스택
                     </h3>
                     <div className="flex flex-wrap gap-2">
