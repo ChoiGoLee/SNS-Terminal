@@ -1,19 +1,23 @@
 import React from 'react'
 import Avatar from './Avatar'
-import UnreadBadge from './Unread'
+import Unread from './Unread'
 
-export interface ChatUser {
+// JSON 데이터 구조에 맞는 타입 정의
+export interface ChatUserSimple {
+  accountname: string
+}
+
+export interface MessageItem {
   id: string
-  name: string
-  avatarUrl?: string | null
+  sender: string
+  text: string
+  createdAt: string
 }
 
 export interface ChatRoom {
   id: string
-  ChatUsers: ChatUser[]
-  lastMessage?: string | null
-  lastTimestamp?: string | number
-  unreadCount?: number
+  ChatUsers: ChatUserSimple[]
+  messages: MessageItem[]
 }
 
 interface ChatRoomItemProps {
@@ -23,12 +27,14 @@ interface ChatRoomItemProps {
   onClick: () => void
 }
 
-export function formatTime(ts?: string | number | null): string {
-  if (!ts) return ''
-  const t = typeof ts === 'number' ? new Date(ts) : new Date(ts)
-  if (isNaN(t.getTime())) return ''
+export function formatTime(dateString?: string): string {
+  if (!dateString) return ''
+
+  const messageDate = new Date(dateString)
+  if (isNaN(messageDate.getTime())) return ''
+
   const now = new Date()
-  const diff = Math.floor((now.getTime() - t.getTime()) / 1000)
+  const diff = Math.floor((now.getTime() - messageDate.getTime()) / 1000)
 
   if (diff < 60) return `${diff}초 전`
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`
@@ -37,7 +43,7 @@ export function formatTime(ts?: string | number | null): string {
   const days = Math.floor(diff / 86400)
   if (days < 30) return `${days}일 전`
 
-  return t.toLocaleDateString('ko-KR', {
+  return messageDate.toLocaleDateString('ko-KR', {
     month: 'numeric',
     day: 'numeric',
   })
@@ -48,10 +54,28 @@ function ChatRoomItem({
   currentUserId,
   isSelected,
   onClick,
-}: ChatRoomItemProps) {
+}: ChatRoomItemProps): React.JSX.Element {
+  // 상대방 찾기 (현재 사용자가 아닌 사람)
   const otherUser = room.ChatUsers.find(
-    (person: ChatUser) => person.id !== currentUserId
+    (person: ChatUserSimple) => person.accountname !== currentUserId
   )
+
+  // 마지막 메시지 계산
+  const lastMessage =
+    room.messages.length > 0
+      ? room.messages.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )[0]
+      : null
+
+  // 읽지 않은 메시지 개수 (임시로 랜덤 값, 실제로는 읽음 상태 관리 필요)
+  const unreadCount = Math.floor(Math.random() * 3)
+
+  // 채팅방 이름 (상대방이 없으면 모든 참여자 표시)
+  const roomName = otherUser
+    ? otherUser.accountname
+    : room.ChatUsers.map((user) => user.accountname).join(', ')
 
   return (
     <li>
@@ -66,15 +90,7 @@ function ChatRoomItem({
       >
         {/* 아바타 영역 */}
         <div className="flex-shrink-0">
-          {otherUser?.avatarUrl ? (
-            <img
-              src={otherUser.avatarUrl}
-              alt={`${otherUser.name} 아바타`}
-              className="w-12 h-12 rounded-full object-cover"
-            />
-          ) : (
-            <Avatar userName={otherUser?.name || '알수없음'} size="sm" />
-          )}
+          <Avatar userName={roomName} size="sm" />
         </div>
 
         {/* 텍스트 영역 */}
@@ -82,19 +98,19 @@ function ChatRoomItem({
           {/* 위쪽: 이름과 시간 */}
           <div className="flex items-center justify-between mb-1">
             <span className="text-text-primary font-medium truncate">
-              {otherUser?.name || '알 수 없음'}
+              {roomName}
             </span>
             <span className="text-text-primary text-sm ml-2 flex-shrink-0">
-              {formatTime(room.lastTimestamp)}
+              {lastMessage ? formatTime(lastMessage.createdAt) : ''}
             </span>
           </div>
 
           {/* 아래쪽: 마지막 메시지와 읽지 않은 개수 */}
           <div className="flex items-start justify-between gap-2">
             <p className="text-text-secondary text-sm flex-1 line-clamp-1">
-              {room.lastMessage || '아직 메시지가 없습니다.'}
+              {lastMessage ? lastMessage.text : '아직 메시지가 없습니다.'}
             </p>
-            <UnreadBadge count={room.unreadCount || 0} />
+            <Unread count={unreadCount} />
           </div>
         </div>
       </button>
