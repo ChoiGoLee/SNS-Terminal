@@ -2,7 +2,7 @@
  * 프로필 기술스택 불러오기
  *
  * @param {string} introData - 유저정보의 자기소개(intro)
- * @returns {string} '$%' 문자열로 분리된 '자기소개 텍스트'와 '기술스택'
+ * @returns {string} '§$' 문자열로 분리된 '자기소개 텍스트'와 '기술스택'
  *
  */
 

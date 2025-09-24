@@ -104,15 +104,8 @@ function ProfileSetting(): React.JSX.Element {
 
   // 마운트 시 1회만 실행
   useEffect(() => {
-    // 로그인 하지 않을시 로그인페이지로 이동
-    const token = sessionStorage.getItem('token')
-    if (!token) {
-      alert('로그인이 필요합니다.')
-      navigate('/login')
-      return
-    }
     handleProfileLoad()
-  }, [navigate])
+  }, [])
 
   // 프로필 수정 함수
 
