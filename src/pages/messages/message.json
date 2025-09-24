@@ -5,10 +5,6 @@
       "ChatUsers": [
         {
           "accountname": "choigolee",
-          "readAt": "2024-09-24T09:01:00Z"
-        },
-        {
-          "accountname": "choigolee",
           "readAt": "2024-09-25T09:01:00Z"
         }
       ],
@@ -36,7 +32,7 @@
         },
         {
           "accountname": "cgl",
-          "readAt": "2024-09-25T09:01:00Z"
+          "readAt": "2024-09-23T09:01:00Z"
         }
       ],
       "messages": [
@@ -62,13 +58,13 @@
           "id": "msg-104",
           "sender": "choigolee",
           "text": "이것은 엄청나게 긴 메세지인데요. 얼마나 써야 더보기가 나오는지 모르겠네요. 이렇게해도 아직도 안나와요. 그래서 말인데요 마무말이나 좀 써볼려고해요 이해해주세요. 한줄만 더 쓰면 될거같네요.",
-          "createdAt": "2024-09-23T10:03:00Z"
+          "createdAt": "2024-09-25T10:03:00Z"
         },
         {
           "id": "msg-105",
           "sender": "choigolee",
           "text": "왜들 그리 다운돼있어? 뭐가 문제야 say something 분위기가 겁나 싸해 요새는 이런 게 유행인가 왜들 그리 재미없어? 아 그건 나도 마찬가지 Tell me what I got to do 급한 대로 블루투스 켜 아무 노래나 일단 틀어 아무거나 신나는 걸로 아무렇게나 춤춰 아무렇지 않아 보이게 아무 생각 하기 싫어 아무개로 살래 잠시 I'm sick and tired of my every day, keep it up 한 곡 더",
-          "createdAt": "2024-09-23T10:04:00Z"
+          "createdAt": "2024-09-25T10:04:00Z"
         }
       ]
     },
@@ -77,7 +73,7 @@
       "ChatUsers": [
         {
           "accountname": "choigolee",
-          "readAt": "2024-09-26T09:01:00Z"
+          "readAt": "2024-09-20T09:01:00Z"
         },
         {
           "accountname": "cgl123",
@@ -104,7 +100,7 @@
       "ChatUsers": [
         {
           "accountname": "choigolee",
-          "readAt": "2024-09-25T09:01:00Z"
+          "readAt": "2024-09-24T09:01:00Z"
         },
         {
           "accountname": "cgl123123",
@@ -122,7 +118,7 @@
           "id": "msg-302",
           "sender": "choigolee",
           "text": "네, 어떤 부분이 궁금하신가요?",
-          "createdAt": "2024-09-28T12:01:00Z"
+          "createdAt": "2024-09-24T12:01:00Z"
         }
       ]
     }
