@@ -101,8 +101,8 @@ function Messages(): React.JSX.Element {
       </div>
       <div className="mx-auto border-background-border border-x">
         <div className="flex ">
-          <aside className=" border-background-border border-x overflow-y-scroll max-h-svh">
-            <Header title="메시지" buttons={{ add: { show: true } }} />
+          <aside className=" border-background-border border-x overflow-y-scroll min-h-svh">
+            <Header title="메시지" />
 
             <SearchInput
               onchange={handleChange}
@@ -123,7 +123,7 @@ function Messages(): React.JSX.Element {
           </aside>
 
           {/* 메시지 영역 */}
-          <div className="overflow-y-scroll max-h-svh">
+          <div className="overflow-y-scroll max-h-svh w-96">
             {!selectedChatId ? (
               // 선택된 채팅방이 없을 때
               <Description
