@@ -20,6 +20,7 @@ function App() {
           <Route path="/post-detail" element={<PostDetail />} />
           <Route path="/post-create" element={<PostCreate />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:accountname" element={<Profile />} />
           <Route path="/profile-setting" element={<ProfileSetting />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/settings" element={<Settings />} />
