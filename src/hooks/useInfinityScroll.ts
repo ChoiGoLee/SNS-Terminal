@@ -1,45 +1,42 @@
-import { useEffect, useRef, useCallback } from 'react'
+// hooks/useInfinityScroll.ts
+import { useEffect, useRef } from 'react'
 
 interface UseInfinityScrollProps {
-  hasMore: boolean
-  isLoading: boolean
-  onLoadMore: () => void // 단순히 다음 페이지 로드를 알림
+  onLoadMore: () => void // 더 불러올 때 실행할 함수
+  hasMore: boolean // 더 불러올 데이터가 있는지
+  isLoading: boolean // 현재 로딩 중인지
 }
 
 export const useInfinityScroll = ({
+  onLoadMore,
   hasMore,
   isLoading,
-  onLoadMore,
 }: UseInfinityScrollProps) => {
-  const observer = useRef<IntersectionObserver | null>(null)
-  const lastElementRef = useRef<HTMLDivElement | null>(null)
-
-  // 콜백 메모이제이션
-  const handleIntersection = useCallback(() => {
-    if (!isLoading && hasMore) {
-      onLoadMore()
-    }
-  }, [isLoading, hasMore, onLoadMore])
+  // 마지막 요소를 가리킬 ref
+  const lastContent = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (observer.current) observer.current.disconnect()
+    // 로딩 중이거나 더 불러올 데이터가 없으면 아무것도 안 함
+    if (isLoading || !hasMore) return
 
-    observer.current = new IntersectionObserver((entries) => {
+    // IntersectionObserver 생성
+    const observer = new IntersectionObserver((entries) => {
+      // 마지막 요소가 화면에 보이면
       if (entries[0].isIntersecting) {
-        handleIntersection()
+        onLoadMore() // 더 불러오기 실행
       }
     })
 
-    if (lastElementRef.current) {
-      observer.current.observe(lastElementRef.current)
+    // 마지막 요소 관찰 시작
+    if (lastContent.current) {
+      observer.observe(lastContent.current)
     }
 
+    // 정리 함수: 컴포넌트 언마운트 시 관찰 중지
     return () => {
-      if (observer.current) {
-        observer.current.disconnect()
-      }
+      observer.disconnect()
     }
-  }, [handleIntersection])
+  }, [isLoading, hasMore, onLoadMore])
 
-  return { lastElementRef }
+  return { lastContent }
 }
