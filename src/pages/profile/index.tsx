@@ -33,8 +33,8 @@ function Profile(): React.JSX.Element {
   const [profileUser, setProfileUser] = useState<Common.User | null>(null) //  프로필 주인 정보
   const [posts, setPosts] = useState<Common.Post[]>([])
   const [error, setError] = useState<string | null>(null)
-  // 팔로우 상태
-  const [isFollowing, setIsFollowing] = useState(false)
+  const [isFollowLoading, setIsFollowLoading] = useState(false) // 팔로우 버튼 로딩 상태
+  const [isFollowing, setIsFollowing] = useState(false) // 팔로우 상태
 
   // 내 정보 가져오기
   const fetchMyInfo = async () => {
@@ -78,28 +78,25 @@ function Profile(): React.JSX.Element {
   }
 
   const toggleFollow = async () => {
-    if (!profileUser) return
+    if (!profileUser || isFollowLoading) return
+
+    setIsFollowLoading(true) // 버튼 비활성화
+
     try {
       if (isFollowing) {
         const response = await api.delete<ProfileAPI.Unfollow.Res>(
           `/profile/${profileUser.accountname}/unfollow`
         )
-        // 언팔로우
-        await response
         setIsFollowing(false)
-        // 팔로워 수 업데이트
         setProfileUser({
           ...profileUser,
           followerCount: response.profile.followerCount,
         })
       } else {
-        // 팔로우
         const response = await api.post<ProfileAPI.Follow.Res>(
           `/profile/${profileUser.accountname}/follow`
         )
-        await response
         setIsFollowing(true)
-        // 팔로워 수 업데이트
         setProfileUser({
           ...profileUser,
           followerCount: response.profile.followerCount,
@@ -108,6 +105,8 @@ function Profile(): React.JSX.Element {
     } catch (err) {
       console.error('팔로우/언팔로우 실패:', err)
       setError('팔로우 상태를 변경할 수 없습니다.')
+    } finally {
+      setIsFollowLoading(false) // 버튼 다시 활성화
     }
   }
 
@@ -203,8 +202,14 @@ function Profile(): React.JSX.Element {
                       width={'flexWidth'}
                       color={isFollowing ? 'surface' : 'primary'}
                       size={'sm'}
-                      content={isFollowing ? 'Unfollow' : 'Follow'}
-                      onClick={toggleFollow}
+                      content={
+                        isFollowLoading
+                          ? '처리 중...'
+                          : isFollowing
+                          ? 'Unfollow'
+                          : 'Follow'
+                      }
+                      onClick={isFollowLoading ? () => {} : toggleFollow}
                     />
                   </div>
                 ) : (
