@@ -6,24 +6,9 @@ import { useEffect, useState } from 'react'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI, PostAPI, Common, ProfileAPI } from '../../types/api'
 import Avatar from '../../components/common/Avatar'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import BaseButton from '../../components/common/BaseButton'
 import UserLevel from '../../components/common/UserLevel'
-
-/**
- * todo
- * - [x] 내 정보 가져오기
- * - [x] 특정 유저 정보 가져오기
- * - [x] 특정 유저 게시글 가져오기
- * - [x] 내 프로필과 다른 사람 프로필 구분
- * - [x] 프로필 UI 구현
- * - [x] 게시글 UI 구현
- * - [x] 에러 처리
- * - [x] 로딩스피너 처리
- * - [x] github api 연결?
- * - [x] 팔로우/언팔로우 기능
- * - [ ] 페이지네이션 또는 무한 스크롤 구현
- */
 
 function Profile(): React.JSX.Element {
   // URL 파라미터에서 accountname 추출
@@ -35,6 +20,7 @@ function Profile(): React.JSX.Element {
   const [error, setError] = useState<string | null>(null)
   const [isFollowLoading, setIsFollowLoading] = useState(false) // 팔로우 버튼 로딩 상태
   const [isFollowing, setIsFollowing] = useState(false) // 팔로우 상태
+  const navigate = useNavigate()
 
   // 내 정보 가져오기
   const fetchMyInfo = async () => {
@@ -222,7 +208,7 @@ function Profile(): React.JSX.Element {
                       content={'프로필 수정'}
                       onClick={() => {
                         // 프로필 수정 페이지로 이동
-                        window.location.href = '/profile/settings'
+                        navigate('/profile-setting')
                       }}
                     />
                   </div>
