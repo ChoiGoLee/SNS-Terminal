@@ -5,6 +5,7 @@ import Unread from './Unread'
 // JSON 데이터 구조에 맞는 타입 정의
 export interface ChatUserSimple {
   accountname: string
+  readAt: string
 }
 
 export interface MessageItem {
@@ -69,8 +70,31 @@ function ChatRoomItem({
         )[0]
       : null
 
-  // 읽지 않은 메시지 개수 (임시로 랜덤 값, 실제로는 읽음 상태 관리 필요)
-  const unreadCount = Math.floor(Math.random() * 3)
+  // 읽지 않은 메시지 개수 계산
+  const unreadCount = (() => {
+    if (!lastMessage) return 0
+
+    // 현재 사용자의 읽은 시간 찾기
+    const currentUserReadInfo = room.ChatUsers.find(
+      (user) => user.accountname === currentUserId
+    )
+
+    if (!currentUserReadInfo) return 0
+
+    const userReadAt = new Date(currentUserReadInfo.readAt)
+    const lastMessageTime = new Date(lastMessage.createdAt)
+
+    // 마지막 메시지가 사용자가 읽은 시간보다 늦으면 읽지 않은 메시지가 있음
+    if (lastMessageTime > userReadAt) {
+      // 사용자가 읽은 시간 이후의 메시지 개수 계산
+      return room.messages.filter(
+        (msg) =>
+          new Date(msg.createdAt) > userReadAt && msg.sender !== currentUserId
+      ).length
+    }
+
+    return 0
+  })()
 
   // 채팅방 이름 (상대방이 없으면 모든 참여자 표시)
   const roomName = otherUser
