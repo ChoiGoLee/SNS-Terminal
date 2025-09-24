@@ -1,6 +1,6 @@
 import { tokenManager } from './tokenManager'
 import type { Common } from '../types/api'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
 interface RequestOptions {
   headers?: Common.AuthHeaders
@@ -15,7 +15,7 @@ const getDefaultHeaders = async (
     'Content-type': 'application/json',
   }
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   if (requiresAuth) {
     const token = sessionStorage.getItem('token')
@@ -25,7 +25,7 @@ const getDefaultHeaders = async (
         headers['Authorization'] = `Bearer ${token}`
       } else {
         sessionStorage.removeItem('token')
-        navigate('/login')
+        window.location.href = '/login'
       }
     }
   }
@@ -59,7 +59,6 @@ const request = async <T>(
     ...(data && { body: JSON.stringify(data) }),
   }
 
-  const response = await fetch(`/api${endpoint}`, config)
   const response = await fetch(`/api${endpoint}`, config)
 
   if (!response.ok) {
