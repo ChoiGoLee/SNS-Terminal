@@ -15,8 +15,6 @@ const getDefaultHeaders = async (
     'Content-type': 'application/json',
   }
 
-  const navigate = useNavigate()
-
   if (requiresAuth) {
     const token = sessionStorage.getItem('token')
     if (token) {
@@ -25,7 +23,7 @@ const getDefaultHeaders = async (
         headers['Authorization'] = `Bearer ${token}`
       } else {
         sessionStorage.removeItem('token')
-        navigate('/login')
+        window.location.href = '/login'
       }
     }
   }

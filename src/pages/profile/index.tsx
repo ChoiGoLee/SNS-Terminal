@@ -81,26 +81,28 @@ function Profile(): React.JSX.Element {
     if (!profileUser) return
     try {
       if (isFollowing) {
-        // 언팔로우
-        await api.delete<ProfileAPI.Unfollow.Res>(
+        const response = await api.delete<ProfileAPI.Unfollow.Res>(
           `/profile/${profileUser.accountname}/unfollow`
         )
+        // 언팔로우
+        await response
         setIsFollowing(false)
         // 팔로워 수 업데이트
         setProfileUser({
           ...profileUser,
-          followerCount: profileUser.followerCount - 1,
+          followerCount: response.profile.followerCount,
         })
       } else {
         // 팔로우
-        await api.post<ProfileAPI.Follow.Res>(
+        const response = await api.post<ProfileAPI.Follow.Res>(
           `/profile/${profileUser.accountname}/follow`
         )
+        await response
         setIsFollowing(true)
         // 팔로워 수 업데이트
         setProfileUser({
           ...profileUser,
-          followerCount: profileUser.followerCount + 1,
+          followerCount: response.profile.followerCount,
         })
       }
     } catch (err) {
