@@ -156,7 +156,7 @@ function ProfileSetting(): React.JSX.Element {
 
     // 기술스택 저장
     const stackToString = selectedStack.join(',')
-    const stackToSave = `${inputIntroValue}%$${stackToString}`
+    const stackToSave = `${inputIntroValue}§$${stackToString}`
 
     // 요청 데이터
     const userUpdateData: ProfileAPI.UpdateProfile.Req = {
@@ -345,7 +345,7 @@ function ProfileSetting(): React.JSX.Element {
                 hasIcon={true}
                 id="searchStack"
                 label="searchStack"
-                onIconClick={() => handleStackReset()}
+                onclick={handleStackReset}
                 type="text"
               />
               <section className="mt-4">
