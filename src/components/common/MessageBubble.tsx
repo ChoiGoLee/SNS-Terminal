@@ -67,8 +67,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   if (type === 'me') {
     return (
-      <div className="flex flex-col items-end pl-4 pt-4 pr-4 pb-2 gap-2">
-        <div className="bg-primary rounded-2xl w-auto max-w-64 py-3 text-black">
+      <div className="flex flex-col items-end w-96 pl-4 pt-4 pr-4 pb-2 gap-2">
+        <div className="bg-primary rounded-2xl w-full max-w-64 py-3 text-black">
           <p className="px-4">{displayText}</p>
           {isLong && (
             <button
