@@ -9,6 +9,7 @@ import Avatar from '../../components/common/Avatar'
 import { useNavigate, useParams } from 'react-router-dom'
 import BaseButton from '../../components/common/BaseButton'
 import UserLevel from '../../components/common/UserLevel'
+import { LoadIntroData } from '../../utils/profileStackLoad'
 
 function Profile(): React.JSX.Element {
   // URL 파라미터에서 accountname 추출
@@ -96,6 +97,19 @@ function Profile(): React.JSX.Element {
     }
   }
 
+  // intro 데이터 파싱을 위한 함수
+  const getDisplayData = (profileUser: Common.User | null) => {
+    if (!profileUser?.intro) {
+      return { displayIntro: '소개글 없음', techStack: [] }
+    }
+
+    const { finalIntroduce, finalStack } = LoadIntroData(profileUser.intro)
+    return {
+      displayIntro: finalIntroduce || '소개글 없음',
+      techStack: finalStack,
+    }
+  }
+
   // 내 프로필인지 판단
   const isMyProfile =
     loginUser &&
@@ -160,6 +174,8 @@ function Profile(): React.JSX.Element {
       </div>
     )
   }
+
+  const { displayIntro, techStack } = getDisplayData(profileUser)
 
   return (
     <div className="flex min-h-screen">
@@ -233,9 +249,26 @@ function Profile(): React.JSX.Element {
                 <span className="text-primary-dark">주니어 개발자</span>
               </div>
               {/* 소개글 */}
-              <p className="text-text-secondary">
-                {profileUser?.intro || '소개글 없음'}
-              </p>
+              <div>
+                <p className="text-text-secondary mb-3">{displayIntro}</p>
+                {techStack.length > 0 && (
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold text-text-primary mb-2">
+                      기술 스택
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {techStack.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full border border-primary/20"
+                        >
+                          {tech.trim()}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="mt-3 text-sm text-text-secondary">
                 {/* 팔로워 팔로잉 수 */}
                 <div className="flex items-center gap-2">
