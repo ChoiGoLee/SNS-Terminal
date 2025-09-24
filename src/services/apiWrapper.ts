@@ -1,6 +1,5 @@
 import { tokenManager } from './tokenManager'
 import type { Common } from '../types/api'
-import { useNavigate } from 'react-router-dom'
 
 interface RequestOptions {
   headers?: Common.AuthHeaders

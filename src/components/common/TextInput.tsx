@@ -66,6 +66,14 @@ function TextInput({
     }
   }
 
+  const handleCloseClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setShowCloseIcon(false)
+    if (onclick) {
+      onclick()
+    }
+  }
+
   /**
    * input 컴포넌트
    *
@@ -105,6 +113,7 @@ function TextInput({
         {hasIcon && showCloseIcon && (
           <CloseIcon
             className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
+            onClick={handleCloseClick}
           />
         )}
       </div>
