@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 import PostCard from '../../components/common/PostCard'
-import TextInput from '../../components/common/TextInput'
+import SearchInput from '../../components/common/SearchInput'
 import { useState } from 'react'
 
 function Home(): React.JSX.Element {
@@ -40,17 +40,15 @@ hello()
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
         <PostCard comment={markdownContent} onClick={() => {}} />
-        <TextInput
+        <SearchInput
           onchange={handleChange}
           value={inputValue}
           placeholder="기술 스택 검색"
           size="md"
           border={'fullRound'}
-          hasIcon={true}
           id="password"
-          label="라벨"
-          type="text"
-        ></TextInput>
+          type="All"
+        ></SearchInput>
       </div>
     </div>
   )

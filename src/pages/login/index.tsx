@@ -54,7 +54,7 @@ function Login(): React.JSX.Element {
       console.log('로그인 성공:', response)
 
       // 토큰 저장
-      localStorage.setItem('token', response.token)
+      sessionStorage.setItem('token', response.token)
 
       // 홈 페이지로 이동
       navigate('/')
@@ -86,7 +86,6 @@ function Login(): React.JSX.Element {
           size="md"
           border="fullRound"
           id="email"
-          label="email"
           type="email"
         />
 
@@ -97,7 +96,6 @@ function Login(): React.JSX.Element {
           size="md"
           border="fullRound"
           id="password"
-          label="password"
           type="password"
         />
 
