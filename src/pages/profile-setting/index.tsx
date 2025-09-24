@@ -59,6 +59,10 @@ function ProfileSetting(): React.JSX.Element {
     setInputStackValue('')
   }
 
+  const handleCancle = () => {
+    navigate('/profile')
+  }
+
   // 기술스택 필터링
   const stackFilter = TECH_STACK.filter(
     (stack: string) =>
@@ -225,6 +229,7 @@ function ProfileSetting(): React.JSX.Element {
     window.URL.revokeObjectURL(previewUrl)
     setpriviewUrl('')
     setImage(null)
+    setUserImage('')
   }
 
   return (
@@ -242,11 +247,12 @@ function ProfileSetting(): React.JSX.Element {
           >
             <p className="text-lg font-bold mb-4">프로필 사진</p>
             <section className="flex gap-8 mb-8">
+              {/* 'Ellipse'를 포함하거나,유저 이미지가 없을 때 유저의 이니셜만 나올 수 있게 함 */}
               <Avatar
                 userImage={
                   previewUrl
                     ? previewUrl
-                    : userImage.includes('Ellipse')
+                    : userImage.includes('Ellipse') || !userImage
                     ? undefined
                     : API_BASE_URL + '/' + userImage
                 }
@@ -391,6 +397,7 @@ function ProfileSetting(): React.JSX.Element {
                   width="fullWidth"
                   color="surface"
                   size="md"
+                  onClick={handleCancle}
                 />
                 <BaseButton
                   content={isUploadLoading ? '저장 중..' : '저장하기'}
