@@ -1,6 +1,7 @@
 import React from 'react'
 import Avatar from './Avatar'
 import Unread from './Unread'
+import { formatTimeAgo } from '../../utils/timeUtils'
 
 // JSON 데이터 구조에 맞는 타입 정의
 export interface ChatUserSimple {
@@ -28,28 +29,6 @@ interface ChatRoomItemProps {
   onClick: () => void
 }
 
-export function formatTime(dateString?: string): string {
-  if (!dateString) return ''
-
-  const messageDate = new Date(dateString)
-  if (isNaN(messageDate.getTime())) return ''
-
-  const now = new Date()
-  const diff = Math.floor((now.getTime() - messageDate.getTime()) / 1000)
-
-  if (diff < 60) return `${diff}초 전`
-  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`
-  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`
-
-  const days = Math.floor(diff / 86400)
-  if (days < 30) return `${days}일 전`
-
-  return messageDate.toLocaleDateString('ko-KR', {
-    month: 'numeric',
-    day: 'numeric',
-  })
-}
-
 function ChatRoomItem({
   room,
   currentUserId,
@@ -70,7 +49,7 @@ function ChatRoomItem({
         )[0]
       : null
 
-  // 읽지 않은 메시지 개수 계산
+  // 읽지 않은 메시지 개수 계산 - 수정된 버전
   const unreadCount = (() => {
     if (!lastMessage) return 0
 
@@ -81,16 +60,28 @@ function ChatRoomItem({
 
     if (!currentUserReadInfo) return 0
 
-    const userReadAt = new Date(currentUserReadInfo.readAt)
-    const lastMessageTime = new Date(lastMessage.createdAt)
+    // 모든 시간을 밀리초로 변환하여 비교
+    const userReadAt =
+      typeof currentUserReadInfo.readAt === 'string'
+        ? new Date(currentUserReadInfo.readAt).getTime()
+        : currentUserReadInfo.readAt // 이미 숫자라면 그대로 사용
+
+    const lastMessageTime =
+      typeof lastMessage.createdAt === 'string'
+        ? new Date(lastMessage.createdAt).getTime()
+        : lastMessage.createdAt // 이미 숫자라면 그대로 사용
 
     // 마지막 메시지가 사용자가 읽은 시간보다 늦으면 읽지 않은 메시지가 있음
     if (lastMessageTime > userReadAt) {
       // 사용자가 읽은 시간 이후의 메시지 개수 계산
-      return room.messages.filter(
-        (msg) =>
-          new Date(msg.createdAt) > userReadAt && msg.sender !== currentUserId
-      ).length
+      return room.messages.filter((msg) => {
+        const msgTime =
+          typeof msg.createdAt === 'string'
+            ? new Date(msg.createdAt).getTime()
+            : msg.createdAt
+
+        return msgTime > userReadAt && msg.sender !== currentUserId
+      }).length
     }
 
     return 0
@@ -125,7 +116,7 @@ function ChatRoomItem({
               {roomName}
             </span>
             <span className="text-text-primary text-sm ml-2 flex-shrink-0">
-              {lastMessage ? formatTime(lastMessage.createdAt) : ''}
+              {lastMessage ? formatTimeAgo(lastMessage.createdAt) : ''}
             </span>
           </div>
 
