@@ -12,8 +12,8 @@ export const sidebarItems: SideItem[] = [
   },
   {
     type: 'followerFeed',
-    img: '/icons/home.svg',
-    activeImg: '/icons/home-fill.svg',
+    img: '/icons/follower.svg',
+    activeImg: '/icons/follower-fill.svg',
     path: '/follower-feed',
     text: '팔로워 피드',
     href: '/follower-feed',
