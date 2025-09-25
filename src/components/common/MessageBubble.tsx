@@ -39,7 +39,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   if (type === 'other') {
     return (
-      <div className="flex pl-4 pt-4 pr-4 pb-2 gap-3 w-96">
+      <div className="flex pt-4 pb-2 gap-3">
         <Avatar userName={userName} size={'md'} />
         <div className="flex flex-col gap-2">
           <div className="bg-background-border rounded-2xl w-auto max-w-64 py-3">
@@ -67,7 +67,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   if (type === 'me') {
     return (
-      <div className="flex flex-col items-end w-96 pl-4 pt-4 pr-4 pb-2 gap-2">
+      <div className="flex flex-col items-end pt-4 pb-2 gap-2">
         <div className="bg-primary rounded-2xl w-full max-w-64 py-3 text-black">
           <p className="px-4">{displayText}</p>
           {isLong && (
