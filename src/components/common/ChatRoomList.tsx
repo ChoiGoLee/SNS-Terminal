@@ -1,23 +1,6 @@
 import React from 'react'
 import ChatRoomItem from './ChatRoomItem'
-
-// JSON 데이터 구조에 맞는 타입 정의 (ChatRoomItem과 동일)
-export interface ChatUserSimple {
-  accountname: string
-}
-
-export interface MessageItem {
-  id: string
-  sender: string
-  text: string
-  createdAt: string
-}
-
-export interface ChatRoom {
-  id: string
-  ChatUsers: ChatUserSimple[]
-  messages: MessageItem[]
-}
+import type { ChatRoom } from './ChatRoomItem'
 
 interface ChatRoomListProps {
   currentUserId: string
