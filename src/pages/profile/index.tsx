@@ -182,7 +182,7 @@ function Profile(): React.JSX.Element {
       <div className="h-full top-0 sticky">
         <SideBar isAuthenticated={true} activeItem="/profile" />
       </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
+      <div className="mx-auto border-x border-background-border border-r border-l max-w-[769px] w-full">
         <Header
           title={
             isMyProfile ? '내 프로필' : `${profileUser?.username}님의 프로필`
@@ -195,7 +195,11 @@ function Profile(): React.JSX.Element {
             {/* 프로필 이미지 */}
             <div className="flex-shrink-0">
               <div className="flex justify-between">
-                <Avatar userName={profileUser?.accountname || ''} size={'lg'} />
+                <Avatar
+                  userImage={profileUser?.image}
+                  userName={profileUser?.username || ''}
+                  size={'lg'}
+                />
                 {/* 팔로우 버튼 */}
                 {!isMyProfile ? (
                   <div>
@@ -288,14 +292,14 @@ function Profile(): React.JSX.Element {
                 {/* 임의로 accountname 하드코딩 */}
                 <img
                   src="https://ghchart.rshah.org/219138/chlwlsgh777"
-                  className="w-[769px] mt-3"
+                  className="mt-3"
                 />
               </div>
             </div>
           </div>
         </div>
         {/* 게시글 섹션 */}
-        <div className="max-w-[769px]">
+        <div className="w-full">
           <h2 className="text-lg p-4">게시글</h2>
           {error ? (
             <p className="p-4 text-red-500">{error}</p>
@@ -305,11 +309,7 @@ function Profile(): React.JSX.Element {
                 <p className="p-4">작성한 게시글이 없습니다.</p>
               ) : (
                 posts.map((post: Common.Post) => (
-                  <PostCard
-                    key={post.id}
-                    comment={post.content}
-                    onClick={() => {}}
-                  />
+                  <PostCard key={post.id} post={post} onClick={() => {}} />
                 ))
               )}
             </div>

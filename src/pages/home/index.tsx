@@ -1,29 +1,29 @@
 import React from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
-import PostCard from '../../components/common/PostCard'
-import TextInput from '../../components/common/TextInput'
+// import PostCard from '../../components/common/PostCard'
+import SearchInput from '../../components/common/SearchInput'
 import { useState } from 'react'
 
 function Home(): React.JSX.Element {
-  const markdownContent = `
-# 제목
+  //   const markdownContent = `
+  // # 제목
 
- 일반 텍스트입니다.
+  //  일반 텍스트입니다.
 
- \`\`\`javascript
-console.log('Hello, world!');
- const greeting = 'React Markdown';
-console.log(greeting);
-\`\`\`
+  //  \`\`\`javascript
+  // console.log('Hello, world!');
+  //  const greeting = 'React Markdown';
+  // console.log(greeting);
+  // \`\`\`
 
-\`\`\`python
-def hello():
-  print("Hello from Python!")
+  // \`\`\`python
+  // def hello():
+  //   print("Hello from Python!")
 
-hello()
- \`\`\`
-  `
+  // hello()
+  //  \`\`\`
+  //   `
 
   const [inputValue, setInputValue] = useState('')
 
@@ -39,18 +39,16 @@ hello()
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        <PostCard comment={markdownContent} onClick={() => {}} />
-        <TextInput
+        {/* <PostCard comment={markdownContent} onClick={() => {}} /> */}
+        <SearchInput
           onchange={handleChange}
           value={inputValue}
           placeholder="기술 스택 검색"
           size="md"
           border={'fullRound'}
-          hasIcon={true}
           id="password"
-          label="라벨"
-          type="text"
-        ></TextInput>
+          type="All"
+        ></SearchInput>
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import SearchIcon from '../../assets/icons/search-g.svg?react'
 import CloseIcon from '../../assets/icons/close-g.svg?react'
 
 interface inputProps {
@@ -6,18 +7,18 @@ interface inputProps {
   size: 'sm' | 'md' | 'lg'
   /** input의 placeholder */
   placeholder?: string
-  /** input의 id(label과 연결 - 웹접근성으로 사용) */
+  /** input의 id(label) */
   id: string
   /** input요소의 입력값 변경을 감지함 */
   onchange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   /** input의 value 값(상태값) */
   value: string
-  /** input 클릭 인식(클릭시 삭제 버튼 나오게) */
+  /** input 클릭 인식 */
   onclick?: () => void
   /** border-radius */
-  border: 'fullRound' | 'lgRound'
-  /** input의 type(ex:password) */
-  type: string
+  border: 'fullRound' | 'lgRound' | 'none'
+  /** 검색 종류 */
+  type: 'user' | 'skillStack' | 'post' | 'All'
 }
 
 const SIZE_TYPE = {
@@ -38,9 +39,10 @@ const SIZE_TYPE = {
 const BORDER_TYPES = {
   fullRound: 'rounded-full',
   lgRound: 'rounded-lg',
+  none: 'rounded-none',
 } as const
 
-function TextInput({
+function SearchInput({
   size,
   placeholder,
   onchange,
@@ -52,18 +54,35 @@ function TextInput({
 }: inputProps) {
   const [showCloseIcon, setShowCloseIcon] = useState(false)
 
-  const handleInput = () => {
-    setShowCloseIcon(true)
-    if (onclick) {
-      onclick()
-    }
+  if (type) {
+    placeholder =
+      type === 'user'
+        ? '유저를 검색해보세요'
+        : type === 'skillStack'
+        ? '기술스택을 검색해보세요'
+        : type === 'post'
+        ? '포스트를 검색해보세요'
+        : '검색어를 입력해보세요'
   }
 
-  const handleCloseClick = (e: React.MouseEvent) => {
-    e.preventDefault()
+  const eraseInput = () => {
     setShowCloseIcon(false)
-    if (onclick) {
-      onclick()
+    if (onchange) {
+      const event = {
+        target: { value: '' },
+      } as React.ChangeEvent<HTMLInputElement>
+      onchange(event)
+    }
+  }
+  // input에 내용이 있을 시에만 삭제버튼 나오게
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onchange) {
+      onchange(e)
+    }
+    if (e.target.value.length > 0) {
+      setShowCloseIcon(true)
+    } else {
+      setShowCloseIcon(false)
     }
   }
 
@@ -89,19 +108,23 @@ function TextInput({
       </label>
       <div className="relative">
         <input
-          type={type}
+          type="text"
           id={id}
           className={`text-text-primary bg-background-surface placeholder-text-secondary border border-background-border focus:border-primary focus:outline-none transition-colors ${SIZE_TYPE[size].input} ${BORDER_TYPES[border]}`}
           value={value}
           placeholder={placeholder}
-          onChange={onchange}
-          onClick={handleInput}
+          onChange={handleInput}
+          onClick={onclick}
+        />
+
+        <SearchIcon
+          className={` ${SIZE_TYPE[size].icon} absolute top-1/2 left-3 flex items-center transform -translate-y-1/2 text-text-secondary`}
         />
         {/* input클릭시 닫기버튼이 나오게 함 */}
         {showCloseIcon && (
           <CloseIcon
             className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
-            onClick={handleCloseClick}
+            onClick={eraseInput}
           />
         )}
       </div>
@@ -109,4 +132,4 @@ function TextInput({
   )
 }
 
-export default TextInput
+export default SearchInput

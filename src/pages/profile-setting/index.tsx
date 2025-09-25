@@ -230,12 +230,15 @@ function ProfileSetting(): React.JSX.Element {
   // 프로필 이미지 삭제 함수
 
   const handleUserImageDelete = () => {
-    window.URL.revokeObjectURL(previewUrl)
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      window.URL.revokeObjectURL(previewUrl)
+    }
     setpriviewUrl('')
     setImage(null)
+
+    // 서버 이미 삭제 -> 기본 이미지로 변경
     setUserImage('')
   }
-
   return (
     <>
       <div className="flex min-h-screen">
@@ -251,15 +254,8 @@ function ProfileSetting(): React.JSX.Element {
           >
             <p className="text-lg font-bold mb-4">프로필 사진</p>
             <section className="flex gap-8 mb-8">
-              {/* 'Ellipse'를 포함하거나,유저 이미지가 없을 때 유저의 이니셜만 나올 수 있게 함 */}
               <Avatar
-                userImage={
-                  previewUrl
-                    ? previewUrl
-                    : userImage.includes('Ellipse') || !userImage
-                    ? undefined
-                    : API_BASE_URL + '/' + userImage
-                }
+                userImage={previewUrl || userImage}
                 userName={inputNameValue}
                 size="lg"
               />
@@ -304,11 +300,9 @@ function ProfileSetting(): React.JSX.Element {
               <TextInput
                 size="lg"
                 placeholder="이름을 입력하세요."
-                label="profileName"
                 value={inputNameValue}
                 border="lgRound"
                 onchange={handleInputName}
-                hasIcon={false}
                 id="profileName"
                 type="text"
               />
@@ -348,9 +342,7 @@ function ProfileSetting(): React.JSX.Element {
                 placeholder="기술 스택 검색"
                 size="lg"
                 border={'lgRound'}
-                hasIcon={true}
                 id="searchStack"
-                label="searchStack"
                 onclick={handleStackReset}
                 type="text"
               />
