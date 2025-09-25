@@ -15,7 +15,7 @@ interface AuthContextType {
   isLoading: boolean
 
   // 액션
-  login: (token: string, userData: Common.User) => void
+  login: (token: string, userData: UserAPI.Login.Res) => void
   logout: () => void
   checkAuth: () => Promise<boolean>
 }
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user && !!sessionStorage.getItem('token')
 
   // 로그인
-  const login = (token: string, userData: Common.User) => {
+  const login = (token: string, userData: UserAPI.Login.Res) => {
     sessionStorage.setItem('token', token)
     setUser(userData)
   }
