@@ -4,9 +4,29 @@ import Comment from '../../assets/icons/comment.svg?react'
 interface CommentButtonProps {
   commentCount?: number
   postId: string | number
+  isDetail?: boolean
 }
 
-function CommentButton({ commentCount, postId }: CommentButtonProps) {
+function CommentButton({
+  commentCount,
+  postId,
+  isDetail = false,
+}: CommentButtonProps) {
+  // 게시글 상세일때 링크 이벤트 제거,클릭시 댓글 작성창 노출
+  if (isDetail) {
+    return (
+      <button className="flex items-center gap-2 p-2 rounded group">
+        <div className="w-8 h-8 flex items-center justify-center rounded-full group-hover:bg-primary/10 transition-colors">
+          <Comment className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
+        </div>
+        <span className="text-sm text-text-secondary group-hover:text-primary transition-colors">
+          {commentCount}
+        </span>
+      </button>
+    )
+  }
+
+  // 홈/피드의 게시글일 경우 클릭시 게시글 상세로 이동
   return (
     <Link
       to={`/post-detail/${postId}`}
