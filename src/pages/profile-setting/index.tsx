@@ -222,11 +222,15 @@ function ProfileSetting(): React.JSX.Element {
   // 프로필 이미지 삭제 함수
 
   const handleUserImageDelete = () => {
-    window.URL.revokeObjectURL(previewUrl)
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      window.URL.revokeObjectURL(previewUrl)
+    }
     setpriviewUrl('')
     setImage(null)
-  }
 
+    // 서버 이미 삭제 -> 기본 이미지로 변경
+    setUserImage('')
+  }
   return (
     <>
       <div className="flex min-h-screen">
@@ -243,13 +247,7 @@ function ProfileSetting(): React.JSX.Element {
             <p className="text-lg font-bold mb-4">프로필 사진</p>
             <section className="flex gap-8 mb-8">
               <Avatar
-                userImage={
-                  previewUrl
-                    ? previewUrl
-                    : userImage.includes('Ellipse')
-                    ? undefined
-                    : API_BASE_URL + '/' + userImage
-                }
+                userImage={previewUrl || userImage}
                 userName={inputNameValue}
                 size="lg"
               />
