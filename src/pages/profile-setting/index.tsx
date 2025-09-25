@@ -3,7 +3,6 @@ import { SideBar } from '../../components/common/SideBar'
 import Avatar from '../../components/common/Avatar'
 import BaseButton from '../../components/common/BaseButton'
 import TextInput from '../../components/common/TextInput'
-import SearchInput from '../../components/common/SearchInput'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/apiWrapper'
@@ -292,11 +291,9 @@ function ProfileSetting(): React.JSX.Element {
               <TextInput
                 size="lg"
                 placeholder="이름을 입력하세요."
-                label="profileName"
                 value={inputNameValue}
                 border="lgRound"
                 onchange={handleInputName}
-                hasIcon={false}
                 id="profileName"
                 type="text"
               />
@@ -328,66 +325,6 @@ function ProfileSetting(): React.JSX.Element {
               )}
             </section>
 
-          <section>
-            <p className="text-lg font-bold mb-4">기술 스택</p>
-            <SearchInput
-              onchange={handleInputStack}
-              value={inputStackValue}
-              placeholder="기술 스택 검색"
-              size="lg"
-              border={'lgRound'}
-              id=""
-              type="skillStack"
-            ></SearchInput>
-            <section className="mt-4">
-              <p className="text-sm lg:text-base font-bold mb-3">
-                선택된 기술 스택
-              </p>
-              <BaseButton
-                content="JavaScript"
-                ariaLabel="JavaScript"
-                fontWeight="normal"
-                width="flexWidth"
-                color="primary"
-                size="sm"
-                icon="/src/assets/icons/close-b-sm.svg"
-                isLeft={false}
-              />
-            </section>
-            <section className="mt-4 border-b border-background-border pb-8 mb-8">
-              <p className="text-sm lg:text-base font-bold mb-3">
-                사용 가능한 기술 스택
-              </p>
-              <BaseButton
-                content="JavaScript"
-                ariaLabel="JavaScript"
-                fontWeight="normal"
-                width="flexWidth"
-                color="surface"
-                size="sm"
-              />
-            </section>
-            <div className="flex gap-4">
-              <BaseButton
-                content="취소"
-                ariaLabel="취소"
-                fontWeight="bold"
-                width="fullWidth"
-                color="surface"
-                size="md"
-              />
-              <BaseButton
-                content={isUploadLoading ? '저장 중..' : '저장하기'}
-                ariaLabel="저장하기"
-                fontWeight="bold"
-                width="fullWidth"
-                color="primary"
-                size="md"
-                btnType="submit"
-              />
-            </div>
-          </section>
-        </form>
             <section className="mb-8">
               <p className="text-lg font-bold mb-4">기술 스택</p>
               <TextInput
@@ -396,9 +333,7 @@ function ProfileSetting(): React.JSX.Element {
                 placeholder="기술 스택 검색"
                 size="lg"
                 border={'lgRound'}
-                hasIcon={true}
                 id="searchStack"
-                label="searchStack"
                 onclick={handleStackReset}
                 type="text"
               />
