@@ -7,14 +7,15 @@ import { useNavigate } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
 import type { Common, HeartAPI, PostAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
-import { formatTimeAgo } from '../../utils/timeUtils'
+import { formatFullTimeAgo, formatTimeAgo } from '../../utils/timeUtils'
 import { API_BASE_URL } from '../../utils/configs'
+import { LoadIntroData } from '../../utils/profileStackLoad'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
   // 게시글 더보기 클릭 이벤트 핸들러 함수
-  onClick: () => void
+  onClick?: () => void
   // api에서 받은 게시글 데이터
   post: Common.Post
 }
@@ -26,6 +27,8 @@ interface PostCardProps {
  * @returns
  */
 function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
+  const { finalStack } = LoadIntroData(post.author.intro || '')
+
   const maxHeight = 100
 
   const navigate = useNavigate()
@@ -73,7 +76,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   // 홈/피드의 게시글일때만 게시글 상세페이지로 이동
   const handlePostClick = () => {
     if (!isDetail) {
-      navigate(`/post/${post.id}`)
+      navigate(`/post-detail/${post.id}`)
     }
   }
 
@@ -84,17 +87,17 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   }
 
   useEffect(() => {
-    if (commentRef.current && commentRef.current.offsetHeight > maxHeight) {
+    if (commentRef.current && commentRef.current.scrollHeight > maxHeight) {
       setShowMoreBtn(true)
       SetShowGradient(true)
     } else if (
       commentRef.current &&
-      commentRef.current.offsetHeight < maxHeight
+      commentRef.current.scrollHeight < maxHeight
     ) {
       setShowMoreBtn(false)
       SetShowGradient(false)
     }
-  }, [])
+  }, [post])
 
   return (
     <article
@@ -110,7 +113,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           size="md"
         />
         <section className="flex-1">
-          <ul className="flex items-center gap-1 mb-2">
+          <ul className="flex items-center gap-2 mb-2">
             <li className="text-lg font-bold text-text-primary">
               {post.author.username}
             </li>
@@ -129,9 +132,15 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           <ul
             className={`${isDetail ? 'flex flex-wrap gap-1 mb-3' : 'hidden'}`}
           >
-            <li className="px-2 py-1 bg-background-surface text-text-secondary text-xs rounded border border-background-border">
-              기술스택
-            </li>
+            {/* 기술스택 표시 */}
+            {finalStack.map((stack) => (
+              <li
+                key={stack}
+                className="px-2 py-1 bg-background-surface text-text-secondary text-xs rounded border border-background-border"
+              >
+                {stack}
+              </li>
+            ))}
           </ul>
 
           <div
@@ -179,7 +188,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           {isDetail && (
             <section>
               <p className="text-text-secondary text-sm mb-4 py-4 border-background-border">
-                {formatTimeAgo(new Date(post.createdAt).getTime())}
+                {formatFullTimeAgo(new Date(post.createdAt).getTime())}
               </p>
             </section>
           )}

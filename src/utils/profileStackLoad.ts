@@ -15,7 +15,14 @@ export const LoadIntroData = (introData: string) => {
     const splitIntroData = introData.split('§$')
     // '자기소개 텍스트','기술스택'으로 나뉘어짐
     finalIntroduce = splitIntroData[0]
-    finalStack = splitIntroData[1].split(',')
+    const stackString = splitIntroData[1]
+
+    // '기술스택'이 빈 값이 나오지 않게 함
+    if (stackString.trim()) {
+      finalStack = stackString.split(',').filter((stack) => stack.trim() !== '')
+    } else {
+      finalStack = []
+    }
   } else {
     finalIntroduce = introData
     finalStack = []

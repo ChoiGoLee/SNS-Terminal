@@ -3,7 +3,7 @@ import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 import PostCard from '../../components/common/PostCard'
 import { api } from '../../services/apiWrapper'
-import type { PostAPI, CommentAPI } from '../../types/api'
+import type { Common, PostAPI, CommentAPI, UserAPI } from '../../types/api'
 // import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CommentInput from '../../components/common/CommentInput'
@@ -11,8 +11,10 @@ import CommentItem from '../../components/common/CommentItem'
 
 function PostDetail(): React.JSX.Element {
   // 상태관리
-  const [postData, setPostData] = useState<any>(null) // 초기값: 데이터 없음
-  const [commentList, setCommentList] = useState<any[]>([])
+  const [postData, setPostData] = useState<Common.Post | null>(null)
+  const [commentList, setCommentList] = useState<Common.Comment[]>([])
+  const [userData, setUserData] = useState<Common.User | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   // useParams로 url의 파라미터 값 가져오기
   const { postId } = useParams()
@@ -26,10 +28,29 @@ function PostDetail(): React.JSX.Element {
       )
       console.log('게시글 데이터:', response)
 
-      setPostData(response.post)
+      setPostData(
+        Array.isArray(response.post) ? response.post[0] : response.post
+      )
     } catch (error) {
       console.error('게시글 불러오기를 실패했습니다.', error)
       alert('게시글 불러오기를 실패했습니다.')
+    }
+  }
+
+  // 유저 정보 불러오기
+  const handleMyInfoLoad = async (): Promise<void> => {
+    try {
+      const response: UserAPI.MyInfo.Res = await api.get('/user/myinfo')
+
+      if (response.user) {
+        setUserData(response.user)
+        setIsLoggedIn(true)
+        console.log('내 정보:', response.user)
+        console.log('게시글 id:', postId)
+      }
+    } catch (error) {
+      console.error('내 정보 불러오기 실패:', error)
+      setIsLoggedIn(false)
     }
   }
 
@@ -37,10 +58,6 @@ function PostDetail(): React.JSX.Element {
 
   // 댓글 작성
   const handleCommentSubmit = async (commentText: string): Promise<void> => {
-    console.log('받은 댓글 내용:', commentText) // 추가
-    console.log('댓글 길이:', commentText.length) // 추가
-    console.log('trim 후:', commentText.trim()) // 추가
-
     try {
       const response: CommentAPI.CreateComment.Res = await api.post(
         `/post/${postId}/comments`,
@@ -76,12 +93,23 @@ function PostDetail(): React.JSX.Element {
     }
   }
 
-  // 게시글 목록 가져오는 테스트 함수 추가
   const testGetPosts = async () => {
     try {
-      const response = await api.get('/post') // 전체 게시글
+      const response: any = await api.get('/post') // 타입 제거하고 실제 구조 확인
       console.log('전체 게시글 목록:', response)
-      // 여기서 실제 ID들을 확인할 수 있어
+
+      // 실제 응답 구조에 맞게 수정 (이미지에서 봤듯이 posts 배열)
+      if (response.posts && response.posts.length > 0) {
+        const postIds = response.posts.map((post) => post.id)
+        console.log('사용 가능한 게시글 ID들:', postIds)
+
+        // 각 게시글의 간단한 정보도 표시
+        response.posts.forEach((post, index) => {
+          console.log(
+            `${index}: ID=${post.id}, 내용="${post.content.slice(0, 20)}..."`
+          )
+        })
+      }
     } catch (error) {
       console.error('게시글 목록 가져오기 실패:', error)
     }
@@ -91,6 +119,7 @@ function PostDetail(): React.JSX.Element {
   useEffect(() => {
     handlePostLoad()
     handleCommentList()
+    handleMyInfoLoad()
     testGetPosts()
   }, [postId])
 
@@ -108,21 +137,29 @@ function PostDetail(): React.JSX.Element {
             <div className="p-4 text-center">로딩 중...</div>
           )}
 
-          <div className="p-4 border-b border-x border-background-border">
-            <CommentInput
-              userName="김개발자" // 임시 하드코딩
-              userImage="https://picsum.photos/40/40" // 임시 이미지
-              onSubmit={handleCommentSubmit}
-            />
-          </div>
+          <div className="p-4 border-b border-x border-background-border font-bold"></div>
           <div className="p-4 border-b border-x border-background-border font-bold">
             댓글 {commentList.length} 개
+          </div>
+          <div className="p-4 border-b border-x border-background-border">
+            {isLoggedIn && userData ? (
+              <CommentInput
+                userName={userData.username}
+                userImage={userData.image}
+                onSubmit={handleCommentSubmit}
+              />
+            ) : (
+              <div className="text-center text-text-secondary py-4">
+                댓글을 작성하시려면 로그인 해주세요.
+              </div>
+            )}
           </div>
           <div className="border-b border-x border-background-border">
             {commentList.map((comment) => (
               <CommentItem
                 key={comment.id}
                 userName={comment.author.username}
+                userImage={comment.author.image}
                 level="senior"
                 content={comment.content}
                 createdAt={new Date(comment.createdAt).getTime()}

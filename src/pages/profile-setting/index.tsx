@@ -303,11 +303,11 @@ function ProfileSetting(): React.JSX.Element {
             </section>
 
             <section className="mb-8">
-              <p className="text-lg font-bold mb-4">introduce</p>
+              <p className="text-lg font-bold mb-4">자기소개</p>
               <textarea
                 className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors
               w-full px-8 lg:p-10 py-2.5 lg:py-3 text-[18px] gap-3"
-                placeholder="introduce를 입력해주세요."
+                placeholder="자기소개를 입력해주세요."
                 name="introduce"
                 id="profileIntroduce"
                 onChange={handleInputIntro}
