@@ -290,11 +290,9 @@ function ProfileSetting(): React.JSX.Element {
               <TextInput
                 size="lg"
                 placeholder="이름을 입력하세요."
-                label="profileName"
                 value={inputNameValue}
                 border="lgRound"
                 onchange={handleInputName}
-                hasIcon={false}
                 id="profileName"
                 type="text"
               />
