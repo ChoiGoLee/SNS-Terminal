@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Header } from '../../components/common/Header'
 import { SideBar } from '../../components/common/SideBar'
 // import PostCard from '../../components/common/PostCard'
@@ -22,6 +22,28 @@ function Home(): React.JSX.Element {
   const [page, setPage] = useState(1)
   const POSTS_PER_PAGE = 10
   const currentPostsCount = posts.length
+
+  // 필터링된 게시글 계산 (useMemo로 성능 최적화)
+  const filteredPosts = useMemo(() => {
+    if (!inputValue.trim()) {
+      return posts
+    }
+
+    const searchTerm = inputValue.toLowerCase().trim()
+
+    return posts.filter((post) => {
+      // 게시물의 제목, 내용, 작성자 정보에서 검색
+      const searchableFields = [
+        post.content,
+        post.author?.accountname,
+        post.author?.username,
+      ].filter(Boolean) // null, undefined 값 제거
+
+      return searchableFields.some((field) =>
+        field?.toString().toLowerCase().includes(searchTerm)
+      )
+    })
+  }, [posts, inputValue])
 
   // ** profile페이지 코드 참고하기 **
   /**
@@ -116,9 +138,9 @@ function Home(): React.JSX.Element {
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="홈" />
-          <div className="flex items-center justify-center min-h-96">
+          <div className="flex items-center justify-center min-h-96 w-[769px]">
             <div className="text-center">
-              <p className="text-red-500 mb-4">{error}</p>
+              <p className="text-red-500 mb-4 ">{error}</p>
               <button
                 onClick={() => {
                   setError(null)
@@ -144,36 +166,48 @@ function Home(): React.JSX.Element {
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        {/* <PostCard comment={markdownContent} onClick={() => {}} /> */}
+
         <SearchInput
           onchange={handleChange}
           value={inputValue}
-          placeholder="기술 스택 검색"
+          placeholder="게시물 검색"
           size="md"
           border={'fullRound'}
-          id="password"
+          id="text"
           type="All"
         ></SearchInput>
 
         {/* 게시글 목록 */}
         <div className="feed-container">
-          {posts.length === 0 && !isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-text-secondary">아직 게시글이 없습니다.</p>
+          {/* 검색 결과 표시 */}
+          {inputValue.trim() && (
+            <div className="px-4 py-2 text-sm text-text-secondary border-b border-background-border">
+              "{inputValue}" 검색 결과: {filteredPosts.length}개
+            </div>
+          )}
+
+          {/* 검색 결과가 없거나 게시글이 없을 때 */}
+          {filteredPosts.length === 0 && !isLoading ? (
+            <div className="text-center py-12 w-[769px]">
+              <p className="text-text-secondary">
+                {inputValue.trim()
+                  ? `"${inputValue}"에 대한 검색 결과가 없습니다.`
+                  : '아직 게시글이 없습니다.'}
+              </p>
             </div>
           ) : (
-            posts.map((post, index) => (
+            filteredPosts.map((post, index) => (
               <div
                 key={post.id}
-                ref={index === posts.length - 1 ? lastContent : null}
+                ref={index === filteredPosts.length - 1 ? lastContent : null}
               >
                 <PostCard post={post} onClick={() => {}} />
               </div>
             ))
           )}
 
-          {/* 무한스크롤 로딩 인디케이터 */}
-          {isLoadingMore && (
+          {/* 무한스크롤 로딩 인디케이터 - 검색 중이 아닐 때만 표시 */}
+          {!inputValue.trim() && isLoadingMore && (
             <div className="text-center py-4">
               {/* 로딩스피너 */}
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
@@ -181,8 +215,8 @@ function Home(): React.JSX.Element {
             </div>
           )}
 
-          {/* 마지막 메시지 */}
-          {!hasMore && posts.length > 0 && (
+          {/* 마지막 메시지 - 검색 중이 아닐 때만 표시 */}
+          {!inputValue.trim() && !hasMore && posts.length > 0 && (
             <div className="text-center py-8">
               <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
             </div>
