@@ -3,5 +3,29 @@
 @tailwind utilities;
 
 body {
-  @apply bg-background-surface text-white;
+  @apply bg-background text-text-primary;
+}
+
+/* globals.css 같은 데 추가 */
+::-webkit-scrollbar {
+  width: 6px; /* 얇게 */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* 다크모드에서는 트랙 지우는 게 깔끔 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444; /* 배경색보다 살짝 밝게 */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
 }

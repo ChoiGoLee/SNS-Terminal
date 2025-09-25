@@ -81,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ title = '', buttons = {} }) => {
   const rightButtons = (['add'] as const).map(renderButton).filter(Boolean)
 
   return (
-    <header className="flex items-center border-background-border border-b p-4">
+    <header className="flex items-center bg-background-surface text-text-primary border-b border-background-border">
       {/* 왼쪽 버튼들 */}
       <div>{leftButtons}</div>
 

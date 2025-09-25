@@ -5,31 +5,41 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styles from '../../assets/css/markdown.module.css'
 // import 'github-markdown-css/github-markdown.css'
 
-function Markdown(): React.JSX.Element {
-  const markdownContent = `
-# 제목
+interface MarkdownProps {
+  content: string
+}
 
-일반 텍스트입니다.
+interface CodeComponentProps {
+  inline?: boolean
+  className?: string
+  children?: React.ReactNode
+}
 
-\`\`\`javascript
-console.log('Hello, world!');
-const greeting = 'React Markdown';
-console.log(greeting);
-\`\`\`
+function Markdown({ content }: MarkdownProps): React.JSX.Element {
+  //   const markdownContent = `
+  // # 제목
 
-\`\`\`python
-def hello():
-  print("Hello from Python!")
-    
-hello()
-\`\`\`
-  `
+  // 일반 텍스트입니다.
+
+  // \`\`\`javascript
+  // console.log('Hello, world!');
+  // const greeting = 'React Markdown';
+  // console.log(greeting);
+  // \`\`\`
+
+  // \`\`\`python
+  // def hello():
+  //   print("Hello from Python!")
+
+  // hello()
+  // \`\`\`
+  //   `
 
   return (
     <div className={styles['markdown-body']}>
       <ReactMarkdown
         components={{
-          code({ node, inline, className, children, ...props }) {
+          code({ inline, className, children, ...props }: CodeComponentProps) {
             const match = /language-(\w+)/.exec(className || '')
 
             return !inline && match ? (
@@ -60,7 +70,7 @@ hello()
           },
         }}
       >
-        {markdownContent}
+        {content}
       </ReactMarkdown>
     </div>
   )

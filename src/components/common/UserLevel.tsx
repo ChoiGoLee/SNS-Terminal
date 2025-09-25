@@ -39,7 +39,13 @@ const LEVEL_ICONS = {
  */
 
 function UserLevel({ level }: UserLevelProps) {
-  return <img src={LEVEL_ICONS[level]} alt={level} className="w-3 h-3" />
+  return (
+    <img
+      src={LEVEL_ICONS[level]}
+      alt={level}
+      className="w-3 h-3 flex item-center justify-center"
+    />
+  )
 }
 
 export default UserLevel
