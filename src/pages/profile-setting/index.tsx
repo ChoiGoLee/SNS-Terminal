@@ -202,7 +202,7 @@ function ProfileSetting(): React.JSX.Element {
       if (file) {
         // 이미지 확장자 검증
         if (!validateImageExtend(file)) {
-          alert('jpg,gif,png,jpeg,bmp,tif,heic 확장자만 업로드 가능합니다.')
+          alert('jpg,gif,png,jpeg,bmp 확장자만 업로드 가능합니다.')
           return
         }
 
