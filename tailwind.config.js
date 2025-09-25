@@ -22,6 +22,9 @@ export default {
           secondary: '#a1a1aa ',
         },
       },
+      fontFamily: {
+        BoldRound: ['BoldRound', 'sans-serif'],
+      },
     },
   },
   plugins: [],
