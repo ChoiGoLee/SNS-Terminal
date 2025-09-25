@@ -39,18 +39,15 @@ function Avatar({ userImage, userName, size }: AvatarProps) {
     <div
       className={`${SIZECLASSES[size]} rounded-full flex items-center justify-center font-bold text-black overflow-hidden bg-primary leading-none`}
     >
-      {userImage ? (
-        userImage === '/Ellipse.png' ? (
-          userName?.charAt(0)
-        ) : (
-          <img
-            src={imageUrl}
-            alt={userName}
-            className="rounded-full object-cover w-full h-full"
-          />
-        )
+      {/* 이미지 있는경우와 없는 경우로 압축 ellipse삭제 */}
+      {hasImage ? (
+        <img
+          src={imageUrl}
+          alt={userName}
+          className="rounded-full object-cover w-full h-full"
+        />
       ) : (
-        userName?.charAt(0)
+        userName?.charAt(0) || '?'
       )}
     </div>
   )

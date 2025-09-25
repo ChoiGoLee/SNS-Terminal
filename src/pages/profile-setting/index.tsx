@@ -222,11 +222,15 @@ function ProfileSetting(): React.JSX.Element {
   // 프로필 이미지 삭제 함수
 
   const handleUserImageDelete = () => {
-    window.URL.revokeObjectURL(previewUrl)
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      window.URL.revokeObjectURL(previewUrl)
+    }
     setpriviewUrl('')
     setImage(null)
-  }
 
+    // 서버 이미 삭제 -> 기본 이미지로 변경
+    setUserImage('')
+  }
   return (
     <>
       <div className="flex min-h-screen">
