@@ -11,6 +11,15 @@ export const sidebarItems: SideItem[] = [
     requireAuth: false,
   },
   {
+    type: 'followerFeed',
+    img: '/icons/home.svg',
+    activeImg: '/icons/home-fill.svg',
+    path: '/follower-feed',
+    text: '팔로워 피드',
+    href: '/follower-feed',
+    requireAuth: true,
+  },
+  {
     type: 'messages',
     img: '/icons/message.svg',
     activeImg: '/icons/message-fill.svg',

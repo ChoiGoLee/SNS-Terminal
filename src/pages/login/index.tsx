@@ -86,7 +86,6 @@ function Login(): React.JSX.Element {
           size="md"
           border="fullRound"
           id="email"
-          label="email"
           type="email"
         />
 
@@ -97,7 +96,6 @@ function Login(): React.JSX.Element {
           size="md"
           border="fullRound"
           id="password"
-          label="password"
           type="password"
         />
 

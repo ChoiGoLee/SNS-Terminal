@@ -11,26 +11,26 @@
  * ```
  */
 
-const formatTimeAgo = (timestamp: number): string => {
-  const now = Date.now()
-  const seconds = Math.floor((now - timestamp) / 1000)
+const formatTimeAgo = (timestamp: number | string): string => {
+  if (!timestamp) return ''
 
-  if (seconds < 60) {
-    return '방금 전'
-  }
+  const messageDate = new Date(timestamp)
+  if (isNaN(messageDate.getTime())) return ''
 
-  const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) {
-    return `${minutes}분 전`
-  }
+  const now = new Date()
+  const diff = Math.floor((now.getTime() - messageDate.getTime()) / 1000)
 
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) {
-    return `${hours}시간 전`
-  }
+  if (0 <= diff && diff < 60) return `${diff}초 전`
+  if (0 <= diff && diff < 3600) return `${Math.floor(diff / 60)}분 전`
+  if (0 <= diff && diff < 86400) return `${Math.floor(diff / 3600)}시간 전`
 
-  const days = Math.floor(hours / 24)
-  return `${days}일 전`
+  const days = Math.floor(diff / 86400)
+  if (0 <= diff && days < 30) return `${days}일 전`
+
+  return messageDate.toLocaleDateString('ko-KR', {
+    month: 'numeric',
+    day: 'numeric',
+  })
 }
 
 export { formatTimeAgo }

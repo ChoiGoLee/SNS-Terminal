@@ -8,6 +8,7 @@ import Profile from './pages/profile/index'
 import ProfileSetting from './pages/profile-setting/index'
 import Messages from './pages/messages/index'
 import Settings from './pages/settings/index'
+import FollowerFeed from './pages/follower-feed'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/follower-feed" element={<FollowerFeed />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/post-detail" element={<PostDetail />} />

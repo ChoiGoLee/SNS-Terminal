@@ -1,0 +1,126 @@
+{
+  "rooms": [
+    {
+      "id": "001",
+      "ChatUsers": [
+        {
+          "accountname": "choigolee",
+          "readAt": 1758355200000
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg-001",
+          "sender": "choigolee",
+          "text": "안녕하세요! 반갑습니다.",
+          "createdAt": 1758182400000
+        },
+        {
+          "id": "msg-002",
+          "sender": "choigolee",
+          "text": "LOSER 외톨이 센 척하는 겁쟁이 못된 양아치 거울 속에 넌 JUST A LOSER 외톨이 상처뿐인 머저리 더러운 쓰레기 거울 속에 난 I'M A 솔직히 세상과 난 어울린 적 없어 홀로였던 내겐 사랑 따윈 벌써 잊혀 진지 오래 저 시간 속에 더 이상은 못 듣겠어 희망찬 사랑 노래 너나 나나 그저 길들여진 대로 각본 속에 놀아나는 슬픈 삐에로 난 멀리 와버렸어 I'M COMING HOME 이제 다시 돌아갈래 어릴 적 제자리로",
+          "createdAt": 1758355200000
+        }
+      ]
+    },
+    {
+      "id": "002",
+      "ChatUsers": [
+        {
+          "accountname": "choigolee",
+          "readAt": 1758766659771
+        },
+        {
+          "accountname": "cgl",
+          "readAt": 1758614400000
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg-101",
+          "sender": "choigolee",
+          "text": "안녕하세요! choigolee입니다.",
+          "createdAt": 1758182400000
+        },
+        {
+          "id": "msg-102",
+          "sender": "cgl",
+          "text": "LOSER 외톨이 센 척하는 겁쟁이 못된 양아치 거울 속에 넌 JUST A LOSER 외톨이 상처뿐인 머저리 더러운 쓰레기 거울 속에 난 I'M A 솔직히 세상과 난 어울린 적 없어 홀로였던 내겐 사랑 따윈 벌써 잊혀 진지 오래 저 시간 속에 더 이상은 못 듣겠어 희망찬 사랑 노래 너나 나나 그저 길들여진 대로 각본 속에 놀아나는 슬픈 삐에로 난 멀리 와버렸어 I'M COMING HOME 이제 다시 돌아갈래 어릴 적 제자리로",
+          "createdAt": 1758355200000
+        },
+        {
+          "id": "msg-103",
+          "sender": "cgl",
+          "text": "반갑습니다!",
+          "createdAt": 1758614400000
+        },
+        {
+          "id": "msg-104",
+          "sender": "choigolee",
+          "text": "이것은 엄청나게 긴 메세지인데요. 얼마나 써야 더보기가 나오는지 모르겠네요. 이렇게해도 아직도 안나와요. 그래서 말인데요 마무말이나 좀 써볼려고해요 이해해주세요. 한줄만 더 쓰면 될거같네요.",
+          "createdAt": 1758787200000
+        },
+        {
+          "id": "msg-105",
+          "sender": "choigolee",
+          "text": "왜들 그리 다운돼있어? 뭐가 문제야 say something 분위기가 겁나 싸해 요새는 이런 게 유행인가 왜들 그리 재미없어? 아 그건 나도 마찬가지 Tell me what I got to do 급한 대로 블루투스 켜 아무 노래나 일단 틀어 아무거나 신나는 걸로 아무렇게나 춤춰 아무렇지 않아 보이게 아무 생각 하기 싫어 아무개로 살래 잠시 I'm sick and tired of my every day, keep it up 한 곡 더",
+          "createdAt": 1758766659771
+        }
+      ]
+    },
+    {
+      "id": "003",
+      "ChatUsers": [
+        {
+          "accountname": "choigolee",
+          "readAt": 1758182400000
+        },
+        {
+          "accountname": "cgl123",
+          "readAt": 1758355200000
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg-201",
+          "sender": "choigolee",
+          "text": "안녕하세요! choigolee입니다.",
+          "createdAt": 1758182400000
+        },
+        {
+          "id": "msg-202",
+          "sender": "cgl123",
+          "text": "저도 반가워요! cgl123입니다.",
+          "createdAt": 1758355200000
+        }
+      ]
+    },
+    {
+      "id": "004",
+      "ChatUsers": [
+        {
+          "accountname": "choigolee",
+          "readAt": 1758355200000
+        },
+        {
+          "accountname": "cgl123123",
+          "readAt": 1758182400000
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg-301",
+          "sender": "cgl123123",
+          "text": "React Hook Form 사용법에 대해 질문이 있는데요.",
+          "createdAt": 1758182400000
+        },
+        {
+          "id": "msg-302",
+          "sender": "choigolee",
+          "text": "네, 어떤 부분이 궁금하신가요?",
+          "createdAt": 1758355200000
+        }
+      ]
+    }
+  ]
+}

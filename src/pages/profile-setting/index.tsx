@@ -15,6 +15,7 @@ import {
   validateUserName,
 } from '../../utils/validation'
 import { LoadIntroData } from '../../utils/profileStackLoad'
+import SearchInput from '../../components/common/SearchInput'
 
 function ProfileSetting(): React.JSX.Element {
   const navigate = useNavigate()
@@ -305,10 +306,9 @@ function ProfileSetting(): React.JSX.Element {
             </section>
 
             <section className="mb-8">
-              <p className="text-lg font-bold mb-4">introduce</p>
+              <p className="text-lg font-bold px-4 mb-4">introduce</p>
               <textarea
-                className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors
-              w-full px-8 lg:p-10 py-2.5 lg:py-3 text-[18px] gap-3"
+                className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors w-full px-3 py-2.5 lg:py-3 text-[18px] gap-3"
                 placeholder="introduce를 입력해주세요."
                 name="introduce"
                 id="profileIntroduce"
@@ -327,17 +327,14 @@ function ProfileSetting(): React.JSX.Element {
 
             <section className="mb-8">
               <p className="text-lg font-bold mb-4">기술 스택</p>
-              <TextInput
+              <SearchInput
                 onchange={handleInputStack}
                 value={inputStackValue}
-                placeholder="기술 스택 검색"
                 size="lg"
-                border={'lgRound'}
-                hasIcon={true}
+                border="lgRound"
                 id="searchStack"
-                label="searchStack"
                 onclick={handleStackReset}
-                type="text"
+                type="skillStack"
               />
               <section className="mt-4">
                 <p className="text-sm lg:text-base font-bold mb-3">
