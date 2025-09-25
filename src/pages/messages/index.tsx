@@ -37,7 +37,7 @@ function Messages(): React.JSX.Element {
   // 현재 로그인한 사용자 (실제로는 context나 props에서 가져와야 함)
   const currentUserId = 'choigolee' // JSON 데이터에 맞게 설정
 
-  const data = messageData as MessageDataType
+  const data = messageData as unknown as MessageDataType
 
   // 현재 사용자가 참여한 채팅방들만 필터링
   const filteredRooms = useMemo(() => {
@@ -133,7 +133,9 @@ function Messages(): React.JSX.Element {
               border={'none'}
               id="user search"
               type="user"
-              onclick={() => alert('아직 구현되지 않은 기능입니다.')}
+              onclick={() =>
+                alert('검색 기능은 아직 준비중입니다. 조금만 기다려주세요!')
+              }
             />
 
             <ChatRoomList
