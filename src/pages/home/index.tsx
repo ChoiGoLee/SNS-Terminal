@@ -39,7 +39,7 @@ hello()
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
-        <PostCard comment={markdownContent} onClick={() => {}} />
+        {/* <PostCard comment={markdownContent} onClick={() => {}} /> */}
         <TextInput
           onchange={handleChange}
           value={inputValue}
