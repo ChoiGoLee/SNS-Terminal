@@ -59,6 +59,10 @@ function ProfileSetting(): React.JSX.Element {
     setInputStackValue('')
   }
 
+  const handleCancle = () => {
+    navigate('/profile')
+  }
+
   // 기술스택 필터링
   const stackFilter = TECH_STACK.filter(
     (stack: string) =>
@@ -76,6 +80,10 @@ function ProfileSetting(): React.JSX.Element {
   const stackDelete = (stack: string) => {
     setSelectedStack(selectedStack.filter((item) => item !== stack))
   }
+
+  // 유저 이미지 있을 경우 '프로필 이미지 삭제'버튼 비활성화
+  const userImgDeleteDisabled =
+    (previewUrl && userImage) || !userImage.includes('Ellipse')
 
   // 프로필 정보 불러오기 함수
   const handleProfileLoad = async (): Promise<void> => {
@@ -268,15 +276,18 @@ function ProfileSetting(): React.JSX.Element {
                     />
                     프로필 이미지 업로드
                   </label>
-                  <BaseButton
-                    content="삭제하기"
-                    fontWeight="normal"
-                    ariaLabel="프로필 업로드 이미지 삭제"
-                    width="flexWidth"
-                    color="surface"
-                    size="sm"
-                    onClick={() => handleUserImageDelete()}
-                  />
+
+                  {userImgDeleteDisabled && (
+                    <BaseButton
+                      content="삭제하기"
+                      fontWeight="normal"
+                      ariaLabel="프로필 업로드 이미지 삭제"
+                      width="flexWidth"
+                      color="surface"
+                      size="sm"
+                      onClick={() => handleUserImageDelete()}
+                    />
+                  )}
                 </div>
                 <p className="text-sm text-text-secondary">
                   이미지는 10mb이하의 jpg,gif,png,jpeg,bmp,tif,heic 확장자로
@@ -303,7 +314,7 @@ function ProfileSetting(): React.JSX.Element {
             </section>
 
             <section className="mb-8">
-              <p className="text-lg font-bold mb-4">introduce</p>
+              <p className="text-lg font-bold mb-4">자기소개</p>
               <textarea
                 className="h-[10rem] bg-background-surface placeholder-text-secondary border border-background-border rounded-lg focus:border-primary focus:outline-none transition-colors
               w-full px-8 lg:p-10 py-2.5 lg:py-3 text-[18px] gap-3"
@@ -340,20 +351,26 @@ function ProfileSetting(): React.JSX.Element {
                   선택된 기술 스택
                 </p>
                 <div className="grid grid-cols-4 gap-4">
-                  {selectedStack.map((stack) => (
-                    <BaseButton
-                      key={stack}
-                      content={stack}
-                      ariaLabel={stack}
-                      onClick={() => stackDelete(stack)}
-                      fontWeight="normal"
-                      width="flexWidth"
-                      color="primary"
-                      size="sm"
-                      icon="/src/assets/icons/close-b-sm.svg"
-                      isLeft={false}
-                    />
-                  ))}
+                  {selectedStack.length > 0 ? (
+                    selectedStack.map((stack) => (
+                      <BaseButton
+                        key={stack}
+                        content={stack}
+                        ariaLabel={stack}
+                        onClick={() => stackDelete(stack)}
+                        fontWeight="normal"
+                        width="flexWidth"
+                        color="primary"
+                        size="sm"
+                        icon="/src/assets/icons/close-b-sm.svg"
+                        isLeft={false}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-4 text-center py-8 text-text-secondary">
+                      검색 결과가 없습니다.
+                    </div>
+                  )}
                 </div>
               </section>
               <section className=" mt-4 border-b border-background-border mb-8">
@@ -385,6 +402,7 @@ function ProfileSetting(): React.JSX.Element {
                   width="fullWidth"
                   color="surface"
                   size="md"
+                  onClick={handleCancle}
                 />
                 <BaseButton
                   content={isUploadLoading ? '저장 중..' : '저장하기'}
