@@ -90,9 +90,8 @@ function Signup(): React.JSX.Element {
         placeholder="유저 이름을 입력하세요"
         size="md"
         border="fullRound"
-        id="email"
-        label="email"
-        type="email"
+        id="username"
+        type="text"
       />
       <TextInput
         onchange={handleInputEmail}
@@ -101,7 +100,6 @@ function Signup(): React.JSX.Element {
         size="md"
         border="fullRound"
         id="email"
-        label="email"
         type="email"
       />
       <TextInput
@@ -110,9 +108,8 @@ function Signup(): React.JSX.Element {
         placeholder="비밀번호를 입력하세요"
         size="md"
         border="fullRound"
-        id="email"
-        label="email"
-        type="email"
+        id="password"
+        type="password"
       />
       <TextInput
         onchange={handleInputAccountName}
@@ -120,9 +117,8 @@ function Signup(): React.JSX.Element {
         placeholder="계정명을 입력하세요"
         size="md"
         border="fullRound"
-        id="email"
-        label="email"
-        type="email"
+        id="accountname"
+        type="accountname"
       />
       <TextInput
         onchange={handleInputIntro}
@@ -130,9 +126,8 @@ function Signup(): React.JSX.Element {
         placeholder="소개글을 입력하세요"
         size="md"
         border="fullRound"
-        id="email"
-        label="email"
-        type="email"
+        id="intro"
+        type="intro"
       />
       {error && (
         <div className="text-red-500 text-sm text-center mt-2">{error}</div>

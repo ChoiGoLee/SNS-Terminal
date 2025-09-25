@@ -19,6 +19,8 @@ interface IBaseButtonProps {
   onClick?: () => void
   /** 버튼 타입 지정 */
   btnType?: 'button' | 'submit'
+  /** 버튼 비활성화 여부 */
+  disabled?: boolean
 }
 
 const WIDTH_TYPES = {
@@ -67,9 +69,11 @@ function BaseButton({
   fontWeight = 'normal',
   onClick,
   btnType = 'button',
+  disabled = false,
 }: IBaseButtonProps) {
   return (
     <button
+      disabled={disabled}
       type={btnType}
       onClick={onClick}
       className={`
