@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Avatar from './Avatar'
+import { formatTimeAgo } from '../../utils/timeUtils'
 
 type Message = 'me' | 'other'
 
@@ -25,18 +26,6 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     ? text
     : text.slice(0, 100) + (isLong ? '...' : '')
 
-  // 시간 포맷팅 함수 (선택사항)
-  const formatMessageTime = (dateString?: string): string => {
-    if (!dateString) return ''
-    const date = new Date(dateString)
-    if (isNaN(date.getTime())) return ''
-    return date.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    })
-  }
-
   if (type === 'other') {
     return (
       <div className="flex pt-4 pb-2 gap-3">
@@ -57,7 +46,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           {/* 시간 표시 (선택사항) */}
           {createdAt && (
             <div className="w-full flex justify-start px-4 mt-1 text-xs text-[#A7A7A7]">
-              {formatMessageTime(createdAt)}
+              {formatTimeAgo(createdAt)}
             </div>
           )}
         </div>
@@ -82,7 +71,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         {/* 시간 표시 (선택사항) */}
         {createdAt && (
           <div className="px-4 mt-1 text-xs text-[#445640] text-right">
-            {formatMessageTime(createdAt)}
+            {formatTimeAgo(createdAt)}
           </div>
         )}
       </div>
