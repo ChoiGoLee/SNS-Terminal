@@ -10,6 +10,7 @@ export type SideItemType =
   | 'profile'
   | 'settings'
   | 'login'
+  | 'followerFeed'
 
 export interface SideItem {
   type: SideItemType

@@ -9,7 +9,7 @@ import { api } from '../../services/apiWrapper'
 import { useInfinityScroll } from '../../hooks/useInfinityScroll'
 import PostCard from '../../components/common/PostCard'
 
-function Home(): React.JSX.Element {
+function FollowerFeed(): React.JSX.Element {
   const [inputValue, setInputValue] = useState('')
 
   const [posts, setPosts] = useState<Common.Post[]>([])
@@ -47,8 +47,8 @@ function Home(): React.JSX.Element {
       setIsLoading(pageNum === 1) // 첫페이지 로딩중
       setIsLoadingMore(pageNum !== 1) // 다음페이지 로딩중
 
-      const res = await api.get<PostAPI.GetAllPosts.Res>(
-        `/post?limit=${POSTS_PER_PAGE}&skip=${currentPostsCount}`
+      const res = await api.get<PostAPI.GetFeed.Res>(
+        `/post/feed?limit=${POSTS_PER_PAGE}&skip=${currentPostsCount}`
       )
 
       console.log(res)
@@ -93,7 +93,7 @@ function Home(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/" />
+          <SideBar isAuthenticated={true} activeItem="/follower-feed" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="홈" />
@@ -112,10 +112,10 @@ function Home(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/" />
+          <SideBar isAuthenticated={true} activeItem="/follower-feed" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="홈" />
+          <Header title="팔로워 피드" />
           <div className="flex items-center justify-center min-h-96">
             <div className="text-center">
               <p className="text-red-500 mb-4">{error}</p>
@@ -140,7 +140,7 @@ function Home(): React.JSX.Element {
   return (
     <div className="flex min-h-screen">
       <div className="h-full top-0 sticky">
-        <SideBar isAuthenticated={true} activeItem="/" />
+        <SideBar isAuthenticated={true} activeItem="/follower-feed" />
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />
@@ -192,4 +192,4 @@ function Home(): React.JSX.Element {
     </div>
   )
 }
-export default Home
+export default FollowerFeed
