@@ -12,7 +12,6 @@ import CommentItem from '../../components/common/CommentItem'
 function PostDetail(): React.JSX.Element {
   // 상태관리
   const [postData, setPostData] = useState<any>(null) // 초기값: 데이터 없음
-  // const [commentInput, setCommentInput] = useState('')
   const [commentList, setCommentList] = useState<any[]>([])
 
   // useParams로 url의 파라미터 값 가져오기
@@ -65,7 +64,9 @@ function PostDetail(): React.JSX.Element {
   // 댓글 목록
   const handleCommentList = async (): Promise<void> => {
     try {
-      const response = await api.get(`/post/${postId}/comments`)
+      const response: CommentAPI.GetComments.Res = await api.get(
+        `/post/${postId}/comments`
+      )
 
       setCommentList(response.comments || []) // 댓글이 없는 경우 고려
       console.log('댓글 목록 로딩에 성공하였습니다.', response)
@@ -95,53 +96,18 @@ function PostDetail(): React.JSX.Element {
 
   return (
     <>
-      {/* 개발자 테스트 도구 - 나중에 삭제 예정 */}
-      <div
-        style={{
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          background: '#fff',
-          padding: '10px',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          zIndex: 1000,
-          fontSize: '12px',
-          color: '#000',
-        }}
-      >
-        <h4 style={{ margin: '0 0 8px 0' }}>테스트용 게시글들</h4>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <button
-            onClick={() =>
-              (window.location.href = `/post-detail/68d3e23ec93d7c81614c37fd`)
-            }
-            style={{ padding: '4px 8px', fontSize: '11px' }}
-          >
-            게시글 1 (현재)
-          </button>
-          {/* testGetPosts()에서 확인한 다른 ID들 추가 */}
-          <button
-            onClick={() => (window.location.href = `/post-detail/다른ID`)}
-            style={{ padding: '4px 8px', fontSize: '11px' }}
-          >
-            게시글 2
-          </button>
-        </div>
-      </div>
       <div className="min-h-30">
         <Header title="포스트" buttons={{ back: { show: true } }} />
       </div>
       <div className="flex">
         <SideBar isAuthenticated={true} activeItem="/" />
-        <div>Post Detail Page</div>
-        <section className="flex flex-col">
-          <PostCard
-            isDetail={true}
-            comment={postData?.content || '로딩 중...'} //null인지,데이터인지 맞춰서 값을 반환
-            onClick={() => {}}
-          />
+        <section className="flex flex-col mx-auto min-w-[769px]">
+          {postData ? (
+            <PostCard isDetail={true} post={postData} /> // 전체 데이터 받아올 수 있게 수정
+          ) : (
+            <div className="p-4 text-center">로딩 중...</div>
+          )}
+
           <div className="p-4 border-b border-x border-background-border">
             <CommentInput
               userName="김개발자" // 임시 하드코딩

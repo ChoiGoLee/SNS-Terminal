@@ -70,9 +70,11 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
       setIsLikeLoading(false)
     }
   }
-  // 게시글 상세 페이지로 이동
+  // 홈/피드의 게시글일때만 게시글 상세페이지로 이동
   const handlePostClick = () => {
-    navigate(`/post/${post.id}`)
+    if (!isDetail) {
+      navigate(`/post/${post.id}`)
+    }
   }
 
   // 이벤트 버블링 방지
@@ -115,10 +117,14 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
             <li>
               <UserLevel level="mid" />
             </li>
-
             <li className="text-text-secondary text-sm">
               {formatTimeAgo(new Date(post.createdAt).getTime())}
             </li>
+            {isDetail && (
+              <li className="ml-auto">
+                <LikeButton isLiked={isLiked} onLike={handleLike} />
+              </li>
+            )}
           </ul>
           <ul
             className={`${isDetail ? 'flex flex-wrap gap-1 mb-3' : 'hidden'}`}
@@ -172,7 +178,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           </div>
           {isDetail && (
             <section>
-              <p className="text-text-secondary text-sm mb-4 border-b py-4 border-background-border">
+              <p className="text-text-secondary text-sm mb-4 py-4 border-background-border">
                 {formatTimeAgo(new Date(post.createdAt).getTime())}
               </p>
             </section>
@@ -181,12 +187,20 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           <div
             className={`flex space-x-6 mt-3 ${isDetail && 'justify-around'}`}
           >
-            <LikeButton
-              likeCount={likeCount}
-              isLiked={isLiked}
-              onLike={handleLike}
-            />
-            <CommentButton commentCount={post.commentCount} postId={post.id} />
+            {!isDetail && (
+              <LikeButton
+                likeCount={likeCount}
+                isLiked={isLiked}
+                onLike={handleLike}
+              />
+            )}
+
+            {isDetail ? null : (
+              <CommentButton
+                commentCount={post.commentCount}
+                postId={post.id}
+              />
+            )}
           </div>
         </section>
       </section>
