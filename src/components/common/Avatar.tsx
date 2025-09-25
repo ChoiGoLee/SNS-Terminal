@@ -23,6 +23,8 @@ function Avatar({ userImage, userName, size }: AvatarProps) {
   // 가져올 이미지 주소
   let imageUrl = ''
   if (hasImage) {
+    // 파일 업로드시 미리보기는 blob:http://로 시작
+    // 실제 서버에 존재하는게 아니라 내 브라우저 메모리에만 존재하는 파일 주소
     if (userImage?.startsWith('http') || userImage?.startsWith('blob:')) {
       imageUrl = userImage
     } else {

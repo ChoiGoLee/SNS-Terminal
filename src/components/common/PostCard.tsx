@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Common, HeartAPI, PostAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { formatTimeAgo } from '../../utils/timeUtils'
+import { API_BASE_URL } from '../../utils/configs'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -38,7 +39,6 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   // API 상태
   const [isLiked, setIsLiked] = useState(post?.hearted ?? false)
   const [likeCount, setLikeCount] = useState(post?.heartCount ?? 0)
-  const [commentCount, setCommentCount] = useState(post?.commentCount ?? 0)
   const [isLikeLoading, setIsLikeLoading] = useState(false)
 
   // 좋아요/좋아요 취소 API 호출
@@ -140,6 +140,24 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
             )}
 
             <Markdown content={post.content} />
+            {/* 게시글 이미지 표시 */}
+            {post.image && (
+              <div className="mt-3">
+                <img
+                  src={
+                    post.image.startsWith('http')
+                      ? post.image
+                      : `${API_BASE_URL}/${post.image}`
+                  }
+                  alt="게시글 이미지"
+                  className="w-full max-w-md rounded-lg object-cover"
+                  onError={(e) => {
+                    console.log('게시글 이미지 로드 실패:', post.image)
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
+              </div>
+            )}
           </div>
           <div className="flex justify-center">
             {showMoreBtn && !isDetail && (
@@ -168,7 +186,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
               isLiked={isLiked}
               onLike={handleLike}
             />
-            <CommentButton commentCount={commentCount} postId={post.id} />
+            <CommentButton commentCount={post.commentCount} postId={post.id} />
           </div>
         </section>
       </section>
