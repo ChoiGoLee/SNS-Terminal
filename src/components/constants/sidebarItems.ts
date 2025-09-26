@@ -37,15 +37,6 @@ export const sidebarItems: SideItem[] = [
     href: '/profile',
     requireAuth: true,
   },
-
-  {
-    type: 'settings',
-    img: '/icons/setting.svg',
-    path: '/settings',
-    text: '설정',
-    href: '/settings',
-    requireAuth: true,
-  },
   {
     type: 'login',
     path: '/login',

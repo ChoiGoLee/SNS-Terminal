@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router'
-import BaseButton from './BaseButton'
 import SidebarButton from './SidebarButton'
 import { sidebarItems as items } from '../constants/sidebarItems.ts'
+import { useAuth } from '../../contexts/AuthContext.tsx'
+import Avatar from './Avatar.tsx'
 
 export type SideItemType =
   | 'home'
   | 'messages'
   | 'profile'
-  | 'settings'
   | 'login'
   | 'followerFeed'
 
@@ -27,22 +27,35 @@ interface SideProps {
   activeItem?: string
 }
 
-// 로그인 프롬프트 컴포넌트 분리
-const LoginPrompt = ({ onLoginClick }: { onLoginClick: () => void }) => (
+// 유저 정보 컴포넌트
+const UserInfo = ({
+  userAccount,
+  userName,
+  userImage,
+  onSettingsClick,
+}: {
+  userAccount: string
+  userName: string
+  userImage?: string
+  onSettingsClick: () => void
+}) => (
   <div className="bg-background-surface border border-background-border rounded-2xl p-4">
-    <h3 className="font-bold text-lg pb-2">Terminal 시작하기</h3>
-    <p className="text-text-secondary text-sm pb-4">
-      사람들의 이야기를 확인하고 대화에 참여해보세요
-    </p>
-    <BaseButton
-      content="회원가입하러 가기"
-      width="flexWidth"
-      ariaLabel="go to signup page"
-      color="primary"
-      size="lg"
-      fontWeight="bold"
-      onClick={onLoginClick}
-    />
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Avatar userName={userName} size={'lg'} userImage={userImage} />
+        <div className="flex flex-col">
+          <span className="text-text-primary text-lg">{userName}님</span>
+          <span className="text-text-secondary text-sm">@{userAccount}</span>
+        </div>
+      </div>
+      <button
+        onClick={onSettingsClick}
+        className="p-2 hover:bg-background-border rounded-lg transition-colors"
+        aria-label="설정"
+      >
+        <img src="/icons/setting.svg" alt="설정" width="20" height="20" />
+      </button>
+    </div>
   </div>
 )
 
@@ -76,6 +89,14 @@ export const SideBar: React.FC<SideProps> = ({
   activeItem,
 }) => {
   const navigate = useNavigate()
+  const { user, checkAuth } = useAuth()
+
+  // 컴포넌트 마운트 시마다 사용자 정보 업데이트
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      checkAuth()
+    }
+  }, [])
 
   // 보여줄 아이템들 분류
   const { mainItems, loginItem } = useMemo(() => {
@@ -115,9 +136,16 @@ export const SideBar: React.FC<SideProps> = ({
           </ul>
         </nav>
 
-        {/* 로그인 영역 */}
-        {loginItem && (
-          <LoginPrompt onLoginClick={() => handleItemClick(loginItem)} />
+        {/* 유저 정보 영역 */}
+        {isAuthenticated && user?.username && (
+          <UserInfo
+            userAccount={user.accountname}
+            userName={user.username}
+            userImage={user.image}
+            onSettingsClick={() => {
+              navigate('/settings')
+            }}
+          />
         )}
       </div>
     </aside>
