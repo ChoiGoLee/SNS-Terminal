@@ -146,10 +146,11 @@ function Login(): React.JSX.Element {
   }
 
   return (
-    <div className="flex-col justify-center content-center px-4 w-screen min-h-screen bg-black">
+    <div className="flex-col justify-center content-center w-screen min-h-screen bg-black px-4">
       <div className="flex justify-center pb-10">
         <span className="font-BoldRound text-primary  text-9xl">Terminal</span>
       </div>
+
       <div className="flex justify-center ">
         <div className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full">
           {/* 세션 만료 메시지 표시 */}
@@ -179,7 +180,7 @@ function Login(): React.JSX.Element {
           {/* 이메일 입력 */}
           <div>
             <label htmlFor="email" className="flex px-3 py-2">
-              아이디
+              이메일
             </label>
             <TextInput
               onchange={handleInputEmail}
