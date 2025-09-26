@@ -5,8 +5,10 @@ import { api } from '../../services/apiWrapper'
 import { Header } from '../../components/common/Header'
 import type { UserAPI } from '../../types/api'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 function Login(): React.JSX.Element {
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const [inputEmail, setInputEmail] = useState('')
@@ -56,6 +58,18 @@ function Login(): React.JSX.Element {
       // 토큰 저장
       sessionStorage.setItem('token', response.token)
 
+      const userData = {
+        _id: response._id,
+        username: response.username,
+        email: response.email,
+        accountname: response.accountname,
+        intro: response.intro,
+        image: response.image,
+        token: response.token,
+        refreshToken: response.refreshToken,
+      }
+
+      login(response.token, userData)
       // 홈 페이지로 이동
       navigate('/')
     } catch (error: any) {

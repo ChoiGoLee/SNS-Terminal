@@ -112,8 +112,8 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           userName={post.author.username}
           size="md"
         />
-        <section className="flex-1">
-          <ul className="flex items-center gap-2 mb-2">
+        <section className="flex-1 max-w-[769px]">
+          <ul className="flex items-center gap-1 mb-2">
             <li className="text-lg font-bold text-text-primary">
               {post.author.username}
             </li>
@@ -164,7 +164,17 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
                       : `${API_BASE_URL}/${post.image}`
                   }
                   alt="게시글 이미지"
-                  className="w-full max-w-md rounded-lg object-cover"
+                  className="w-full max-w-[769px] rounded-lg object-cover"
+                  onLoad={() => {
+                    // 이미지 로드 후 높이 재계산
+                    if (
+                      commentRef.current &&
+                      commentRef.current.offsetHeight > maxHeight
+                    ) {
+                      setShowMoreBtn(true)
+                      SetShowGradient(true)
+                    }
+                  }}
                   onError={(e) => {
                     console.log('게시글 이미지 로드 실패:', post.image)
                     e.currentTarget.style.display = 'none'
@@ -176,7 +186,11 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           <div className="flex justify-center">
             {showMoreBtn && !isDetail && (
               <button
-                className="py-2 px-5 transition bg-background-border hover:bg-background-surface text-sm text-text-primary rounded-full"
+                className={`py-2 px-5 transition text-sm text-text-primary rounded-full ${
+                  isExpanded
+                    ? 'py-2 px-5 bg-background-border text-sm hover:bg-background-surface'
+                    : 'bg-background-border hover:bg-background-surface'
+                }`}
                 onClick={(e) => {
                   setIsExpanded((prevState) => !prevState)
                   handleClick(e)

@@ -83,15 +83,13 @@ export const Header: React.FC<HeaderProps> = ({ title = '', buttons = {} }) => {
   return (
     <header className="flex items-center bg-background-surface text-text-primary border-b border-background-border">
       {/* 왼쪽 버튼들 */}
-      <div className="flex items-center min-w-20">{leftButtons}</div>
+      <div>{leftButtons}</div>
 
       {/* 중앙 제목 */}
-      <h1 className="flex-1 font-medium text-lg  px-4">{title}</h1>
+      <h1 className="pl-4 flex-1 font-medium text-lg">{title}</h1>
 
       {/* 오른쪽 버튼들 */}
-      <div className="flex items-center min-w-20 justify-end">
-        {rightButtons}
-      </div>
+      <div className="justify-end pr-4">{rightButtons}</div>
     </header>
   )
 }

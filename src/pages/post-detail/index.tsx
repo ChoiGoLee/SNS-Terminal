@@ -154,7 +154,7 @@ function PostDetail(): React.JSX.Element {
         <Header title="포스트" buttons={{ back: { show: true } }} />
       </div>
       <div className="flex">
-        <SideBar isAuthenticated={true} activeItem="/" />
+        <SideBar activeItem="/" />
         <section className="flex flex-col mx-auto min-w-[769px]">
           {postData ? (
             <PostCard isDetail={true} post={postData} /> // 전체 데이터 받아올 수 있게 수정

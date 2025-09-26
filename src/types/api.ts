@@ -7,11 +7,11 @@ export namespace Common {
     accountname: string
     intro: string
     image: string
-    isfollow: boolean
-    following: string[]
-    follower: string[]
-    followerCount: number
-    followingCount: number
+    isfollow?: boolean
+    following?: string[]
+    follower?: string[]
+    followerCount?: number
+    followingCount?: number
   }
 
   export interface Post {
