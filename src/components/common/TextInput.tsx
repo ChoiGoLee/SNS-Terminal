@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import SearchIcon from '../../assets/icons/search-g.svg?react'
 import CloseIcon from '../../assets/icons/close-g.svg?react'
 
 interface inputProps {
@@ -9,8 +8,6 @@ interface inputProps {
   placeholder?: string
   /** input의 id(label과 연결 - 웹접근성으로 사용) */
   id: string
-  /** input의 label(id와 연결 - 웹접근성으로 사용) */
-  label?: string
   /** input요소의 입력값 변경을 감지함 */
   onchange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   /** input의 value 값(상태값) */
@@ -19,8 +16,6 @@ interface inputProps {
   onclick?: () => void
   /** border-radius */
   border: 'fullRound' | 'lgRound'
-  /** 아이콘 여부 */
-  hasIcon?: boolean
   /** input의 type(ex:password) */
   type: string
 }
@@ -48,12 +43,10 @@ const BORDER_TYPES = {
 function TextInput({
   size,
   placeholder,
-  label,
   onchange,
   value,
   border,
   onclick,
-  hasIcon,
   id,
   type,
 }: inputProps) {
@@ -92,7 +85,7 @@ function TextInput({
   return (
     <div className={`flex flex-col justify-center`}>
       <label htmlFor={id} className={`sr-only`}>
-        {label}
+        {id}
       </label>
       <div className="relative">
         <input
@@ -104,13 +97,8 @@ function TextInput({
           onChange={onchange}
           onClick={handleInput}
         />
-        {hasIcon && (
-          <SearchIcon
-            className={` ${SIZE_TYPE[size].icon} absolute top-1/2 left-3 flex items-center transform -translate-y-1/2 text-text-secondary`}
-          />
-        )}
         {/* input클릭시 닫기버튼이 나오게 함 */}
-        {hasIcon && showCloseIcon && (
+        {showCloseIcon && (
           <CloseIcon
             className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
             onClick={handleCloseClick}
