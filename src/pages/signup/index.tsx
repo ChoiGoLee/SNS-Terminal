@@ -162,7 +162,7 @@ function Signup(): React.JSX.Element {
       <div className="flex justify-center pb-10">
         <span className="font-BoldRound text-primary  text-9xl">Terminal</span>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <div className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full">
           {/* 이메일 입력 */}
           <div>
@@ -297,6 +297,11 @@ function Signup(): React.JSX.Element {
             />
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <a href="/login" className="underline text-text-secondary mt-4">
+          로그인하기
+        </a>
       </div>
     </div>
   )
