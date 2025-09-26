@@ -26,9 +26,17 @@
  * - 결과: true 또는 false 반환
  */
 
-// 10byte만 받는 함수
-function getByteLength(str: string): number {
-  return new TextEncoder().encode(str).length
+// 글자 수 가중치 계산 (한글=2, 그 외=1)
+function getCustomLength(str: string): number {
+  let length = 0
+  for (const char of str) {
+    if (/[가-힣]/.test(char)) {
+      length += 2
+    } else {
+      length += 1
+    }
+  }
+  return length
 }
 
 /**
@@ -46,29 +54,18 @@ export function validateEmail(email: string): boolean {
  * userName이 없거나 공백이면 false
  */
 export function validateUserName(userName: string): boolean {
-  // 공백인 경우
-  if (userName.trim().length === 0) {
-    return false
-  }
-  if (getByteLength(userName) > 10) {
-    return false
-  }
-
+  if (userName.trim().length === 0) return false
+  if (getCustomLength(userName) > 10) return false
   return true
 }
 
 /**
  * 계정 ID 검증
  */
-
 export function validateAccountID(id: string): boolean {
   const idPattern = /^[a-zA-Z0-9._]+$/
-  if (!idPattern.test(id)) {
-    return false
-  }
-  if (getByteLength(id) > 10) {
-    return false
-  }
+  if (!idPattern.test(id)) return false
+  if (getCustomLength(id) > 10) return false
   return true
 }
 
