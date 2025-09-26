@@ -78,7 +78,7 @@ export function validatePassword(password: string): boolean {
  * 이미지 확장자: jpg, gif, png, jpeg, bmp, tif, heic
  */
 export function validateImageExtend(file: File): boolean {
-  const allowExtends = ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'tif', 'heic']
+  const allowExtends = ['jpg', 'gif', 'png', 'jpeg', 'bmp']
   const extend = file.name.split('.').pop()?.toLowerCase() ?? ''
 
   if (!allowExtends.includes(extend)) {

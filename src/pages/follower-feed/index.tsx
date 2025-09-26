@@ -143,8 +143,8 @@ function FollowerFeed(): React.JSX.Element {
         <SideBar isAuthenticated={true} activeItem="/follower-feed" />
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
-        <Header title="홈" />
-        {/* <PostCard comment={markdownContent} onClick={() => {}} /> */}
+        <Header title="팔로워 피드" />
+
         <SearchInput
           onchange={handleChange}
           value={inputValue}

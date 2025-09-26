@@ -5,17 +5,18 @@ import { useNavigate } from 'react-router-dom'
 import Description from '../../components/common/Description'
 import LogoutIcon from '../../assets/icons/logout.svg?react'
 import TrashIcon from '../../assets/icons/trash.svg?react'
+import { useAuth } from '../../contexts/AuthContext'
 
 function Settings(): React.JSX.Element {
   const navigate = useNavigate()
+  const { logout } = useAuth()
 
   // 상태관리(로그아웃 or 회원탈퇴 페이지만 나오게,기본 페이지는 로그아웃)
   const [activeMenu, setActiveMenu] = useState<'logout' | 'resign'>('logout')
 
   // 이벤트 핸들러
   const handleLogout = () => {
-    sessionStorage.removeItem('token')
-    navigate('/login')
+    logout()
   }
 
   const handleResign = () => {
