@@ -244,7 +244,7 @@ function ProfileSetting(): React.JSX.Element {
     <>
       <div className="flex min-h-screen">
         <div>
-          <SideBar isAuthenticated={true} activeItem="/settings" />
+          <SideBar activeItem="/settings" />
         </div>
         <div className="mx-auto border-x min-w-[769px] border-background-border border-r border-l">
           <Header title="프로필 편집" buttons={{ back: { show: true } }} />

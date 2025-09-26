@@ -93,7 +93,7 @@ function FollowerFeed(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/follower-feed" />
+          <SideBar activeItem="/follower-feed" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="홈" />
@@ -112,7 +112,7 @@ function FollowerFeed(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/follower-feed" />
+          <SideBar activeItem="/follower-feed" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="팔로워 피드" />
@@ -140,7 +140,7 @@ function FollowerFeed(): React.JSX.Element {
   return (
     <div className="flex min-h-screen">
       <div className="h-full top-0 sticky">
-        <SideBar isAuthenticated={true} activeItem="/follower-feed" />
+        <SideBar activeItem="/follower-feed" />
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="팔로워 피드" />

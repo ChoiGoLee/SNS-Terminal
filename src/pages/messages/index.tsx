@@ -118,7 +118,7 @@ function Messages(): React.JSX.Element {
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="sticky top-0 h-screen">
-        <SideBar isAuthenticated={true} activeItem="/messages" />
+        <SideBar activeItem="/messages" />
       </div>
       <div className="mx-auto border-background-border border-x ">
         <div className="flex ">

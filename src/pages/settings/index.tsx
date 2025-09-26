@@ -27,7 +27,7 @@ function Settings(): React.JSX.Element {
     <>
       <section className="flex h-screen overflow-hidden">
         <div className="sticky top-0 h-screen">
-          <SideBar isAuthenticated={true} activeItem="/settings" />
+          <SideBar activeItem="/settings" />
         </div>
         <div className="min-h-screen flex min-w-[769px] mx-auto border-background-border border-x">
           <aside className="w-full lg:w-80 border-r border-background-border hidden lg:flex flex-col">
