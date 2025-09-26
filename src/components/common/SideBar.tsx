@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import SidebarButton from './SidebarButton'
 import { sidebarItems as items } from '../constants/sidebarItems.ts'
 import { useAuth } from '../../contexts/AuthContext.tsx'
 import Avatar from './Avatar.tsx'
+import BaseButton from './BaseButton.tsx'
 
 export type SideItemType =
   | 'home'
@@ -11,6 +12,7 @@ export type SideItemType =
   | 'profile'
   | 'login'
   | 'followerFeed'
+  | 'postCreate'
 
 export interface SideItem {
   type: SideItemType
@@ -92,7 +94,7 @@ export const SideBar: React.FC<SideProps> = ({
   const { user, checkAuth } = useAuth()
 
   // 컴포넌트 마운트 시마다 사용자 정보 업데이트
-  React.useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated) {
       checkAuth()
     }
@@ -137,6 +139,20 @@ export const SideBar: React.FC<SideProps> = ({
             ))}
           </ul>
         </nav>
+
+        {/* 포스트작성 버튼 */}
+        <div className="mb-3">
+          <BaseButton
+            content="포스트 작성"
+            ariaLabel="새 포스트 작성"
+            size="md"
+            color="primary"
+            width="fullWidth"
+            fontWeight="bold"
+            isLeft={true}
+            onClick={() => navigate('/post-create')}
+          />
+        </div>
 
         {/* 유저 정보 영역 */}
         {isAuthenticated && user?.username && (
