@@ -5,9 +5,9 @@ import CommentButton from './CommentButton'
 import UserLevel from './UserLevel'
 import { useNavigate } from 'react-router'
 import { useEffect, useRef, useState } from 'react'
-import type { Common, HeartAPI, PostAPI } from '../../types/api'
+import type { Common, HeartAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
-import { formatFullTimeAgo, formatTimeAgo } from '../../utils/timeUtils'
+import { formatTimeAgo } from '../../utils/timeUtils'
 import { API_BASE_URL } from '../../utils/configs'
 import { LoadIntroData } from '../../utils/profileStackLoad'
 
@@ -123,11 +123,6 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
             <li className="text-text-secondary text-sm">
               {formatTimeAgo(new Date(post.createdAt).getTime())}
             </li>
-            {isDetail && (
-              <li className="ml-auto">
-                <LikeButton isLiked={isLiked} onLike={handleLike} />
-              </li>
-            )}
           </ul>
           <ul
             className={`${isDetail ? 'flex flex-wrap gap-1 mb-3' : 'hidden'}`}
@@ -185,30 +180,20 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
               >{`${isExpanded ? '접기' : '더보기'}`}</button>
             )}
           </div>
-          {isDetail && (
-            <section>
-              <p className="text-text-secondary text-sm mb-4 py-4 border-background-border">
-                {formatFullTimeAgo(new Date(post.createdAt).getTime())}
-              </p>
-            </section>
-          )}
 
-          <div
-            className={`flex space-x-6 mt-3 ${isDetail && 'justify-around'}`}
-          >
+          <div className={`flex space-x-6 mt-3`}>
             {!isDetail && (
-              <LikeButton
-                likeCount={likeCount}
-                isLiked={isLiked}
-                onLike={handleLike}
-              />
-            )}
-
-            {isDetail ? null : (
-              <CommentButton
-                commentCount={post.commentCount}
-                postId={post.id}
-              />
+              <>
+                <LikeButton
+                  likeCount={likeCount}
+                  isLiked={isLiked}
+                  onLike={handleLike}
+                />
+                <CommentButton
+                  commentCount={post.commentCount}
+                  postId={post.id}
+                />
+              </>
             )}
           </div>
         </section>
