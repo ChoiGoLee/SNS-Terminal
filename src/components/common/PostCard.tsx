@@ -26,7 +26,7 @@ interface PostCardProps {
  * @returns
  */
 function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
-  const maxHeight = 100
+  const maxHeight = 300
 
   const navigate = useNavigate()
 
