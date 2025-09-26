@@ -9,7 +9,7 @@ import type { Common, HeartAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { formatTimeAgo } from '../../utils/timeUtils'
 import { API_BASE_URL } from '../../utils/configs'
-import { LoadIntroData } from '../../utils/profileStackLoad'
+import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -27,8 +27,6 @@ interface PostCardProps {
  * @returns
  */
 function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
-  const { finalStack } = LoadIntroData(post.author.intro || '')
-
   const maxHeight = 100
 
   const navigate = useNavigate()
@@ -75,7 +73,11 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   }
   // 홈/피드의 게시글일때만 게시글 상세페이지로 이동
   const handlePostClick = () => {
+    console.log('PostCard 클릭됨!', post.id)
+    console.log('isDetail:', isDetail)
+
     if (!isDetail) {
+      console.log('navigate 호출:', `/post-detail/${post.id}`)
       navigate(`/post-detail/${post.id}`)
     }
   }
@@ -87,17 +89,20 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   }
 
   useEffect(() => {
-    if (commentRef.current && commentRef.current.scrollHeight > maxHeight) {
-      setShowMoreBtn(true)
-      SetShowGradient(true)
-    } else if (
-      commentRef.current &&
-      commentRef.current.scrollHeight < maxHeight
-    ) {
-      setShowMoreBtn(false)
-      SetShowGradient(false)
-    }
-  }, [post])
+    const timer = setTimeout(() => {
+      if (commentRef.current && commentRef.current.offsetHeight > maxHeight) {
+        setShowMoreBtn(true)
+        SetShowGradient(true)
+      } else if (
+        commentRef.current &&
+        commentRef.current.offsetHeight < maxHeight
+      ) {
+        setShowMoreBtn(false)
+        SetShowGradient(false)
+      }
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [post.content])
 
   return (
     <article
@@ -124,19 +129,6 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
               {formatTimeAgo(new Date(post.createdAt).getTime())}
             </li>
           </ul>
-          <ul
-            className={`${isDetail ? 'flex flex-wrap gap-1 mb-3' : 'hidden'}`}
-          >
-            {/* 기술스택 표시 */}
-            {finalStack.map((stack) => (
-              <li
-                key={stack}
-                className="px-2 py-1 bg-background-surface text-text-secondary text-xs rounded border border-background-border"
-              >
-                {stack}
-              </li>
-            ))}
-          </ul>
 
           <div
             className={`${
@@ -154,37 +146,42 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
               <Markdown content={post.content} />
             </div>
 
-            {/* 게시글 이미지 표시 */}
             {post.image && (
-              <div className="mt-3">
-                <img
-                  src={
-                    post.image.startsWith('http')
-                      ? post.image
-                      : `${API_BASE_URL}/${post.image}`
-                  }
-                  alt="게시글 이미지"
-                  className="w-full max-w-[769px] rounded-lg object-cover"
-                  onLoad={() => {
-                    // 이미지 로드 후 높이 재계산
-                    if (
-                      commentRef.current &&
-                      commentRef.current.offsetHeight > maxHeight
-                    ) {
-                      setShowMoreBtn(true)
-                      SetShowGradient(true)
+              <div className={`grid gap-2 ${getImageLayout(post.image)}`}>
+                {post.image.split(',').map((imageUrl, index) => (
+                  <img
+                    key={index}
+                    src={
+                      imageUrl.trim().startsWith('http')
+                        ? imageUrl
+                        : `${API_BASE_URL}/${imageUrl.trim()}`
                     }
-                  }}
-                  onError={(e) => {
-                    console.log('게시글 이미지 로드 실패:', post.image)
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
+                    alt="게시글 이미지"
+                    className={`w-full rounded-lg object-cover ${getImageClass(
+                      index,
+                      post.image
+                    )}`}
+                    onLoad={() => {
+                      // 이미지 로드 후 높이 재계산
+                      if (
+                        commentRef.current &&
+                        commentRef.current.offsetHeight > maxHeight
+                      ) {
+                        setShowMoreBtn(true)
+                        SetShowGradient(true)
+                      }
+                    }}
+                    onError={(e) => {
+                      console.log('게시글 이미지 로드 실패:', post.image)
+                      e.currentTarget.style.display = 'none'
+                    }}
+                  />
+                ))}
               </div>
             )}
           </div>
-          <div className="flex justify-center">
-            {showMoreBtn && !isDetail && (
+          {showMoreBtn && !isDetail && (
+            <div className="flex justify-center mt-8">
               <button
                 className={`py-2 px-5 transition text-sm text-text-primary rounded-full ${
                   isExpanded
@@ -196,8 +193,8 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
                   handleClick(e)
                 }}
               >{`${isExpanded ? '접기' : '더보기'}`}</button>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className={`flex space-x-6 mt-3`}>
             {!isDetail && (

@@ -36,6 +36,7 @@ function PostDetail(): React.JSX.Element {
     handlePostLoad()
     handleCommentList()
     handleMyInfoLoad()
+    window.scrollTo(0, 0) // 페이지 진입시 최상단으로
   }, [postId])
 
   // 게시글 데이터가 로딩되면 좋아요가 결정되게

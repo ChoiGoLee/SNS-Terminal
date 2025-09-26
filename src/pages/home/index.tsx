@@ -201,7 +201,7 @@ function Home(): React.JSX.Element {
                 key={post.id}
                 ref={index === filteredPosts.length - 1 ? lastContent : null}
               >
-                <PostCard post={post} onClick={() => {}} />
+                <PostCard post={post} />
               </div>
             ))
           )}
