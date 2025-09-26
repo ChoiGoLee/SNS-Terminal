@@ -4,7 +4,7 @@ interface AvatarProps {
   /** user image 주소 */
   userImage?: string
   /** user name 유저 이름 */
-  userName: string
+  userName: string | undefined
   /** 아바타의 크기  */
   size: 'xs' | 'sm' | 'md' | 'lg'
 }
