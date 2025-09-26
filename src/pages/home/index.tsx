@@ -115,7 +115,7 @@ function Home(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/" />
+          <SideBar activeItem="/" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="홈" />
@@ -134,7 +134,7 @@ function Home(): React.JSX.Element {
     return (
       <div className="flex min-h-screen">
         <div className="h-full top-0 sticky">
-          <SideBar isAuthenticated={true} activeItem="/" />
+          <SideBar activeItem="/" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-l">
           <Header title="홈" />
@@ -162,7 +162,7 @@ function Home(): React.JSX.Element {
   return (
     <div className="flex min-h-screen">
       <div className="h-full top-0 sticky">
-        <SideBar isAuthenticated={true} activeItem="/" />
+        <SideBar activeItem="/" />
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l">
         <Header title="홈" />

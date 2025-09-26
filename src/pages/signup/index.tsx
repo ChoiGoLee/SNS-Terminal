@@ -299,9 +299,17 @@ function Signup(): React.JSX.Element {
         </div>
       </div>
       <div className="flex justify-center">
-        <a href="/login" className="underline text-text-secondary mt-4">
-          로그인하기
-        </a>
+        <div className="text-center pt-4">
+          <p className="text-text-secondary text-sm">
+            이미 계정이 있으신가요?{' '}
+            <button
+              onClick={() => navigate('/login')}
+              className="text-primary hover:underline font-medium"
+            >
+              로그인
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   )
