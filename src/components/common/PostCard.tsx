@@ -149,7 +149,11 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
               <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
             )}
 
-            <Markdown content={post.content} />
+            {/* 텍스트 한 줄 처리가 길어질때 줄바꿈 되게 함 */}
+            <div className="overflow-hidden break-all">
+              <Markdown content={post.content} />
+            </div>
+
             {/* 게시글 이미지 표시 */}
             {post.image && (
               <div className="mt-3">
