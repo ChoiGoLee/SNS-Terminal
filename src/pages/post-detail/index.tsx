@@ -10,7 +10,7 @@ function PostDetail(): React.JSX.Element {
         <Header title="포스트" buttons={{ back: { show: true } }} />
       </div>
       <div className="flex">
-        <SideBar isAuthenticated={true} activeItem="/" />
+        <SideBar activeItem="/" />
         <div>Post Detail Page</div>
         {/* <PostCard
           isDetail={true}
