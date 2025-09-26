@@ -26,6 +26,11 @@
  * - 결과: true 또는 false 반환
  */
 
+// 10byte만 받는 함수
+function getByteLength(str: string): number {
+  return new TextEncoder().encode(str).length
+}
+
 /**
  * 이메일 검증
  */
@@ -45,6 +50,9 @@ export function validateUserName(userName: string): boolean {
   if (userName.trim().length === 0) {
     return false
   }
+  if (getByteLength(userName) > 10) {
+    return false
+  }
 
   return true
 }
@@ -55,7 +63,13 @@ export function validateUserName(userName: string): boolean {
 
 export function validateAccountID(id: string): boolean {
   const idPattern = /^[a-zA-Z0-9._]+$/
-  return idPattern.test(id)
+  if (!idPattern.test(id)) {
+    return false
+  }
+  if (getByteLength(id) > 10) {
+    return false
+  }
+  return true
 }
 
 /**
