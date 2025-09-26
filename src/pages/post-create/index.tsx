@@ -10,7 +10,7 @@ function PostCreate() {
   return (
     <div className="flex">
       <div className="h-full top-0 sticky">
-        <SideBar isAuthenticated={true} activeItem="/post-create" />
+        <SideBar activeItem="/post-create" />
       </div>
       <div className="mx-auto max-w-[796px]">
         <Header title="새 포스트 작성" buttons={{ cancel: { show: true } }} />

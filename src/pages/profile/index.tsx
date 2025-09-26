@@ -42,7 +42,7 @@ function Profile(): React.JSX.Element {
         `/profile/${accountname}`
       )
       setProfileUser(response.profile)
-      setIsFollowing(response.profile.isfollow) // 팔로우 상태 설정
+      setIsFollowing(response.profile.isfollow ?? false) // 팔로우 상태 설정
       return response.profile
     } catch (err) {
       console.error('사용자 정보 조회 실패:', err)
@@ -154,7 +154,7 @@ function Profile(): React.JSX.Element {
     return (
       <div className="flex min-h-screen ">
         <div className="h-full">
-          <SideBar isAuthenticated={true} activeItem="/profile" />
+          <SideBar activeItem="/profile" />
         </div>
         <div className="mx-auto border-x border-background-border border-r border-">
           <Header title="프로필" />
@@ -180,7 +180,7 @@ function Profile(): React.JSX.Element {
   return (
     <div className="flex min-h-screen">
       <div className="h-full top-0 sticky">
-        <SideBar isAuthenticated={true} activeItem="/profile" />
+        <SideBar activeItem="/profile" />
       </div>
       <div className="mx-auto border-x border-background-border border-r border-l max-w-[769px] w-full">
         <Header
