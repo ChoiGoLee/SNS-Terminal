@@ -25,7 +25,6 @@ export interface SideItem {
 }
 
 interface SideProps {
-  isAuthenticated?: boolean
   activeItem?: string
 }
 
@@ -86,31 +85,19 @@ const SidebarMenuItem = ({
   )
 }
 
-export const SideBar: React.FC<SideProps> = ({
-  isAuthenticated = false,
-  activeItem,
-}) => {
+export const SideBar: React.FC<SideProps> = ({ activeItem }) => {
   const navigate = useNavigate()
   const { user, checkAuth } = useAuth()
 
   // 컴포넌트 마운트 시마다 사용자 정보 업데이트
   useEffect(() => {
-    if (isAuthenticated) {
-      checkAuth()
-    }
+    checkAuth()
   }, [])
 
   // 보여줄 아이템들 분류
-  const { mainItems, loginItem } = useMemo(() => {
-    const visibleItems = items.filter(
-      (item) => !item.requireAuth || isAuthenticated
-    )
-
-    return {
-      mainItems: visibleItems.filter((item) => item.type !== 'login'),
-      loginItem: visibleItems.find((item) => item.type === 'login'),
-    }
-  }, [items, isAuthenticated])
+  const mainItems = useMemo(() => {
+    return items.filter((item) => item.type !== 'login')
+  }, [])
 
   const handleItemClick = (item: SideItem) => {
     navigate(item.path)
@@ -155,7 +142,7 @@ export const SideBar: React.FC<SideProps> = ({
         </div>
 
         {/* 유저 정보 영역 */}
-        {isAuthenticated && user?.username && (
+        {user?.username && (
           <UserInfo
             userAccount={user.accountname}
             userName={user.username}
