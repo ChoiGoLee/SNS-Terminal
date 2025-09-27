@@ -80,9 +80,12 @@ function Signup(): React.JSX.Element {
     if (!inputUserName.trim()) {
       newErrors.userName = '사용자 이름을 입력해주세요'
       isValid = false
-    } else if (!validateUserName(inputUserName)) {
-      newErrors.userName = '올바른 사용자 이름을 입력해주세요'
-      isValid = false
+    } else {
+      const userNameError = validateUserName(inputUserName)
+      if (userNameError) {
+        newErrors.userName = userNameError
+        isValid = false
+      }
     }
 
     if (!inputEmail.trim()) {
@@ -104,9 +107,12 @@ function Signup(): React.JSX.Element {
     if (!inputAccountName.trim()) {
       newErrors.accountName = '계정명을 입력해주세요'
       isValid = false
-    } else if (!validateAccountID(inputAccountName)) {
-      newErrors.accountName = '계정명은 영어, 숫자, 점, 밑줄만 가능합니다'
-      isValid = false
+    } else {
+      const accountError = validateAccountID(inputAccountName)
+      if (accountError) {
+        newErrors.accountName = accountError
+        isValid = false
+      }
     }
 
     setValidationErrors(newErrors)

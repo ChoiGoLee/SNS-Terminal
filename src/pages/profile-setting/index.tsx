@@ -171,8 +171,9 @@ function ProfileSetting(): React.JSX.Element {
     console.log('요청 데이터:', userUpdateData)
 
     // 유저네임 검증
-    if (!validateUserName(inputNameValue)) {
-      setNameError('이름을 입력해주세요.')
+    const nameValidationError = validateUserName(inputNameValue)
+    if (nameValidationError) {
+      setNameError(nameValidationError)
       return
     }
 
