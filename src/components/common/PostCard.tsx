@@ -194,11 +194,9 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
         </ul>
 
         <div
-          className={`${
+          className={`ml-16 ${
             !isDetail &&
-            (isExpanded
-              ? 'max-h-full ml-16'
-              : 'relative max-h-96 overflow-hidden ml-16')
+            (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
           }`}
           ref={commentRef}
         >
