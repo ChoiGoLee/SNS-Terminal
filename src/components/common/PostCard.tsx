@@ -42,6 +42,41 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   const [likeCount, setLikeCount] = useState(post?.heartCount ?? 0)
   const [isLikeLoading, setIsLikeLoading] = useState(false)
 
+  // 게시물 컨텐츠, 메타 정보 분리 함수
+  const parsePostContent = (content: string) => {
+    // 본문과 메타 정보 'Φ$'로 분리
+    const [mainContent, metaData] = content.split('Φ$')
+
+    // 메타 정보가 없을때 일반 컨텐츠만 노출되게 함
+    if (!metaData) {
+      return {
+        content: mainContent,
+        postType: null,
+        hashtags: [] as string[], // 빈 []은 undefined 타입 경고가 떠서 문자값 배열로 타입 지정
+      }
+    }
+
+    // 게시물 타입과 해시태그를 '¶$'로 분리
+    const [postType, hashTagString] = metaData.split('¶$')
+
+    // 해시태그 조건(','로 분리,공백없음,글자수 존재)
+    const hashtags = hashTagString
+      ? hashTagString
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter((tag) => tag.length > 0)
+      : []
+
+    return {
+      content: mainContent,
+      postType: postType || null,
+      hashtags,
+    }
+  }
+
+  // 위에서 파싱된 데이터
+  const postMeta = parsePostContent(post.content)
+
   // 좋아요/좋아요 취소 API 호출
   const handleLike = async () => {
     if (isLikeLoading) return
@@ -107,26 +142,40 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   return (
     <article
       onClick={handlePostClick}
-      className={`bg-background border-background-border  p-4 transition-colors relative ${
+      className={`bg-background border-background-border p-5 transition-colors relative ${
         isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >
       <section className="flex-1 max-w-[769px]">
-        <ul className="flex items-center gap-1 mb-2">
-          <Avatar
-            userImage={post.author.image}
-            userName={post.author.username}
-            size="md"
-          />
-          <li className="mx-2 text-lg font-bold text-text-primary max-w-[80%] truncate">
-            {post.author.username}
-          </li>
-          <li>
+        <ul className="flex items-center relative mb-3">
+          <li className="flex flex-1 items-center gap-1 max-w-[80%]">
+            <div className="flex-none">
+              <Avatar
+                userImage={post.author.image}
+                userName={post.author.username}
+                size="md"
+              />
+            </div>
+            <div className="mx-2 text-lg font-bold text-text-primary line-clamp-1 truncate max-w-[80%]">
+              {post.author.username}
+            </div>
             <UserLevel level="mid" />
+
+            {/* 게시글 상세페이지에서만 나오게(createdAt이 api - 게시글 전체보기에 없음) */}
+            {isDetail && (
+              <div className="ml-1 text-text-secondary text-sm whitespace-nowrap">
+                {formatTimeAgo(new Date(post.createdAt).getTime())}
+              </div>
+            )}
           </li>
-          <li className="ml-1 text-text-secondary text-sm">
-            {formatTimeAgo(new Date(post.createdAt).getTime())}
-          </li>
+          {/* 게시글 유형 */}
+          {postMeta.postType && (
+            <li className="mt-4 mb-8 absolute right-0 top-0">
+              <span className="px-3 py-2 border-primary text-primary border rounded-full text-xs font-medium">
+                {postMeta.postType}
+              </span>
+            </li>
+          )}
         </ul>
 
         <div
@@ -142,7 +191,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
 
           {/* 텍스트 한 줄 처리가 길어질때 줄바꿈 되게 함 */}
           <div className="overflow-hidden break-all">
-            <Markdown content={post.content} />
+            <Markdown content={postMeta.content} />
           </div>
 
           {post.image && (
@@ -195,7 +244,23 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           </div>
         )}
 
-        <div className={`flex space-x-6 mt-3`}>
+        {/* 해시태그 */}
+        {postMeta.hashtags.length > 0 && (
+          <div className="mt-8">
+            <div className="flex items-center gap-2 flex-wrap">
+              {postMeta.hashtags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-primary text-sm hover:text-primary-dark cursor-pointer"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className={`flex space-x-6 mt-2`}>
           {!isDetail && (
             <>
               <LikeButton
