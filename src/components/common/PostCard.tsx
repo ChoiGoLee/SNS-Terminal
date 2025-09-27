@@ -94,6 +94,8 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
     }
   }, [])
 
+  console.log(post)
+
   return (
     <article
       onClick={handlePostClick}
@@ -106,6 +108,7 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           userImage={post.author.image}
           userName={post.author.username}
           size="md"
+          accountName={post?.author?.accountname}
         />
         <section className="flex-1 max-w-[769px]">
           <ul className="flex items-center gap-1 mb-2">
