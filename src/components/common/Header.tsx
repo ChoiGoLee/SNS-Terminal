@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ title = '', buttons = {} }) => {
   // 기본 동작들
   const defaultActions = {
     back: () => navigate(-1),
-    cancel: () => console.log('취소 클릭'),
+    cancel: () => navigate(-1),
     add: () => console.log('추가 클릭'),
   }
 
