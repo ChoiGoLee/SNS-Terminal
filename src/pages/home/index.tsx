@@ -84,7 +84,7 @@ function Home(): React.JSX.Element {
         setHasMore(false)
       }
     } catch (error) {
-      setError('게시글을 불러오는데 실패했습니다.')
+      setError(`'게시글을 불러오는데 실패했습니다.', ${error}`)
     } finally {
       setIsLoading(false)
       setIsLoadingMore(false)

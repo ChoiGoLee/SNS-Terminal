@@ -14,17 +14,13 @@ import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
-  // 게시글 더보기 클릭 이벤트 핸들러 함수
-  onClick?: () => void
   // api에서 받은 게시글 데이터
   post: Common.Post
-  postType: PostType
 }
 
 /**
  *
  * @param {boolean} isDetail - 홈/피드페이지 or 상세페이지 여부
- * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
 function PostCard({ isDetail = false, post }: PostCardProps) {
