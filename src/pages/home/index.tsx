@@ -196,12 +196,12 @@ function Home(): React.JSX.Element {
               </p>
             </div>
           ) : (
-            filteredPosts.map((post, index) => (
+            filteredPosts.map((posts, index) => (
               <div
-                key={post.id}
+                key={posts.id}
                 ref={index === filteredPosts.length - 1 ? lastContent : null}
               >
-                <PostCard post={post} />
+                <PostCard post={posts} />
               </div>
             ))
           )}
