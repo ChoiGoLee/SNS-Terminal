@@ -14,6 +14,7 @@ import { useAuth } from '../../contexts/AuthContext'
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
+  isHome?: boolean
   // api에서 받은 게시글 데이터
   post: Common.Post
   // 게시글 삭제 후 목록 업데이트를 위한 콜백
@@ -25,7 +26,12 @@ interface PostCardProps {
  * @param {boolean} isDetail - 홈/피드페이지 or 상세페이지 여부
  * @returns
  */
-function PostCard({ isDetail = false, post, onDelete }: PostCardProps) {
+function PostCard({
+  isDetail = false,
+  isHome = false,
+  post,
+  onDelete,
+}: PostCardProps) {
   const maxHeight = 300
 
   const navigate = useNavigate()
@@ -37,8 +43,8 @@ function PostCard({ isDetail = false, post, onDelete }: PostCardProps) {
   const commentRef = useRef<HTMLDivElement>(null)
 
   // API 상태
-  const [isLiked, setIsLiked] = useState(post?.hearted ?? false)
-  const [likeCount, setLikeCount] = useState(post?.heartCount ?? 0)
+  const [isLiked, setIsLiked] = useState(post?.hearted)
+  const [likeCount, setLikeCount] = useState(post?.heartCount)
   const [isLikeLoading, setIsLikeLoading] = useState(false)
   const [isDeleteLoading, setIsDeleteLoading] = useState(false)
 
@@ -140,15 +146,16 @@ function PostCard({ isDetail = false, post, onDelete }: PostCardProps) {
         const res = await api.delete<HeartAPI.RemoveHeart.Res>(
           `/post/${post.id}/unheart`
         )
-
-        setIsLiked(false)
+        console.log(res)
+        setIsLiked(res.post.hearted)
         setLikeCount(res.post.heartCount)
       } else {
         // 좋아요
         const res = await api.post<HeartAPI.AddHeart.Res>(
           `/post/${post.id}/heart`
         )
-        setIsLiked(true)
+        console.log(res)
+        setIsLiked(res.post.hearted)
         setLikeCount(res.post.heartCount)
       }
     } catch (error) {
@@ -328,7 +335,7 @@ function PostCard({ isDetail = false, post, onDelete }: PostCardProps) {
         )}
 
         <div className={`flex space-x-6 mt-2`}>
-          {!isDetail && (
+          {!isDetail && !isHome && (
             <>
               <LikeButton
                 likeCount={likeCount}

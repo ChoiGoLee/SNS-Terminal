@@ -180,7 +180,7 @@ function Home(): React.JSX.Element {
               key={post.id}
               ref={index === filteredPosts.length - 1 ? lastContent : null}
             >
-              <PostCard post={post} onDelete={handleDeletePost} />
+              <PostCard post={post} onDelete={handleDeletePost} isHome={true} />
             </div>
           ))
         )}
