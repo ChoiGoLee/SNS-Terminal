@@ -4,9 +4,11 @@ import Comment from '../../assets/icons/comment.svg?react'
 interface CommentButtonProps {
   commentCount?: number
   postId: string | number
+  isDetail?: boolean
 }
 
 function CommentButton({ commentCount, postId }: CommentButtonProps) {
+  // 홈/피드의 게시글일 경우 클릭시 게시글 상세로 이동
   return (
     <Link
       to={`/post-detail/${postId}`}

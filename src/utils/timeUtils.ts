@@ -33,4 +33,20 @@ const formatTimeAgo = (timestamp: number | string): string => {
   })
 }
 
-export { formatTimeAgo }
+const formatFullTimeAgo = (timestamp: number | string): string => {
+  if (!timestamp) return ''
+
+  const messageDate = new Date(timestamp)
+  if (isNaN(messageDate.getTime())) return ''
+
+  return messageDate.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true, // 12시간제
+  })
+}
+
+export { formatTimeAgo, formatFullTimeAgo }

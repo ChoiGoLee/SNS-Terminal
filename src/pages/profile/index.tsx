@@ -295,7 +295,7 @@ function Profile(): React.JSX.Element {
               <p className="p-4">작성한 게시글이 없습니다.</p>
             ) : (
               posts.map((post: Common.Post) => (
-                <PostCard key={post.id} post={post} onClick={() => {}} />
+                <PostCard key={post.id} post={post} />
               ))
             )}
           </div>

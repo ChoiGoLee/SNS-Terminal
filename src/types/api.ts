@@ -509,7 +509,7 @@ export namespace CommentAPI {
 
   export namespace GetComments {
     export interface Res {
-      comment: Common.Comment[]
+      comments: Common.Comment[]
     }
 
     export interface Error {

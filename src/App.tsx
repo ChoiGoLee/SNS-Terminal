@@ -106,7 +106,7 @@ function App() {
               <Route element={<PageLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/follower-feed" element={<FollowerFeed />} />
-                <Route path="/post-detail" element={<PostDetail />} />
+                <Route path="/post-detail/:postId" element={<PostDetail />} />
                 <Route path="/post-create" element={<PostCreate />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/:accountname" element={<Profile />} />

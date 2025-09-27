@@ -83,7 +83,7 @@ function Home(): React.JSX.Element {
         setHasMore(false)
       }
     } catch (error) {
-      setError('게시글을 불러오는데 실패했습니다.')
+      setError(`'게시글을 불러오는데 실패했습니다.', ${error}`)
     } finally {
       setIsLoading(false)
       setIsLoadingMore(false)
@@ -188,7 +188,7 @@ function Home(): React.JSX.Element {
               key={post.id}
               ref={index === filteredPosts.length - 1 ? lastContent : null}
             >
-              <PostCard post={post} onClick={() => {}} />
+              <PostCard post={post} />
             </div>
           ))
         )}
