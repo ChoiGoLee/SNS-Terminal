@@ -349,7 +349,7 @@ function PostCreate() {
               <img src="src/assets/icons/hash.svg" alt="" />
               <input
                 type="text"
-                className="text-text-primary bg-background-surface focus:outline-none flex-1 ml-2"
+                className="text-text-primary bg-background-surface focus:outline-none flex-1 ml-2 w-full"
                 placeholder={
                   hashTags.length >= 7
                     ? '최대 7개까지 추가 가능'

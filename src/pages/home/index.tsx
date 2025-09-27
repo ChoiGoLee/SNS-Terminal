@@ -49,6 +49,11 @@ function Home(): React.JSX.Element {
     console.log(e.target.value)
   }
 
+  // 게시글 삭제 핸들러 추가
+  const handleDeletePost = (postId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId))
+  }
+
   // 게시글 목록 불러오기
   const fetchPosts = async (pageNum = 1) => {
     try {
@@ -175,7 +180,7 @@ function Home(): React.JSX.Element {
               key={post.id}
               ref={index === filteredPosts.length - 1 ? lastContent : null}
             >
-              <PostCard post={post} />
+              <PostCard post={post} onDelete={handleDeletePost} />
             </div>
           ))
         )}
