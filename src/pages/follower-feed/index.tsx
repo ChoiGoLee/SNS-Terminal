@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
-// import PostCard from '../../components/common/PostCard'
 import SearchInput from '../../components/common/SearchInput'
 import { useState } from 'react'
 import type { Common, PostAPI } from '../../types/api'
@@ -23,18 +21,27 @@ function FollowerFeed(): React.JSX.Element {
   const POSTS_PER_PAGE = 10
   const currentPostsCount = posts.length
 
-  // ** profile페이지 코드 참고하기 **
-  /**
-   * TODO
-   * PostAPI.GetFeed.Res 연결해서 게시글 목록 불러오기
-   * 불러온 게시글 목록을 map 돌려서 PostCard 컴포넌트로 렌더링하기
-   * 로딩 중일때 로딩 스피너
-   * 에러 났을때 에러 메세지
-   *
-   * 무한스크롤
-   * 로딩중일때 로딩 스피너
-   * 다음 페이지 없을때 끝입니다 메세지
-   */
+  // 필터링된 게시글 계산 (useMemo로 성능 최적화)
+  const filteredPosts = useMemo(() => {
+    if (!inputValue.trim()) {
+      return posts
+    }
+
+    const searchTerm = inputValue.toLowerCase().trim()
+
+    return posts.filter((post) => {
+      // 게시물의 제목, 내용, 작성자 정보에서 검색
+      const searchableFields = [
+        post.content,
+        post.author?.accountname,
+        post.author?.username,
+      ].filter(Boolean) // null, undefined 값 제거
+
+      return searchableFields.some((field) =>
+        field?.toString().toLowerCase().includes(searchTerm)
+      )
+    })
+  }, [posts, inputValue])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
@@ -91,17 +98,12 @@ function FollowerFeed(): React.JSX.Element {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen">
-        <div className="h-full top-0 sticky">
-          <SideBar activeItem="/follower-feed" />
-        </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="홈" />
-          <div className="flex items-center justify-center min-h-96">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
-              <p className="text-text-secondary">게시글을 불러오는 중...</p>
-            </div>
+      <div className="mx-auto border-x border-background-border border-r border-l w-[769px]">
+        <Header title="홈" />
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
+            <p className="text-text-secondary">게시글을 불러오는 중...</p>
           </div>
         </div>
       </div>
@@ -110,27 +112,22 @@ function FollowerFeed(): React.JSX.Element {
 
   if (error) {
     return (
-      <div className="flex min-h-screen">
-        <div className="h-full top-0 sticky">
-          <SideBar activeItem="/follower-feed" />
-        </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="팔로워 피드" />
-          <div className="flex items-center justify-center min-h-96">
-            <div className="text-center">
-              <p className="text-red-500 mb-4">{error}</p>
-              <button
-                onClick={() => {
-                  setError(null)
-                  setPage(1)
-                  setHasMore(true)
-                  fetchPosts(1)
-                }}
-                className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-primary-dark"
-              >
-                다시 시도
-              </button>
-            </div>
+      <div className="mx-auto border-x border-background-border border-r border-l">
+        <Header title="팔로워 피드" />
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button
+              onClick={() => {
+                setError(null)
+                setPage(1)
+                setHasMore(true)
+                fetchPosts(1)
+              }}
+              className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-primary-dark"
+            >
+              다시 시도
+            </button>
           </div>
         </div>
       </div>
@@ -138,56 +135,50 @@ function FollowerFeed(): React.JSX.Element {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="h-full top-0 sticky">
-        <SideBar activeItem="/follower-feed" />
-      </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
-        <Header title="팔로워 피드" />
+    <div className="mx-auto border-x border-background-border border-r border-l">
+      <Header title="팔로워 피드" />
 
-        <SearchInput
-          onchange={handleChange}
-          value={inputValue}
-          placeholder="기술 스택 검색"
-          size="md"
-          border={'fullRound'}
-          id="password"
-          type="All"
-        ></SearchInput>
+      <SearchInput
+        onchange={handleChange}
+        value={inputValue}
+        placeholder="기술 스택 검색"
+        size="md"
+        border={'fullRound'}
+        id="password"
+        type="All"
+      ></SearchInput>
 
-        {/* 게시글 목록 */}
-        <div className="feed-container">
-          {posts.length === 0 && !isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-text-secondary">아직 게시글이 없습니다.</p>
+      {/* 게시글 목록 */}
+      <div className="feed-container">
+        {filteredPosts.length === 0 && !isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-text-secondary">아직 게시글이 없습니다.</p>
+          </div>
+        ) : (
+          posts.map((post, index) => (
+            <div
+              key={post.id}
+              ref={index === posts.length - 1 ? lastContent : null}
+            >
+              <PostCard post={post} />
             </div>
-          ) : (
-            posts.map((post, index) => (
-              <div
-                key={post.id}
-                ref={index === posts.length - 1 ? lastContent : null}
-              >
-                <PostCard post={post} />
-              </div>
-            ))
-          )}
+          ))
+        )}
 
-          {/* 무한스크롤 로딩 인디케이터 */}
-          {isLoadingMore && (
-            <div className="text-center py-4">
-              {/* 로딩스피너 */}
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
-              <p className="text-text-secondary text-sm">더 불러오는 중...</p>
-            </div>
-          )}
-
-          {/* 마지막 메시지 */}
-          {!hasMore && posts.length > 0 && (
-            <div className="text-center py-8">
-              <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
-            </div>
-          )}
-        </div>
+        {/* 무한스크롤 로딩 인디케이터 */}
+        {isLoadingMore && (
+          <div className="text-center py-4">
+            {/* 로딩스피너 */}
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
+            <p className="text-text-secondary text-sm">더 불러오는 중...</p>
+          </div>
+        )}
+        {/* 마지막 메시지 */}
+        {filteredPosts.length !== 0 && !hasMore && posts.length > 0 && (
+          <div className="text-center py-8">
+            <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   )

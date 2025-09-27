@@ -53,20 +53,21 @@ export function validateEmail(email: string): boolean {
  * 사용자 이름 검증
  * userName이 없거나 공백이면 false
  */
-export function validateUserName(userName: string): boolean {
-  if (userName.trim().length === 0) return false
-  if (getCustomLength(userName) > 10) return false
-  return true
+export function validateUserName(userName: string): string {
+  if (userName.trim().length === 0) return '이름을 입력해주세요'
+  if (getCustomLength(userName) > 10)
+    return '한글은 최대 5글자, 영어는 최대 10글자까지 사용 가능합니다.'
+  return ''
 }
 
 /**
  * 계정 ID 검증
  */
-export function validateAccountID(id: string): boolean {
+export function validateAccountID(id: string): string {
   const idPattern = /^[a-zA-Z0-9._]+$/
-  if (!idPattern.test(id)) return false
-  if (getCustomLength(id) > 10) return false
-  return true
+  if (!idPattern.test(id)) return '계정명은 영어, 숫자, 점, 밑줄만 가능합니다'
+  if (getCustomLength(id) > 10) return '최대 10글자까지 사용 가능합니다.'
+  return ''
 }
 
 /**

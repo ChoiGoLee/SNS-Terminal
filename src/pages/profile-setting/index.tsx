@@ -1,5 +1,4 @@
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import Avatar from '../../components/common/Avatar'
 import BaseButton from '../../components/common/BaseButton'
 import TextInput from '../../components/common/TextInput'
@@ -7,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI, ProfileAPI } from '../../types/api'
-import { API_BASE_URL } from '../../utils/configs'
 import { TECH_STACK } from '../../utils/profileStack'
 import {
   validateImageExtend,
@@ -134,7 +132,7 @@ function ProfileSetting(): React.JSX.Element {
         const formdata = new FormData()
         formdata.append('image', image)
         try {
-          const response = await fetch(API_BASE_URL + '/image/uploadfile', {
+          const response = await fetch('/api/image/uploadfile', {
             method: 'POST',
             body: formdata,
           })
@@ -173,8 +171,9 @@ function ProfileSetting(): React.JSX.Element {
     console.log('요청 데이터:', userUpdateData)
 
     // 유저네임 검증
-    if (!validateUserName(inputNameValue)) {
-      setNameError('이름을 입력해주세요.')
+    const nameValidationError = validateUserName(inputNameValue)
+    if (nameValidationError) {
+      setNameError(nameValidationError)
       return
     }
 
@@ -243,9 +242,6 @@ function ProfileSetting(): React.JSX.Element {
   return (
     <>
       <div className="flex min-h-screen">
-        <div>
-          <SideBar activeItem="/settings" />
-        </div>
         <div className="mx-auto border-x min-w-[769px] border-background-border border-r border-l">
           <Header title="프로필 편집" buttons={{ back: { show: true } }} />
           <form

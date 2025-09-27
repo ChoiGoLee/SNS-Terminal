@@ -8,14 +8,17 @@ import { useEffect, useRef, useState } from 'react'
 import type { Common, HeartAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { formatTimeAgo } from '../../utils/timeUtils'
-import { API_BASE_URL } from '../../utils/configs'
 import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
   isDetail?: boolean
+  isHome?: boolean
   // api에서 받은 게시글 데이터
   post: Common.Post
+  // 게시글 삭제 후 목록 업데이트를 위한 콜백
+  onDelete?: (postId: string) => void
 }
 
 /**
@@ -23,7 +26,12 @@ interface PostCardProps {
  * @param {boolean} isDetail - 홈/피드페이지 or 상세페이지 여부
  * @returns
  */
-function PostCard({ isDetail = false, post }: PostCardProps) {
+function PostCard({
+  isDetail = false,
+  isHome = false,
+  post,
+  onDelete,
+}: PostCardProps) {
   const maxHeight = 300
 
   const navigate = useNavigate()
@@ -35,9 +43,12 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
   const commentRef = useRef<HTMLDivElement>(null)
 
   // API 상태
-  const [isLiked, setIsLiked] = useState(post?.hearted ?? false)
-  const [likeCount, setLikeCount] = useState(post?.heartCount ?? 0)
+  const [isLiked, setIsLiked] = useState(post?.hearted)
+  const [likeCount, setLikeCount] = useState(post?.heartCount)
   const [isLikeLoading, setIsLikeLoading] = useState(false)
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false)
+
+  const { user } = useAuth()
 
   // 게시글 유형 아이콘 타입
   const POST_TYPE_ICONS = {
@@ -88,6 +99,41 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
   // 위에서 파싱된 데이터
   const postMeta = parsePostContent(post.content)
 
+  // 현재 사용자가 게시글 작성자인지 확인
+  const isAuthor = user?.accountname === post.author.accountname
+
+  // 게시글 삭제 함수
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) {
+      return
+    }
+
+    setIsDeleteLoading(true)
+
+    try {
+      await api.delete(`/post/${post.id}`)
+
+      alert('게시글이 삭제되었습니다.')
+
+      // 삭제 성공 시 콜백 실행 (목록에서 제거)
+      if (onDelete) {
+        onDelete(post.id)
+      }
+
+      // 상세 페이지에서 삭제한 경우 홈으로 이동
+      if (isDetail) {
+        navigate('/')
+      }
+    } catch (error) {
+      console.error('게시글 삭제 실패:', error)
+      alert('게시글 삭제에 실패했습니다. 다시 시도해주세요.')
+    } finally {
+      setIsDeleteLoading(false)
+    }
+  }
+
   // 좋아요/좋아요 취소 API 호출
   const handleLike = async () => {
     if (isLikeLoading) return
@@ -100,15 +146,16 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
         const res = await api.delete<HeartAPI.RemoveHeart.Res>(
           `/post/${post.id}/unheart`
         )
-
-        setIsLiked(false)
+        console.log(res)
+        setIsLiked(res.post.hearted)
         setLikeCount(res.post.heartCount)
       } else {
         // 좋아요
         const res = await api.post<HeartAPI.AddHeart.Res>(
           `/post/${post.id}/heart`
         )
-        setIsLiked(true)
+        console.log(res)
+        setIsLiked(res.post.hearted)
         setLikeCount(res.post.heartCount)
       }
     } catch (error) {
@@ -158,12 +205,13 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
     >
       <section className="flex-1 max-w-[769px]">
         <ul className="flex items-center relative mb-3">
-          <li className="flex flex-1 items-center gap-1 max-w-[80%]">
+          <li className="flex flex-1 items-center gap-1 max-w-[70%]">
             <div className="flex-none">
               <Avatar
                 userImage={post.author.image}
                 userName={post.author.username}
                 size="md"
+                accountName={post?.author?.accountname}
               />
             </div>
             <div className="mx-2 text-lg font-bold text-text-primary line-clamp-1 truncate max-w-[80%]">
@@ -190,14 +238,25 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
               </span>
             </li>
           )}
+          {/* 작성자일 경우에만 삭제 버튼 표시 */}
+          {isAuthor && (
+            <li>
+              <button
+                onClick={handleDelete}
+                disabled={isDeleteLoading}
+                className="mt-4 mb-8 px-3 py-2 text-xs font-medium rounded-full border border-background-border text-text-secondary hover:bg-danger-dark/30 hover:text-danger hover:border-danger transition-colors disabled:opacity-50 disabled:cursor-not-allowed absolute right-20 top-0"
+                aria-label="게시글 삭제"
+              >
+                {isDeleteLoading ? '삭제 중...' : '삭제'}
+              </button>
+            </li>
+          )}
         </ul>
 
         <div
-          className={`${
+          className={`ml-16 ${
             !isDetail &&
-            (isExpanded
-              ? 'max-h-full ml-16'
-              : 'relative max-h-96 overflow-hidden ml-16')
+            (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
           }`}
           ref={commentRef}
         >
@@ -233,7 +292,7 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
                   src={
                     imageUrl.trim().startsWith('http')
                       ? imageUrl
-                      : `${API_BASE_URL}/${imageUrl.trim()}`
+                      : `/api/${imageUrl.trim()}`
                   }
                   alt="게시글 이미지"
                   className={`w-full rounded-lg object-cover ${getImageClass(
@@ -276,7 +335,7 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
         )}
 
         <div className={`flex space-x-6 mt-2`}>
-          {!isDetail && (
+          {!isDetail && !isHome && (
             <>
               <LikeButton
                 likeCount={likeCount}

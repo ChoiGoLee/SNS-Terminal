@@ -105,7 +105,7 @@ function ChatRoomItem({
       >
         {/* 아바타 영역 */}
         <div className="flex-shrink-0">
-          <Avatar userName={roomName} size="sm" />
+          <Avatar userName={roomName} size="sm" accountName={roomName} />
         </div>
 
         {/* 텍스트 영역 */}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import PostCard from '../../components/common/PostCard'
 import { api } from '../../services/apiWrapper'
 import type {
@@ -150,11 +149,8 @@ function PostDetail(): React.JSX.Element {
 
   return (
     <>
-      <div className="min-h-30">
-        <Header title="포스트" buttons={{ back: { show: true } }} />
-      </div>
+      <Header title="포스트" buttons={{ back: { show: true } }} />
       <div className="flex">
-        <SideBar activeItem="/" />
         <section className="flex flex-col mx-auto min-w-[769px]">
           {postData ? (
             <PostCard isDetail={true} post={postData} /> // 전체 데이터 받아올 수 있게 수정

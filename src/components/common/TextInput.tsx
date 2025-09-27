@@ -22,15 +22,15 @@ interface inputProps {
 
 const SIZE_TYPE = {
   sm: {
-    input: 'w-full px-8 lg:pl-9 py-2 text-[14px] gap-2',
+    input: 'w-full pr-8 py-2 text-[14px] gap-2',
     icon: 'w-[14px]',
   },
   md: {
-    input: 'w-full px-8 lg:px-9 py-2 lg:py-3 text-4 gap-2',
+    input: 'w-full px-8 lg:p-3 py-2 lg:py-3 text-4 gap-2',
     icon: 'w-4',
   },
   lg: {
-    input: 'w-full px-8 lg:p-10 py-2.5 lg:py-3 text-[18px] gap-3',
+    input: 'w-full px-8 lg:p-4 py-2.5 lg:py-3 text-[18px] gap-3',
     icon: 'w-[18px]',
   },
 } as const
@@ -52,18 +52,24 @@ function TextInput({
 }: inputProps) {
   const [showCloseIcon, setShowCloseIcon] = useState(false)
 
-  const handleInput = () => {
-    setShowCloseIcon(true)
-    if (onclick) {
-      onclick()
+  const eraseInput = () => {
+    setShowCloseIcon(false)
+    if (onchange) {
+      const event = {
+        target: { value: '' },
+      } as React.ChangeEvent<HTMLInputElement>
+      onchange(event)
     }
   }
-
-  const handleCloseClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    setShowCloseIcon(false)
-    if (onclick) {
-      onclick()
+  // input에 내용이 있을 시에만 삭제버튼 나오게
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onchange) {
+      onchange(e)
+    }
+    if (e.target.value.length > 0) {
+      setShowCloseIcon(true)
+    } else {
+      setShowCloseIcon(false)
     }
   }
 
@@ -94,14 +100,14 @@ function TextInput({
           className={`text-text-primary bg-background-surface placeholder-text-secondary border border-background-border focus:border-primary focus:outline-none transition-colors ${SIZE_TYPE[size].input} ${BORDER_TYPES[border]}`}
           value={value}
           placeholder={placeholder}
-          onChange={onchange}
-          onClick={handleInput}
+          onChange={handleInput}
+          onClick={onclick}
         />
         {/* input클릭시 닫기버튼이 나오게 함 */}
         {showCloseIcon && (
           <CloseIcon
             className={`${SIZE_TYPE[size].icon} absolute top-1/2 right-3 flex items-center transform -translate-y-1/2 cursor-pointer text-text-secondary`}
-            onClick={handleCloseClick}
+            onClick={eraseInput}
           />
         )}
       </div>

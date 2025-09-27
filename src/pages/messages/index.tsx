@@ -2,7 +2,6 @@ import React from 'react'
 import { useState, useMemo } from 'react'
 import ChatRoomList from '../../components/common/ChatRoomList'
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import Description from '../../components/common/Description'
 import { MessageBubble } from '../../components/common/MessageBubble'
 import SearchInput from '../../components/common/SearchInput'
@@ -116,21 +115,17 @@ function Messages(): React.JSX.Element {
   // }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="sticky top-0 h-screen">
-        <SideBar activeItem="/messages" />
-      </div>
-      <div className="mx-auto border-background-border border-x ">
+    <div className="h-screen overflow-y-hidden">
+      <div className="mx-auto ">
+        <Header title="메시지" />
         <div className="flex ">
-          <aside className=" border-background-border border-x overflow-y-scroll min-h-svh">
-            <Header title="메시지" />
-
+          <aside className="overflow-y-scroll min-h-svh border-r border-background-border">
             <SearchInput
               onchange={handleChange}
               value={inputValue}
               placeholder="채팅하고 싶은 유저를 찾아보세요"
               size="md"
-              border={'none'}
+              border="fullRound"
               id="user search"
               type="user"
               onclick={() =>
@@ -147,7 +142,7 @@ function Messages(): React.JSX.Element {
           </aside>
 
           {/* 메시지 영역 */}
-          <div className="overflow-y-scroll max-h-svh w-96">
+          <div className="overflow-y-scroll max-h-svh flex-1">
             {/* 채팅 상대방 헤더 */}
             {selectedChatId && chatPartner && (
               <header className="sticky top-0 bg-background-surface border-b border-background-border px-4 py-3 z-10">

@@ -1,7 +1,6 @@
 import { formatTimeAgo } from '../../utils/timeUtils'
 import Avatar from './Avatar'
 import UserLevel from './UserLevel'
-import LikeButton from './LikeButton'
 
 interface CommentItemProps {
   userImage?: string
@@ -9,8 +8,6 @@ interface CommentItemProps {
   level: 'junior' | 'mid' | 'senior' | 'lead'
   content: string
   createdAt: number | string
-  isLiked?: boolean
-  likeCount?: number
   onLikeToggle: () => void
 }
 
@@ -25,8 +22,6 @@ interface CommentItemProps {
  *   level="senior"
  *   content="정말 유용한 정보네요!"
  *   createdAt={Date.now() - 180000} // 감귤마켓 API 참고
- *   isLiked={false}
- *   likeCount={5}
  *   onLikeToggle={() => console.log('좋아요')}
  * />
  * ```
@@ -37,9 +32,6 @@ function CommentItem({
   level,
   content,
   createdAt,
-  isLiked,
-  likeCount,
-  onLikeToggle,
 }: CommentItemProps) {
   return (
     <div className="flex p-4 space-x-3 border-b border-background-border">
@@ -60,11 +52,6 @@ function CommentItem({
         <p className="text-text-primary text-sm leading-normal mb-2">
           {content}
         </p>
-        <LikeButton
-          likeCount={likeCount}
-          isLiked={isLiked ?? false} // boolean 타입 선언시 오류가 발생, undefined일때 false를 기본값으로 설정
-          onLike={onLikeToggle}
-        />
       </div>
     </div>
   )

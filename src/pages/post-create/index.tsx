@@ -1,5 +1,4 @@
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import Avatar from '../../components/common/Avatar'
 import BaseButton from '../../components/common/BaseButton'
 import PostTypeButton from './components/PostTypeButton'
@@ -194,10 +193,7 @@ function PostCreate() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="h-full top-0 sticky">
-        <SideBar activeItem="/post-create" />
-      </div>
+    <div className="flex min-h-screen overflow-hidden">
       <div className="mx-auto w-[796px]">
         <Header title="새 포스트 작성" buttons={{ cancel: { show: true } }} />
         <form
@@ -353,7 +349,7 @@ function PostCreate() {
               <img src="src/assets/icons/hash.svg" alt="" />
               <input
                 type="text"
-                className="text-text-primary bg-background-surface focus:outline-none flex-1 ml-2"
+                className="text-text-primary bg-background-surface focus:outline-none flex-1 ml-2 w-full"
                 placeholder={
                   hashTags.length >= 7
                     ? '최대 7개까지 추가 가능'

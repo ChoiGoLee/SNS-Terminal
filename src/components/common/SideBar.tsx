@@ -104,7 +104,7 @@ export const SideBar: React.FC<SideProps> = ({ activeItem }) => {
   }
 
   return (
-    <aside className="w-64 bg-background-surface border-r border-background-border flex flex-col top-0 sticky">
+    <aside className="min-w-65 bg-background-surface border-r border-background-border flex flex-col top-0 sticky">
       <div className="flex flex-col h-screen p-4">
         {/* 로고 */}
         <header className="pb-8 text-center">
@@ -152,6 +152,12 @@ export const SideBar: React.FC<SideProps> = ({ activeItem }) => {
             }}
           />
         )}
+
+        <footer>
+          <div className="text-center px-4 pt-4 text-text-secondary text-xs">
+            &copy; {new Date().getFullYear()} Choigolee. All rights reserved.
+          </div>
+        </footer>
       </div>
     </aside>
   )
