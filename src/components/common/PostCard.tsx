@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from 'react'
 import type { Common, HeartAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { formatTimeAgo } from '../../utils/timeUtils'
-import { API_BASE_URL } from '../../utils/configs'
 import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 
 interface PostCardProps {
@@ -232,7 +231,7 @@ function PostCard({ isDetail = false, post }: PostCardProps) {
                   src={
                     imageUrl.trim().startsWith('http')
                       ? imageUrl
-                      : `${API_BASE_URL}/${imageUrl.trim()}`
+                      : `/api/${imageUrl.trim()}`
                   }
                   alt="게시글 이미지"
                   className={`w-full rounded-lg object-cover ${getImageClass(

@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI, ProfileAPI } from '../../types/api'
-import { API_BASE_URL } from '../../utils/configs'
 import { TECH_STACK } from '../../utils/profileStack'
 import {
   validateImageExtend,
@@ -133,7 +132,7 @@ function ProfileSetting(): React.JSX.Element {
         const formdata = new FormData()
         formdata.append('image', image)
         try {
-          const response = await fetch(API_BASE_URL + '/image/uploadfile', {
+          const response = await fetch('/api/image/uploadfile', {
             method: 'POST',
             body: formdata,
           })
