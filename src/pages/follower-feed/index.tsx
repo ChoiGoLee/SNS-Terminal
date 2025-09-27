@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Header } from '../../components/common/Header'
-// import PostCard from '../../components/common/PostCard'
 import SearchInput from '../../components/common/SearchInput'
 import { useState } from 'react'
 import type { Common, PostAPI } from '../../types/api'
@@ -22,18 +21,27 @@ function FollowerFeed(): React.JSX.Element {
   const POSTS_PER_PAGE = 10
   const currentPostsCount = posts.length
 
-  // ** profile페이지 코드 참고하기 **
-  /**
-   * TODO
-   * PostAPI.GetFeed.Res 연결해서 게시글 목록 불러오기
-   * 불러온 게시글 목록을 map 돌려서 PostCard 컴포넌트로 렌더링하기
-   * 로딩 중일때 로딩 스피너
-   * 에러 났을때 에러 메세지
-   *
-   * 무한스크롤
-   * 로딩중일때 로딩 스피너
-   * 다음 페이지 없을때 끝입니다 메세지
-   */
+  // 필터링된 게시글 계산 (useMemo로 성능 최적화)
+  const filteredPosts = useMemo(() => {
+    if (!inputValue.trim()) {
+      return posts
+    }
+
+    const searchTerm = inputValue.toLowerCase().trim()
+
+    return posts.filter((post) => {
+      // 게시물의 제목, 내용, 작성자 정보에서 검색
+      const searchableFields = [
+        post.content,
+        post.author?.accountname,
+        post.author?.username,
+      ].filter(Boolean) // null, undefined 값 제거
+
+      return searchableFields.some((field) =>
+        field?.toString().toLowerCase().includes(searchTerm)
+      )
+    })
+  }, [posts, inputValue])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
@@ -142,7 +150,7 @@ function FollowerFeed(): React.JSX.Element {
 
       {/* 게시글 목록 */}
       <div className="feed-container">
-        {posts.length === 0 && !isLoading ? (
+        {filteredPosts.length === 0 && !isLoading ? (
           <div className="text-center py-12">
             <p className="text-text-secondary">아직 게시글이 없습니다.</p>
           </div>
@@ -152,7 +160,7 @@ function FollowerFeed(): React.JSX.Element {
               key={post.id}
               ref={index === posts.length - 1 ? lastContent : null}
             >
-              <PostCard post={post} onClick={() => {}} />
+              <PostCard post={post} />
             </div>
           ))
         )}
@@ -165,9 +173,8 @@ function FollowerFeed(): React.JSX.Element {
             <p className="text-text-secondary text-sm">더 불러오는 중...</p>
           </div>
         )}
-
         {/* 마지막 메시지 */}
-        {!hasMore && posts.length > 0 && (
+        {filteredPosts.length !== 0 && !hasMore && posts.length > 0 && (
           <div className="text-center py-8">
             <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
           </div>

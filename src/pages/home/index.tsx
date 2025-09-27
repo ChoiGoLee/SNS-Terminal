@@ -44,19 +44,6 @@ function Home(): React.JSX.Element {
     })
   }, [posts, inputValue])
 
-  // ** profile페이지 코드 참고하기 **
-  /**
-   * TODO
-   * PostAPI.GetFeed.Res 연결해서 게시글 목록 불러오기
-   * 불러온 게시글 목록을 map 돌려서 PostCard 컴포넌트로 렌더링하기
-   * 로딩 중일때 로딩 스피너
-   * 에러 났을때 에러 메세지
-   *
-   * 무한스크롤
-   * 로딩중일때 로딩 스피너
-   * 다음 페이지 없을때 끝입니다 메세지
-   */
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
     console.log(e.target.value)
