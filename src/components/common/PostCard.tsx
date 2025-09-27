@@ -107,111 +107,109 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   return (
     <article
       onClick={handlePostClick}
-      className={`bg-background border-background-border max-w-[769px] p-4 transition-colors relative ${
+      className={`bg-background border-background-border  p-4 transition-colors relative ${
         isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >
-      <section className="flex space-x-3">
-        <Avatar
-          userImage={post.author.image}
-          userName={post.author.username}
-          size="md"
-        />
-        <section className="flex-1 max-w-[769px]">
-          <ul className="flex items-center gap-1 mb-2">
-            <li className="text-lg font-bold text-text-primary">
-              {post.author.username}
-            </li>
-            <li>
-              <UserLevel level="mid" />
-            </li>
-            <li className="text-text-secondary text-sm">
-              {formatTimeAgo(new Date(post.createdAt).getTime())}
-            </li>
-          </ul>
+      <section className="flex-1 max-w-[769px]">
+        <ul className="flex items-center gap-1 mb-2">
+          <Avatar
+            userImage={post.author.image}
+            userName={post.author.username}
+            size="md"
+          />
+          <li className="mx-2 text-lg font-bold text-text-primary max-w-[80%] truncate">
+            {post.author.username}
+          </li>
+          <li>
+            <UserLevel level="mid" />
+          </li>
+          <li className="ml-1 text-text-secondary text-sm">
+            {formatTimeAgo(new Date(post.createdAt).getTime())}
+          </li>
+        </ul>
 
-          <div
-            className={`${
-              !isDetail &&
-              (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
-            }`}
-            ref={commentRef}
-          >
-            {!isDetail && !isExpanded && showGradient && (
-              <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
-            )}
-
-            {/* 텍스트 한 줄 처리가 길어질때 줄바꿈 되게 함 */}
-            <div className="overflow-hidden break-all">
-              <Markdown content={post.content} />
-            </div>
-
-            {post.image && (
-              <div className={`grid gap-2 ${getImageLayout(post.image)}`}>
-                {post.image.split(',').map((imageUrl, index) => (
-                  <img
-                    key={index}
-                    src={
-                      imageUrl.trim().startsWith('http')
-                        ? imageUrl
-                        : `${API_BASE_URL}/${imageUrl.trim()}`
-                    }
-                    alt="게시글 이미지"
-                    className={`w-full rounded-lg object-cover ${getImageClass(
-                      index,
-                      post.image
-                    )}`}
-                    onLoad={() => {
-                      // 이미지 로드 후 높이 재계산
-                      if (
-                        commentRef.current &&
-                        commentRef.current.offsetHeight > maxHeight
-                      ) {
-                        setShowMoreBtn(true)
-                        SetShowGradient(true)
-                      }
-                    }}
-                    onError={(e) => {
-                      console.log('게시글 이미지 로드 실패:', post.image)
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-          {showMoreBtn && !isDetail && (
-            <div className="flex justify-center mt-8">
-              <button
-                className={`py-2 px-5 transition text-sm text-text-primary rounded-full ${
-                  isExpanded
-                    ? 'py-2 px-5 bg-background-border text-sm hover:bg-background-surface'
-                    : 'bg-background-border hover:bg-background-surface'
-                }`}
-                onClick={(e) => {
-                  setIsExpanded((prevState) => !prevState)
-                  handleClick(e)
-                }}
-              >{`${isExpanded ? '접기' : '더보기'}`}</button>
-            </div>
+        <div
+          className={`${
+            !isDetail &&
+            (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
+          }`}
+          ref={commentRef}
+        >
+          {!isDetail && !isExpanded && showGradient && (
+            <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
           )}
 
-          <div className={`flex space-x-6 mt-3`}>
-            {!isDetail && (
-              <>
-                <LikeButton
-                  likeCount={likeCount}
-                  isLiked={isLiked}
-                  onLike={handleLike}
-                />
-                <CommentButton
-                  commentCount={post.commentCount}
-                  postId={post.id}
-                />
-              </>
-            )}
+          {/* 텍스트 한 줄 처리가 길어질때 줄바꿈 되게 함 */}
+          <div className="overflow-hidden break-all">
+            <Markdown content={post.content} />
           </div>
-        </section>
+
+          {post.image && (
+            <div className={`grid gap-2 ${getImageLayout(post.image)}`}>
+              {post.image.split(',').map((imageUrl, index) => (
+                <img
+                  key={index}
+                  src={
+                    imageUrl.trim().startsWith('http')
+                      ? imageUrl
+                      : `${API_BASE_URL}/${imageUrl.trim()}`
+                  }
+                  alt="게시글 이미지"
+                  className={`w-full rounded-lg object-cover ${getImageClass(
+                    index,
+                    post.image
+                  )}`}
+                  onLoad={() => {
+                    // 이미지 로드 후 높이 재계산
+                    if (
+                      commentRef.current &&
+                      commentRef.current.offsetHeight > maxHeight
+                    ) {
+                      setShowMoreBtn(true)
+                      SetShowGradient(true)
+                    }
+                  }}
+                  onError={(e) => {
+                    console.log('게시글 이미지 로드 실패:', post.image)
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        {showMoreBtn && !isDetail && (
+          <div className="flex justify-center mt-8">
+            <button
+              className={`py-2 px-5 transition text-sm text-text-primary rounded-full ${
+                isExpanded
+                  ? 'py-2 px-5 bg-background-border text-sm hover:bg-background-surface'
+                  : 'bg-background-border hover:bg-background-surface'
+              }`}
+              onClick={(e) => {
+                setIsExpanded((prevState) => !prevState)
+                handleClick(e)
+              }}
+            >{`${isExpanded ? '접기' : '더보기'}`}</button>
+          </div>
+        )}
+
+        <div className={`flex space-x-6 mt-3`}>
+          {!isDetail && (
+            <>
+              <LikeButton
+                likeCount={likeCount}
+                isLiked={isLiked}
+                onLike={handleLike}
+              />
+              <CommentButton
+                commentCount={post.commentCount}
+                postId={post.id}
+              />
+            </>
+          )}
+        </div>
       </section>
     </article>
   )
