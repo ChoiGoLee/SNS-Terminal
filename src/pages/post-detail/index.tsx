@@ -10,12 +10,11 @@ import type {
   UserAPI,
   HeartAPI,
 } from '../../types/api'
-// import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CommentInput from '../../components/common/CommentInput'
 import CommentItem from '../../components/common/CommentItem'
-import { formatFullTimeAgo } from '../../utils/timeUtils'
 import LikeButton from '../../components/common/LikeButton'
+import { formatFullTimeAgo } from '../../utils/timeUtils'
 
 function PostDetail(): React.JSX.Element {
   // useParams로 url의 파라미터 값 가져오기

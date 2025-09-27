@@ -27,7 +27,7 @@
  */
 
 // 글자 수 가중치 계산 (한글=2, 그 외=1)
-function getCustomLength(str: string): number {
+export function getCustomLength(str: string): number {
   let length = 0
   for (const char of str) {
     if (/[가-힣]/.test(char)) {
