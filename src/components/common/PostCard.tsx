@@ -18,6 +18,7 @@ interface PostCardProps {
   onClick?: () => void
   // api에서 받은 게시글 데이터
   post: Common.Post
+  postType: PostType
 }
 
 /**
@@ -26,7 +27,7 @@ interface PostCardProps {
  * @param {function} onClick - 게시글 더보기 클릭 이벤트 핸들러 함수
  * @returns
  */
-function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
+function PostCard({ isDetail = false, post }: PostCardProps) {
   const maxHeight = 300
 
   const navigate = useNavigate()
@@ -41,6 +42,20 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(post?.hearted ?? false)
   const [likeCount, setLikeCount] = useState(post?.heartCount ?? 0)
   const [isLikeLoading, setIsLikeLoading] = useState(false)
+
+  // 게시글 유형 아이콘 타입
+  const POST_TYPE_ICONS = {
+    일반: '/icons/daily-fill.svg',
+    개발: '/icons/tag-fill.svg',
+    헬프: '/icons/question-fill.svg',
+    테크: '/icons/stack-fill.svg',
+    프로젝트: '/icons/folder-fill.svg',
+    학습: '/icons/study-fill.svg',
+  } as const
+
+  const getPostTypeIcon = (postType: string) => {
+    return POST_TYPE_ICONS[postType as keyof typeof POST_TYPE_ICONS]
+  }
 
   // 게시물 컨텐츠, 메타 정보 분리 함수
   const parsePostContent = (content: string) => {
@@ -120,7 +135,6 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
   // 이벤트 버블링 방지
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onClick()
   }
 
   useEffect(() => {
@@ -171,7 +185,11 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
           {/* 게시글 유형 */}
           {postMeta.postType && (
             <li className="mt-4 mb-8 absolute right-0 top-0">
-              <span className="px-3 py-2 border-primary text-primary border rounded-full text-xs font-medium">
+              <span className="px-3 py-2 border-primary text-primary border rounded-full text-xs font-medium flex gap-1">
+                <img
+                  src={getPostTypeIcon(postMeta.postType)}
+                  alt={postMeta.postType}
+                />
                 {postMeta.postType}
               </span>
             </li>
@@ -181,7 +199,9 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
         <div
           className={`${
             !isDetail &&
-            (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
+            (isExpanded
+              ? 'max-h-full ml-16'
+              : 'relative max-h-96 overflow-hidden ml-16')
           }`}
           ref={commentRef}
         >
@@ -189,11 +209,26 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
             <div className="absolute bottom-0 left-0 w-full h-36 gradation bg-gradient-to-t from-background z-10"></div>
           )}
 
+          {/* 해시태그 */}
+          {postMeta.hashtags.length > 0 && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                {postMeta.hashtags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="text-primary text-sm hover:text-primary-dark cursor-pointer"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* 텍스트 한 줄 처리가 길어질때 줄바꿈 되게 함 */}
           <div className="overflow-hidden break-all">
             <Markdown content={postMeta.content} />
           </div>
-
           {post.image && (
             <div className={`grid gap-2 ${getImageLayout(post.image)}`}>
               {post.image.split(',').map((imageUrl, index) => (
@@ -241,22 +276,6 @@ function PostCard({ isDetail = false, onClick, post }: PostCardProps) {
                 handleClick(e)
               }}
             >{`${isExpanded ? '접기' : '더보기'}`}</button>
-          </div>
-        )}
-
-        {/* 해시태그 */}
-        {postMeta.hashtags.length > 0 && (
-          <div className="mt-8">
-            <div className="flex items-center gap-2 flex-wrap">
-              {postMeta.hashtags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="text-primary text-sm hover:text-primary-dark cursor-pointer"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
           </div>
         )}
 
