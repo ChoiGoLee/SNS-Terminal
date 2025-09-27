@@ -167,7 +167,7 @@ function FollowerFeed(): React.JSX.Element {
                 key={post.id}
                 ref={index === posts.length - 1 ? lastContent : null}
               >
-                <PostCard post={post} onClick={() => {}} />
+                <PostCard post={post} />
               </div>
             ))
           )}
