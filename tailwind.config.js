@@ -23,6 +23,7 @@ export default {
         },
       },
       fontFamily: {
+        DEFAULT: ['Pretendard', 'sans-serif'],
         BoldRound: ['BoldRound', 'sans-serif'],
       },
     },
