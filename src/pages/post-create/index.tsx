@@ -1,5 +1,4 @@
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import Avatar from '../../components/common/Avatar'
 import BaseButton from '../../components/common/BaseButton'
 import PostTypeButton from './components/PostTypeButton'
@@ -194,10 +193,7 @@ function PostCreate() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="h-full top-0 sticky">
-        <SideBar activeItem="/post-create" />
-      </div>
+    <div className="flex min-h-screen overflow-hidden">
       <div className="mx-auto w-[796px]">
         <Header title="새 포스트 작성" buttons={{ cancel: { show: true } }} />
         <form

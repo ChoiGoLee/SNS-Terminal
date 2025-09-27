@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import { useNavigate } from 'react-router-dom'
 import Description from '../../components/common/Description'
 import LogoutIcon from '../../assets/icons/logout.svg?react'
@@ -25,14 +24,11 @@ function Settings(): React.JSX.Element {
 
   return (
     <>
-      <section className="flex h-screen overflow-hidden">
-        <div className="sticky top-0 h-screen">
-          <SideBar activeItem="/settings" />
-        </div>
-        <div className="min-h-screen flex min-w-[769px] mx-auto border-background-border border-x">
+      <section className="h-screen overflow-y-hidden">
+        <Header title="설정" />
+        {/* 왼쪽 사이드 메뉴 */}
+        <div className="flex min-h-screen">
           <aside className="w-full lg:w-80 border-r border-background-border hidden lg:flex flex-col">
-            <Header title="설정" />
-            {/* 왼쪽 사이드 메뉴 */}
             <nav className="p-4 flex-1 overflow-y-auto">
               <button
                 onClick={() => setActiveMenu('logout')}

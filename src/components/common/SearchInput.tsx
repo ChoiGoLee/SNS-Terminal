@@ -102,7 +102,7 @@ function SearchInput({
    */
 
   return (
-    <div className={`flex flex-col justify-center`}>
+    <div className={`flex flex-col justify-center m-5`}>
       <label htmlFor={id} className={`sr-only`}>
         {id}
       </label>

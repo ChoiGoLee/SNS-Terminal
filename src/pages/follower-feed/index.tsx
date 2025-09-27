@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 // import PostCard from '../../components/common/PostCard'
 import SearchInput from '../../components/common/SearchInput'
 import { useState } from 'react'
@@ -91,17 +90,12 @@ function FollowerFeed(): React.JSX.Element {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen">
-        <div className="h-full top-0 sticky">
-          <SideBar activeItem="/follower-feed" />
-        </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="홈" />
-          <div className="flex items-center justify-center min-h-96">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
-              <p className="text-text-secondary">게시글을 불러오는 중...</p>
-            </div>
+      <div className="mx-auto border-x border-background-border border-r border-l w-[769px]">
+        <Header title="홈" />
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
+            <p className="text-text-secondary">게시글을 불러오는 중...</p>
           </div>
         </div>
       </div>
@@ -110,27 +104,22 @@ function FollowerFeed(): React.JSX.Element {
 
   if (error) {
     return (
-      <div className="flex min-h-screen">
-        <div className="h-full top-0 sticky">
-          <SideBar activeItem="/follower-feed" />
-        </div>
-        <div className="mx-auto border-x border-background-border border-r border-l">
-          <Header title="팔로워 피드" />
-          <div className="flex items-center justify-center min-h-96">
-            <div className="text-center">
-              <p className="text-red-500 mb-4">{error}</p>
-              <button
-                onClick={() => {
-                  setError(null)
-                  setPage(1)
-                  setHasMore(true)
-                  fetchPosts(1)
-                }}
-                className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-primary-dark"
-              >
-                다시 시도
-              </button>
-            </div>
+      <div className="mx-auto border-x border-background-border border-r border-l">
+        <Header title="팔로워 피드" />
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button
+              onClick={() => {
+                setError(null)
+                setPage(1)
+                setHasMore(true)
+                fetchPosts(1)
+              }}
+              className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-primary-dark"
+            >
+              다시 시도
+            </button>
           </div>
         </div>
       </div>
@@ -138,56 +127,51 @@ function FollowerFeed(): React.JSX.Element {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="h-full top-0 sticky">
-        <SideBar activeItem="/follower-feed" />
-      </div>
-      <div className="mx-auto border-x border-background-border border-r border-l">
-        <Header title="팔로워 피드" />
+    <div className="mx-auto border-x border-background-border border-r border-l">
+      <Header title="팔로워 피드" />
 
-        <SearchInput
-          onchange={handleChange}
-          value={inputValue}
-          placeholder="기술 스택 검색"
-          size="md"
-          border={'fullRound'}
-          id="password"
-          type="All"
-        ></SearchInput>
+      <SearchInput
+        onchange={handleChange}
+        value={inputValue}
+        placeholder="기술 스택 검색"
+        size="md"
+        border={'fullRound'}
+        id="password"
+        type="All"
+      ></SearchInput>
 
-        {/* 게시글 목록 */}
-        <div className="feed-container">
-          {posts.length === 0 && !isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-text-secondary">아직 게시글이 없습니다.</p>
+      {/* 게시글 목록 */}
+      <div className="feed-container">
+        {posts.length === 0 && !isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-text-secondary">아직 게시글이 없습니다.</p>
+          </div>
+        ) : (
+          posts.map((post, index) => (
+            <div
+              key={post.id}
+              ref={index === posts.length - 1 ? lastContent : null}
+            >
+              <PostCard post={post} onClick={() => {}} />
             </div>
-          ) : (
-            posts.map((post, index) => (
-              <div
-                key={post.id}
-                ref={index === posts.length - 1 ? lastContent : null}
-              >
-                <PostCard post={post} onClick={() => {}} />
-              </div>
-            ))
-          )}
+          ))
+        )}
 
-          {/* 무한스크롤 로딩 인디케이터 */}
-          {isLoadingMore && (
-            <div className="text-center py-4">
-              {/* 로딩스피너 */}
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
-              <p className="text-text-secondary text-sm">더 불러오는 중...</p>
-            </div>
-          )}
+        {/* 무한스크롤 로딩 인디케이터 */}
+        {isLoadingMore && (
+          <div className="text-center py-4">
+            {/* 로딩스피너 */}
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-secondary mx-auto mb-6"></div>
+            <p className="text-text-secondary text-sm">더 불러오는 중...</p>
+          </div>
+        )}
 
-          {/* 마지막 메시지 */}
-          {!hasMore && posts.length > 0 && (
-            <div className="text-center py-8">
-              <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
-            </div>
-          )}
-        </div>
+        {/* 마지막 메시지 */}
+        {!hasMore && posts.length > 0 && (
+          <div className="text-center py-8">
+            <p className="text-text-secondary">모든 게시글을 불러왔습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   )

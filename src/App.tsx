@@ -11,6 +11,7 @@ import Settings from './pages/settings/index'
 import FollowerFeed from './pages/follower-feed'
 import { useAuth } from './contexts/AuthContext'
 import { Navigate } from 'react-router-dom'
+import AppLayout from './components/layout/pageLayout'
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -31,15 +32,17 @@ function App() {
           {isAuthenticated ? (
             // 인증된 사용자용 라우트
             <>
-              <Route path="/" element={<Home />} />
-              <Route path="/follower-feed" element={<FollowerFeed />} />
-              <Route path="/post-detail" element={<PostDetail />} />
-              <Route path="/post-create" element={<PostCreate />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/:accountname" element={<Profile />} />
-              <Route path="/profile-setting" element={<ProfileSetting />} />
-              <Route path="/messages" element={<Messages />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/follower-feed" element={<FollowerFeed />} />
+                <Route path="/post-detail" element={<PostDetail />} />
+                <Route path="/post-create" element={<PostCreate />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/:accountname" element={<Profile />} />
+                <Route path="/profile-setting" element={<ProfileSetting />} />
+                <Route path="/messages" element={<Messages />} />
+                <Route path="/settings" element={<Settings />} />
+              </Route>
 
               {/* 인증된 사용자가 로그인/회원가입 페이지 접근 시 홈으로 리다이렉트 */}
               <Route path="/login" element={<Navigate to="/" replace />} />

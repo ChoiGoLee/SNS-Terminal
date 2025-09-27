@@ -1,5 +1,4 @@
 import { Header } from '../../components/common/Header'
-import { SideBar } from '../../components/common/SideBar'
 import Avatar from '../../components/common/Avatar'
 import BaseButton from '../../components/common/BaseButton'
 import TextInput from '../../components/common/TextInput'
@@ -243,9 +242,6 @@ function ProfileSetting(): React.JSX.Element {
   return (
     <>
       <div className="flex min-h-screen">
-        <div>
-          <SideBar activeItem="/settings" />
-        </div>
         <div className="mx-auto border-x min-w-[769px] border-background-border border-r border-l">
           <Header title="프로필 편집" buttons={{ back: { show: true } }} />
           <form

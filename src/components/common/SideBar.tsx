@@ -152,6 +152,13 @@ export const SideBar: React.FC<SideProps> = ({ activeItem }) => {
             }}
           />
         )}
+
+        <footer>
+          <div className="text-center px-4 pt-4 text-gray-500">
+            &copy; {new Date().getFullYear()} Choigolee. <br />
+            All rights reserved.
+          </div>
+        </footer>
       </div>
     </aside>
   )
