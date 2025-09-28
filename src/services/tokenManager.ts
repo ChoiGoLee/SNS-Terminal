@@ -1,12 +1,14 @@
+import { API_BASE_URL } from "../utils/configs"
+
 export const tokenManager = async (
   token: string
 ): Promise<{ isValid: boolean; data?: any }> => {
   try {
-    const response = await fetch('/api/user/checktoken', {
-      method: 'GET',
+    const response = await fetch(`${API_BASE_URL}/user/checktoken`, {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-type': 'application/json',
+        "Content-type": "application/json",
       },
     })
 
