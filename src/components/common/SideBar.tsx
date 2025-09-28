@@ -40,7 +40,14 @@ const UserInfo = ({
   userImage?: string
   onSettingsClick: () => void
 }) => (
-  <div className="bg-background-surface border border-background-border rounded-2xl p-4">
+  <div
+    className="bg-background-surface border border-background-border rounded-2xl p-4"
+    onClick={(e) => {
+      e.stopPropagation()
+      if (!userAccount) return
+      location.href = `/profile/${userAccount}`
+    }}
+  >
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Avatar userName={userName} size={'lg'} userImage={userImage} />

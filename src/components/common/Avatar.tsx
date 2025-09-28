@@ -7,8 +7,6 @@ interface AvatarProps {
   userName: string | undefined
   /** 아바타의 크기  */
   size: 'xs' | 'sm' | 'md' | 'lg'
-
-  accountName?: string
 }
 
 const SIZECLASSES = {
@@ -18,7 +16,7 @@ const SIZECLASSES = {
   lg: 'w-16 h-16 text-lg',
 } as const
 
-function Avatar({ userImage, userName, size, accountName }: AvatarProps) {
+function Avatar({ userImage, userName, size }: AvatarProps) {
   // 이미지 있는지 확인
   const hasImage = userImage && userImage !== '' && userImage !== '/Ellipse.png'
 
@@ -40,10 +38,6 @@ function Avatar({ userImage, userName, size, accountName }: AvatarProps) {
   return (
     <div
       className={`${SIZECLASSES[size]} rounded-full flex items-center justify-center font-bold text-black overflow-hidden bg-primary leading-none`}
-      onClick={(e) => {
-        e.stopPropagation()
-        location.href = `/profile/${accountName}`
-      }}
     >
       {/* 이미지 있는경우와 없는 경우로 압축 ellipse삭제 */}
       {hasImage ? (
