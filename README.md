@@ -17,6 +17,43 @@
 
 ---
 
+# 🖥️ Terminal
+
+<img width="1920" height="1080" alt="Terminal 서비스 이미지" src="https://github.com/user-attachments/assets/bf2151d1-ab55-4c3b-b1ee-a4c46971fd77" />
+
+> 코드로 소통하는 개발자 전용 SNS 플랫폼
+
+[![Deploy](https://img.shields.io/badge/Deploy-Firebase-orange)](https://snsterminal.web.app/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.0+-61dafb)](https://reactjs.org/)
+
+**배포 URL**: [https://snsterminal.web.app/](https://snsterminal.web.app/)
+
+**테스트 계정**
+
+- 이메일: `choigolee@test.com`
+- 비밀번호: `choigolee`
+
+---
+
+## 📑 목차
+
+- [프로젝트 소개](#-프로젝트-소개)
+- [주요 기능](#-주요-기능)
+- [개발 배경 및 목표](#-개발-배경-및-목표)
+- [주요 기술 의사결정](#-주요-기술-의사결정)
+  - [마크다운 & 코드 하이라이팅 구현](#마크다운--코드-하이라이팅-구현)
+  - [API 제약 조건 내에서의 데이터 확장](#2-api-제약-조건-내에서의-데이터-확장)
+  - [성능 최적화 전략](#3-성능-최적화-전략)
+- [기술 스택](#️-기술-스택)
+- [프로젝트 구조](#-프로젝트-구조)
+- [페이지 구성](#-페이지-구성)
+- [시작하기](#-시작하기)
+- [API 명세](#-api-명세)
+- [팀원 소개](#-팀원-소개)
+- [참고 자료](#-참고-자료)
+- [회고](#-회고)
+
 ## 📌 프로젝트 소개
 
 Terminal은 개발자를 위한 특화 기능을 제공하는 SNS 플랫폼입니다. 일반적인 소셜 네트워크 기능에 더해, 코드 공유와 기술 스택 표시 등 개발자 커뮤니티에 최적화된 경험을 제공합니다.
