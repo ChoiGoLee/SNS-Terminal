@@ -194,6 +194,125 @@ firebase deploy --only hosting
 
 ---
 
+## 🔌 API 명세
+
+### Base URL
+
+```
+https://dev.wenivops.co.kr/services/mandarin
+```
+
+### 인증
+
+JWT Bearer Token 방식 사용
+
+```json
+{
+  "Authorization": "Bearer {token}",
+  "Content-Type": "application/json"
+}
+```
+
+### 주요 엔드포인트
+
+#### 사용자 관리
+
+| Method | Endpoint                 | 설명              |
+| ------ | ------------------------ | ----------------- |
+| POST   | `/user`                  | 회원가입          |
+| POST   | `/user/login`            | 로그인            |
+| GET    | `/user/myinfo`           | 내 프로필 조회    |
+| PUT    | `/user`                  | 프로필 수정       |
+| POST   | `/user/emailvalid`       | 이메일 중복 검사  |
+| POST   | `/user/accountnamevalid` | 계정 ID 중복 검사 |
+
+#### 프로필
+
+| Method | Endpoint                         | 설명             |
+| ------ | -------------------------------- | ---------------- |
+| GET    | `/profile/:accountname`          | 유저 프로필 조회 |
+| POST   | `/profile/:accountname/follow`   | 팔로우           |
+| DELETE | `/profile/:accountname/unfollow` | 언팔로우         |
+
+#### 게시물
+
+| Method | Endpoint                      | 설명             |
+| ------ | ----------------------------- | ---------------- |
+| POST   | `/post`                       | 게시물 작성      |
+| GET    | `/post`                       | 전체 게시물 조회 |
+| GET    | `/post/feed`                  | 팔로잉 피드      |
+| GET    | `/post/:accountname/userpost` | 유저별 게시물    |
+| GET    | `/post/:post_id`              | 게시물 상세      |
+| DELETE | `/post/:post_id`              | 게시물 삭제      |
+| POST   | `/post/:post_id/heart`        | 좋아요           |
+| DELETE | `/post/:post_id/unheart`      | 좋아요 취소      |
+
+#### 댓글
+
+| Method | Endpoint                              | 설명      |
+| ------ | ------------------------------------- | --------- |
+| POST   | `/post/:post_id/comments`             | 댓글 작성 |
+| GET    | `/post/:post_id/comments`             | 댓글 목록 |
+| DELETE | `/post/:post_id/comments/:comment_id` | 댓글 삭제 |
+
+#### 이미지 업로드
+
+| Method | Endpoint             | 설명                                  |
+| ------ | -------------------- | ------------------------------------- |
+| POST   | `/image/uploadfile`  | 단일 이미지 업로드 (프로필)           |
+| POST   | `/image/uploadfiles` | 다중 이미지 업로드 (게시물, 최대 3개) |
+
+### 페이지네이션
+
+쿼리 파라미터를 사용한 페이지네이션 지원:
+
+```
+?limit={불러올 개수}&skip={건너뛸 개수}
+```
+
+예시:
+
+```
+/post/feed/?limit=10&skip=0  // 첫 10개
+/post/feed/?limit=10&skip=10 // 11-20번째
+```
+
+### 이미지 처리
+
+1. 이미지를 먼저 업로드 (`/image/uploadfile` 또는 `/image/uploadfiles`)
+2. 응답으로 받은 filename을 저장
+3. 다른 API 요청 시 filename을 문자열로 전송
+
+**이미지 제약사항:**
+
+- 최대 크기: 10MB
+- 지원 형식: jpg, gif, png, jpeg, bmp, tif, heic
+- 게시물: 최대 3개까지 업로드 가능
+
+### 에러 응답 예시
+
+```json
+// 401 Unauthorized
+{
+  "message": "유효하지 않은 토큰입니다.",
+  "status": 401
+}
+
+// 404 Not Found
+{
+  "message": "해당 계정이 존재하지 않습니다.",
+  "status": 404
+}
+
+// 422 Unprocessable Entity
+{
+  "message": "필수 입력사항을 입력해주세요.",
+  "status": 422
+}
+```
+
+---
+
 ## 👥 팀원 소개
 
 |                                                  최진호                                                   |                                                  고우리                                                   |                                                  이지언                                                   |
