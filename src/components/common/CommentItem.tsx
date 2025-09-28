@@ -1,6 +1,7 @@
 import { formatTimeAgo } from '../../utils/timeUtils'
 import Avatar from './Avatar'
 import UserLevel from './UserLevel'
+import Markdown from './Markdown'
 
 interface CommentItemProps {
   userImage?: string
@@ -49,9 +50,10 @@ function CommentItem({
             )}
           </span>
         </div>
-        <p className="text-text-primary text-sm leading-normal mb-2">
+        {/* <p className="text-text-primary text-sm leading-normal mb-2">
           {content}
-        </p>
+        </p> */}
+        <Markdown content={content} />
       </div>
     </div>
   )
