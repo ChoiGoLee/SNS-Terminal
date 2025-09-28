@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import BaseButton from '../../components/common/BaseButton'
 import TextInput from '../../components/common/TextInput'
-import { Header } from '../../components/common/Header'
 import { api } from '../../services/apiWrapper'
 import type { UserAPI } from '../../types/api'
 import { useNavigate } from 'react-router-dom'
