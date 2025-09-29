@@ -168,7 +168,13 @@ function Signup(): React.JSX.Element {
         <span className="font-BoldRound text-primary  text-9xl">Terminal</span>
       </div>
       <div className="flex justify-center ">
-        <div className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSignup()
+          }}
+          className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full"
+        >
           {/* 이메일 입력 */}
           <div>
             <label htmlFor="email" className="flex px-3 py-2">
@@ -301,7 +307,7 @@ function Signup(): React.JSX.Element {
               onClick={handleSignup}
             />
           </div>
-        </div>
+        </form>
       </div>
       <div className="flex justify-center">
         <div className="text-center pt-4">
