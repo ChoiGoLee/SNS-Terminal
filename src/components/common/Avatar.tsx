@@ -48,9 +48,12 @@ function Avatar({ userImage, userName, size, accountName }: AvatarProps) {
       {/* 이미지 있는경우와 없는 경우로 압축 ellipse삭제 */}
       {hasImage ? (
         <img
+          style={{ aspectRatio: '1 / 1' }}
           src={imageUrl}
           alt={userName}
-          className="rounded-full object-cover w-full h-full"
+          className={`object-cover w-full h-full ${
+            hasImage ? 'bg-transparent' : 'bg-primary'
+          }`}
         />
       ) : (
         userName?.charAt(0) || '?'

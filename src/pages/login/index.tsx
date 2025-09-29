@@ -147,7 +147,10 @@ function Login(): React.JSX.Element {
 
   return (
     <div className="flex-col justify-center content-center w-screen min-h-screen bg-black px-4">
-      <div className="flex justify-center pb-10">
+      <div className="flex flex-col items-center justify-center pb-10">
+        <span className="text-text-primary text-2xl mt-4 font-BoldRound">
+          코드로 소통하는 개발자 전용 SNS
+        </span>
         <span className="font-BoldRound text-primary  text-9xl">Terminal</span>
       </div>
 
