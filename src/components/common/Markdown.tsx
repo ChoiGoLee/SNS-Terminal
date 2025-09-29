@@ -22,7 +22,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
 
 function Markdown({ content }: MarkdownProps): React.JSX.Element {
   return (
-    <div className="markdown-body text-text-primary">
+    <div>
       <ReactMarkdown
         components={{
           h1: ({ children }) => (
