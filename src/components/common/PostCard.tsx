@@ -1,16 +1,16 @@
-import Avatar from "./Avatar"
-import Markdown from "./Markdown"
-import LikeButton from "./LikeButton"
-import CommentButton from "./CommentButton"
-import UserLevel from "./UserLevel"
-import { useNavigate } from "react-router"
-import { useEffect, useRef, useState } from "react"
-import type { Common, HeartAPI } from "../../types/api"
-import { api } from "../../services/apiWrapper"
-import { formatTimeAgo } from "../../utils/timeUtils"
-import { getImageClass, getImageLayout } from "../../utils/getImageLayout"
-import { useAuth } from "../../contexts/AuthContext"
-import { API_BASE_URL } from "../../utils/configs"
+import Avatar from './Avatar'
+import Markdown from './Markdown'
+import LikeButton from './LikeButton'
+import CommentButton from './CommentButton'
+import UserLevel from './UserLevel'
+import { useNavigate } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
+import type { Common, HeartAPI } from '../../types/api'
+import { api } from '../../services/apiWrapper'
+import { formatTimeAgo } from '../../utils/timeUtils'
+import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
+import { useAuth } from '../../contexts/AuthContext'
+import { API_BASE_URL } from '../../utils/configs'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -53,12 +53,12 @@ function PostCard({
 
   // 게시글 유형 아이콘 타입
   const POST_TYPE_ICONS = {
-    일반: "/icons/daily-fill.svg",
-    개발: "/icons/tag-fill.svg",
-    헬프: "/icons/question-fill.svg",
-    테크: "/icons/stack-fill.svg",
-    프로젝트: "/icons/folder-fill.svg",
-    학습: "/icons/study-fill.svg",
+    일반: '/icons/daily-fill.svg',
+    개발: '/icons/tag-fill.svg',
+    헬프: '/icons/question-fill.svg',
+    테크: '/icons/stack-fill.svg',
+    프로젝트: '/icons/folder-fill.svg',
+    학습: '/icons/study-fill.svg',
   } as const
 
   const getPostTypeIcon = (postType: string) => {
@@ -68,7 +68,7 @@ function PostCard({
   // 게시물 컨텐츠, 메타 정보 분리 함수
   const parsePostContent = (content: string) => {
     // 본문과 메타 정보 'Φ$'로 분리
-    const [mainContent, metaData] = content.split("Φ$")
+    const [mainContent, metaData] = content.split('Φ$')
 
     // 메타 정보가 없을때 일반 컨텐츠만 노출되게 함
     if (!metaData) {
@@ -80,12 +80,12 @@ function PostCard({
     }
 
     // 게시물 타입과 해시태그를 '¶$'로 분리
-    const [postType, hashTagString] = metaData.split("¶$")
+    const [postType, hashTagString] = metaData.split('¶$')
 
     // 해시태그 조건(','로 분리,공백없음,글자수 존재)
     const hashtags = hashTagString
       ? hashTagString
-          .split(",")
+          .split(',')
           .map((tag) => tag.trim())
           .filter((tag) => tag.length > 0)
       : []
@@ -107,7 +107,7 @@ function PostCard({
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (!confirm("정말 이 게시글을 삭제하시겠습니까?")) {
+    if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) {
       return
     }
 
@@ -116,7 +116,7 @@ function PostCard({
     try {
       await api.delete(`/post/${post.id}`)
 
-      alert("게시글이 삭제되었습니다.")
+      alert('게시글이 삭제되었습니다.')
 
       // 삭제 성공 시 콜백 실행 (목록에서 제거)
       if (onDelete) {
@@ -125,11 +125,11 @@ function PostCard({
 
       // 상세 페이지에서 삭제한 경우 홈으로 이동
       if (isDetail) {
-        navigate("/")
+        navigate('/')
       }
     } catch (error) {
-      console.error("게시글 삭제 실패:", error)
-      alert("게시글 삭제에 실패했습니다. 다시 시도해주세요.")
+      console.error('게시글 삭제 실패:', error)
+      alert('게시글 삭제에 실패했습니다. 다시 시도해주세요.')
     } finally {
       setIsDeleteLoading(false)
     }
@@ -160,18 +160,18 @@ function PostCard({
         setLikeCount(res.post.heartCount)
       }
     } catch (error) {
-      console.error("좋아요 처리 실패:", error)
+      console.error('좋아요 처리 실패:', error)
     } finally {
       setIsLikeLoading(false)
     }
   }
   // 홈/피드의 게시글일때만 게시글 상세페이지로 이동
   const handlePostClick = () => {
-    console.log("PostCard 클릭됨!", post.id)
-    console.log("isDetail:", isDetail)
+    console.log('PostCard 클릭됨!', post.id)
+    console.log('isDetail:', isDetail)
 
     if (!isDetail) {
-      console.log("navigate 호출:", `/post-detail/${post.id}`)
+      console.log('navigate 호출:', `/post-detail/${post.id}`)
       navigate(`/post-detail/${post.id}`)
     }
   }
@@ -201,7 +201,7 @@ function PostCard({
     <article
       onClick={handlePostClick}
       className={`bg-background border-background-border p-5 transition-colors relative ${
-        isDetail ? "border" : "cursor-pointer border-b"
+        isDetail ? 'border' : 'cursor-pointer border-b'
       }`}
     >
       <section className="flex-1 max-w-[769px]">
@@ -219,7 +219,6 @@ function PostCard({
                 userImage={post.author.image}
                 userName={post.author.username}
                 size="md"
-                accountName={post?.author?.accountname}
               />
             </div>
             <div className="mx-2 text-lg font-bold text-text-primary line-clamp-1 truncate max-w-[80%]">
@@ -255,7 +254,7 @@ function PostCard({
                 className="mt-4 mb-8 ml-3 px-3 py-2 text-xs font-medium rounded-full border border-background-border text-text-secondary hover:bg-danger-dark/30 hover:text-danger hover:border-danger transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="게시글 삭제"
               >
-                {isDeleteLoading ? "삭제 중..." : "삭제"}
+                {isDeleteLoading ? '삭제 중...' : '삭제'}
               </button>
             </li>
           )}
@@ -264,7 +263,7 @@ function PostCard({
         <div
           className={`ml-16 ${
             !isDetail &&
-            (isExpanded ? "max-h-full" : "relative max-h-96 overflow-hidden")
+            (isExpanded ? 'max-h-full' : 'relative max-h-96 overflow-hidden')
           }`}
           ref={commentRef}
         >
@@ -294,11 +293,11 @@ function PostCard({
           </div>
           {post.image && (
             <div className={`grid gap-2 ${getImageLayout(post.image)}`}>
-              {post.image.split(",").map((imageUrl, index) => (
+              {post.image.split(',').map((imageUrl, index) => (
                 <img
                   key={index}
                   src={
-                    imageUrl.trim().startsWith("http")
+                    imageUrl.trim().startsWith('http')
                       ? imageUrl
                       : `${API_BASE_URL}/${imageUrl.trim()}`
                   }
@@ -318,8 +317,8 @@ function PostCard({
                     }
                   }}
                   onError={(e) => {
-                    console.log("게시글 이미지 로드 실패:", post.image)
-                    e.currentTarget.style.display = "none"
+                    console.log('게시글 이미지 로드 실패:', post.image)
+                    e.currentTarget.style.display = 'none'
                   }}
                 />
               ))}
@@ -331,14 +330,14 @@ function PostCard({
             <button
               className={`py-2 px-5 transition text-sm text-text-primary rounded-full ${
                 isExpanded
-                  ? "py-2 px-5 bg-background-border text-sm hover:bg-background-surface"
-                  : "bg-background-border hover:bg-background-surface"
+                  ? 'py-2 px-5 bg-background-border text-sm hover:bg-background-surface'
+                  : 'bg-background-border hover:bg-background-surface'
               }`}
               onClick={(e) => {
                 setIsExpanded((prevState) => !prevState)
                 handleClick(e)
               }}
-            >{`${isExpanded ? "접기" : "더보기"}`}</button>
+            >{`${isExpanded ? '접기' : '더보기'}`}</button>
           </div>
         )}
 
