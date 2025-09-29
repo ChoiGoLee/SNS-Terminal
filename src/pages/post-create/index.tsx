@@ -8,6 +8,7 @@ import { validateImageExtend, validateImageSize } from '../../utils/validation'
 import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 import { useNavigate } from 'react-router-dom'
 import { API_BASE_URL } from '../../utils/configs'
+import { useTitle } from '../../hooks/usePageTitle'
 
 const POST_TYPE = [
   { text: '일반', icon: '/icons/daily.svg' },
@@ -19,6 +20,9 @@ const POST_TYPE = [
 ]
 
 function PostCreate() {
+  // 메타태그 타이틀
+  useTitle('게시물 작성 | Terminal')
+
   const { user } = useAuth()
   const [postContent, setPostContent] = useState('')
   const [images, setImages] = useState<File[]>([])

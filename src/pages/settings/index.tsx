@@ -5,8 +5,12 @@ import Description from '../../components/common/Description'
 import LogoutIcon from '../../assets/icons/logout.svg?react'
 import TrashIcon from '../../assets/icons/trash.svg?react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function Settings(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('설정 | Terminal')
+
   const navigate = useNavigate()
   const { logout } = useAuth()
 

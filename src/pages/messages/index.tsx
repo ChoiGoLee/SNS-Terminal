@@ -6,6 +6,7 @@ import Description from '../../components/common/Description'
 import { MessageBubble } from '../../components/common/MessageBubble'
 import SearchInput from '../../components/common/SearchInput'
 import messageData from './message.json'
+import { useTitle } from '../../hooks/usePageTitle'
 
 interface ChatUserSimple {
   accountname: string
@@ -30,6 +31,9 @@ interface MessageDataType {
 }
 
 function Messages(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('메시지 | Terminal')
+
   const [inputValue, setInputValue] = useState('')
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
 

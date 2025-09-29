@@ -6,13 +6,16 @@ import type { UserAPI } from '../../types/api'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { validateEmail, validatePassword } from '../../utils/validation'
-
+import { useTitle } from '../../hooks/usePageTitle'
 interface ValidateErrors {
   email: string
   password: string
 }
 
 function Login(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('로그인 | Terminal')
+
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()

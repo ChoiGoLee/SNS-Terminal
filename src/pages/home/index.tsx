@@ -7,8 +7,12 @@ import type { Common, PostAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { useInfinityScroll } from '../../hooks/useInfinityScroll'
 import PostCard from '../../components/common/PostCard'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function Home(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('Terminal - 코드로 소통하는 개발자 전용 SNS')
+
   const [inputValue, setInputValue] = useState('')
 
   const [posts, setPosts] = useState<Common.Post[]>([])

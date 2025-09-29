@@ -9,8 +9,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import BaseButton from '../../components/common/BaseButton'
 import UserLevel from '../../components/common/UserLevel'
 import { LoadIntroData } from '../../utils/profileStackLoad'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function Profile(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('프로필 | Terminal')
+
   // URL 파라미터에서 accountname 추출
   const { accountname } = useParams<{ accountname: string }>()
   const [isLoading, setIsLoading] = useState(true) // 로딩 상태

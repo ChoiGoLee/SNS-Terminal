@@ -10,6 +10,7 @@ import {
   validatePassword,
   validateUserName,
 } from '../../utils/validation'
+import { useTitle } from '../../hooks/usePageTitle'
 
 interface ValidateErrors {
   email: string
@@ -20,6 +21,9 @@ interface ValidateErrors {
 }
 
 function Signup(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('회원가입 | Terminal')
+
   const navigate = useNavigate()
 
   const [inputUserName, setInputUserName] = useState('')

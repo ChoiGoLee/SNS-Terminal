@@ -6,8 +6,12 @@ import type { Common, PostAPI } from '../../types/api'
 import { api } from '../../services/apiWrapper'
 import { useInfinityScroll } from '../../hooks/useInfinityScroll'
 import PostCard from '../../components/common/PostCard'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function FollowerFeed(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('팔로워 피드 | Terminal')
+
   const [inputValue, setInputValue] = useState('')
 
   const [posts, setPosts] = useState<Common.Post[]>([])
