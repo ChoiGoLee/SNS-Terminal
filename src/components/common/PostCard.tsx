@@ -10,6 +10,7 @@ import { api } from '../../services/apiWrapper'
 import { formatTimeAgo } from '../../utils/timeUtils'
 import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 import { useAuth } from '../../contexts/AuthContext'
+import { API_BASE_URL } from '../../utils/configs'
 
 interface PostCardProps {
   /**홈/피드페이지 or 상세페이지 여부**/
@@ -205,13 +206,19 @@ function PostCard({
     >
       <section className="flex-1 max-w-[769px]">
         <ul className="flex items-center relative mb-3">
-          <li className="flex flex-1 items-center gap-1 max-w-[70%]">
+          <li
+            className="flex flex-1 items-center gap-1 w-full"
+            onClick={(e) => {
+              e.stopPropagation()
+              if (!post?.author?.accountname) return
+              location.href = `/profile/${post?.author?.accountname}`
+            }}
+          >
             <div className="flex-none">
               <Avatar
                 userImage={post.author.image}
                 userName={post.author.username}
                 size="md"
-                accountName={post?.author?.accountname}
               />
             </div>
             <div className="mx-2 text-lg font-bold text-text-primary line-clamp-1 truncate max-w-[80%]">
@@ -228,7 +235,7 @@ function PostCard({
           </li>
           {/* 게시글 유형 */}
           {postMeta.postType && (
-            <li className="mt-4 mb-8 absolute right-0 top-0">
+            <li className="mt-4 mb-8">
               <span className="px-3 py-2 border-primary text-primary border rounded-full text-xs font-medium flex gap-1">
                 <img
                   src={getPostTypeIcon(postMeta.postType)}
@@ -244,7 +251,7 @@ function PostCard({
               <button
                 onClick={handleDelete}
                 disabled={isDeleteLoading}
-                className="mt-4 mb-8 px-3 py-2 text-xs font-medium rounded-full border border-background-border text-text-secondary hover:bg-danger-dark/30 hover:text-danger hover:border-danger transition-colors disabled:opacity-50 disabled:cursor-not-allowed absolute right-20 top-0"
+                className="mt-4 mb-8 ml-3 px-3 py-2 text-xs font-medium rounded-full border border-background-border text-text-secondary hover:bg-danger-dark/30 hover:text-danger hover:border-danger transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="게시글 삭제"
               >
                 {isDeleteLoading ? '삭제 중...' : '삭제'}
@@ -292,7 +299,7 @@ function PostCard({
                   src={
                     imageUrl.trim().startsWith('http')
                       ? imageUrl
-                      : `/api/${imageUrl.trim()}`
+                      : `${API_BASE_URL}/${imageUrl.trim()}`
                   }
                   alt="게시글 이미지"
                   className={`w-full rounded-lg object-cover ${getImageClass(

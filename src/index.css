@@ -15,19 +15,24 @@ body {
 }
 
 @font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-    format('woff');
+  font-family: 'Apple SD Gothic Neo';
   font-weight: 400;
+  font-style: normal;
   font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/fonts-archive/AppleSDGothicNeo/AppleSDGothicNeo-Regular.woff2')
+      format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/fonts-archive/AppleSDGothicNeo/AppleSDGothicNeo-Regular.ttf')
+      format('truetype');
 }
-
 @font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff')
-    format('woff');
+  font-family: 'Apple SD Gothic Neo';
   font-weight: 700;
+  font-style: normal;
   font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/fonts-archive/AppleSDGothicNeo/AppleSDGothicNeo-Bold.woff2')
+      format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/fonts-archive/AppleSDGothicNeo/AppleSDGothicNeo-Bold.ttf')
+      format('truetype');
 }
 
 /* globals.css 같은 데 추가 */
@@ -52,5 +57,5 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: #444 transparent;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'Apple SD Gothic Neo', sans-serif;
 }

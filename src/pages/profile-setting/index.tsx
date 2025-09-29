@@ -14,6 +14,7 @@ import {
 } from '../../utils/validation'
 import { LoadIntroData } from '../../utils/profileStackLoad'
 import SearchInput from '../../components/common/SearchInput'
+import { API_BASE_URL } from '../../utils/configs'
 
 function ProfileSetting(): React.JSX.Element {
   const navigate = useNavigate()
@@ -132,7 +133,7 @@ function ProfileSetting(): React.JSX.Element {
         const formdata = new FormData()
         formdata.append('image', image)
         try {
-          const response = await fetch('/api/image/uploadfile', {
+          const response = await fetch(`${API_BASE_URL}/image/uploadfile`, {
             method: 'POST',
             body: formdata,
           })
@@ -357,7 +358,7 @@ function ProfileSetting(): React.JSX.Element {
                         width="flexWidth"
                         color="primary"
                         size="sm"
-                        icon="/src/assets/icons/close-b-sm.svg"
+                        // icon="/src/assets/icons/close-b-sm.svg"
                         isLeft={false}
                       />
                     ))

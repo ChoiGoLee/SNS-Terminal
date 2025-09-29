@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { validateImageExtend, validateImageSize } from '../../utils/validation'
 import { getImageClass, getImageLayout } from '../../utils/getImageLayout'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../../utils/configs'
 
 const POST_TYPE = [
   { text: '일반', icon: '/icons/daily.svg' },
@@ -50,10 +51,13 @@ function PostCreate() {
         const formData = new FormData()
         formData.append('image', image)
 
-        const uploadResponse = await fetch('/api/image/uploadfiles', {
-          method: 'POST',
-          body: formData,
-        })
+        const uploadResponse = await fetch(
+          `${API_BASE_URL}/image/uploadfiles`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        )
 
         if (!uploadResponse.ok) {
           throw new Error('이미지 업로드 실패')
@@ -82,7 +86,7 @@ function PostCreate() {
         },
       }
 
-      const response = await fetch('/api/post', {
+      const response = await fetch(`${API_BASE_URL}/post`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
