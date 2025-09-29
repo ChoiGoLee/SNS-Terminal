@@ -1,5 +1,6 @@
-import { tokenManager } from './tokenManager'
-import type { Common } from '../types/api'
+import { API_BASE_URL } from "./../utils/configs"
+import { tokenManager } from "./tokenManager"
+import type { Common } from "../types/api"
 
 interface RequestOptions {
   headers?: Common.AuthHeaders
@@ -11,18 +12,18 @@ const getDefaultHeaders = async (
   requiresAuth = true
 ): Promise<Common.AuthHeaders> => {
   const headers: Common.AuthHeaders = {
-    'Content-type': 'application/json',
+    "Content-type": "application/json",
   }
 
   if (requiresAuth) {
-    const token = sessionStorage.getItem('token')
+    const token = sessionStorage.getItem("token")
     if (token) {
       const result = await tokenManager(token)
       if (result.isValid) {
-        headers['Authorization'] = `Bearer ${token}`
+        headers["Authorization"] = `Bearer ${token}`
       } else {
-        sessionStorage.removeItem('token')
-        window.location.href = '/login'
+        sessionStorage.removeItem("token")
+        window.location.href = "/login"
       }
     }
   }
@@ -56,11 +57,11 @@ const request = async <T>(
     ...(data && { body: JSON.stringify(data) }),
   }
 
-  const response = await fetch(`/api${endpoint}`, config)
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, config)
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
-    throw new Error(errorData.message || '서버 에러')
+    throw new Error(errorData.message || "서버 에러")
   }
 
   return await response.json()
@@ -69,7 +70,7 @@ const request = async <T>(
 // api wrapper 호출 부분
 export const api = {
   get: <T>(endpoint: string, options?: RequestOptions): Promise<T> => {
-    return request<T>(endpoint, 'GET', null, options)
+    return request<T>(endpoint, "GET", null, options)
   },
 
   post: <T>(
@@ -77,7 +78,7 @@ export const api = {
     data?: any,
     options?: RequestOptions
   ): Promise<T> => {
-    return request<T>(endpoint, 'POST', data, options)
+    return request<T>(endpoint, "POST", data, options)
   },
 
   put: <T>(
@@ -85,10 +86,10 @@ export const api = {
     data?: any,
     options?: RequestOptions
   ): Promise<T> => {
-    return request<T>(endpoint, 'PUT', data, options)
+    return request<T>(endpoint, "PUT", data, options)
   },
 
   delete: <T>(endpoint: string, options?: RequestOptions): Promise<T> => {
-    return request<T>(endpoint, 'DELETE', null, options)
+    return request<T>(endpoint, "DELETE", null, options)
   },
 }
