@@ -151,7 +151,13 @@ function Login(): React.JSX.Element {
       </div>
 
       <div className="flex justify-center ">
-        <div className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleLogin()
+          }}
+          className=" flex-col px-6 pt-8 space-y-4 border pb-10 border-background-border rounded-3xl max-w-[768px] w-full"
+        >
           {/* 세션 만료 메시지 표시 */}
           {sessionExpiredMessage && (
             <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg mb-4">
@@ -256,7 +262,7 @@ function Login(): React.JSX.Element {
               </button>
             </p>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )
