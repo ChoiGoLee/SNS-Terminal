@@ -15,8 +15,12 @@ import {
 import { LoadIntroData } from '../../utils/profileStackLoad'
 import SearchInput from '../../components/common/SearchInput'
 import { API_BASE_URL } from '../../utils/configs'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function ProfileSetting(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('프로필 설정 | Terminal')
+
   const navigate = useNavigate()
 
   // 유저 정보 및 프로필 이미지 상태 관리

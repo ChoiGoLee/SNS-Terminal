@@ -6,13 +6,16 @@ import type { UserAPI } from '../../types/api'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { validateEmail, validatePassword } from '../../utils/validation'
-
+import { useTitle } from '../../hooks/usePageTitle'
 interface ValidateErrors {
   email: string
   password: string
 }
 
 function Login(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('로그인 | Terminal')
+
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -146,7 +149,10 @@ function Login(): React.JSX.Element {
 
   return (
     <div className="flex-col justify-center content-center w-screen min-h-screen bg-black px-4">
-      <div className="flex justify-center pb-10">
+      <div className="flex flex-col items-center justify-center pb-10">
+        <span className="text-text-primary text-2xl mt-4 font-BoldRound">
+          코드로 소통하는 개발자 전용 SNS
+        </span>
         <span className="font-BoldRound text-primary  text-9xl">Terminal</span>
       </div>
 

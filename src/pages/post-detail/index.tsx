@@ -14,8 +14,12 @@ import CommentInput from '../../components/common/CommentInput'
 import CommentItem from '../../components/common/CommentItem'
 import LikeButton from '../../components/common/LikeButton'
 import { formatFullTimeAgo } from '../../utils/timeUtils'
+import { useTitle } from '../../hooks/usePageTitle'
 
 function PostDetail(): React.JSX.Element {
+  // 메타태그 타이틀
+  useTitle('게시물 | Terminal')
+
   // useParams로 url의 파라미터 값 가져오기
   const { postId } = useParams()
   // console.log('게시글 id:', postId)
