@@ -38,7 +38,7 @@ const UserInfo = ({
   userAccount: string
   userName: string
   userImage?: string
-  onSettingsClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onSettingsClick: () => void
 }) => (
   <div
     className="bg-background-surface border border-background-border rounded-2xl p-4"
@@ -154,8 +154,8 @@ export const SideBar: React.FC<SideProps> = ({ activeItem }) => {
             userAccount={user.accountname}
             userName={user.username}
             userImage={user.image}
-            onSettingsClick={(e) => {
-              e.stopPropagation()
+            onSettingsClick={() => {
+              // e.stopPropagation()
               navigate('/settings')
             }}
           />
