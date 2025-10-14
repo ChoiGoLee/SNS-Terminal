@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useLocation, Outlet } from 'react-router-dom'
 
 import { SideBar } from '../common/SideBar'
